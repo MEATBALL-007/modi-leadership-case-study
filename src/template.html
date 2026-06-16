@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>นเรนทรา โมดี — กรณีศึกษาผู้นำ</title>
+<meta name="description" content="พรีเซนต์เชิงวิชาการ กรณีศึกษาภาวะผู้นำของนเรนทรา โมดี นายกรัฐมนตรีอินเดีย — นำเสนอทั้งด้านบวกและด้านลบอย่างเป็นกลาง">
+<style>
+/* === ฟอนต์ไทยฝัง base64 (self-contained, ไม่มี fetch ภายนอก) === */
+{{FONTS}}
+/* === สไตล์ === */
+{{STYLES}}
+</style>
+</head>
+<body>
+
+  <!-- progress bar (โหมดเลื่อน) -->
+  <div class="progress" id="progress"></div>
+
+  <!-- ปุ่มควบคุมมุมบน -->
+  <header class="toolbar">
+    <div class="brand">
+      <span class="chakra-mini"></span>
+      <span>นเรนทรา โมดี<small>กรณีศึกษาผู้นำ · Leadership Case Study</small></span>
+    </div>
+    <span class="spacer"></span>
+    <button class="btn" id="btn-notes" type="button" aria-pressed="false" title="โน้ตผู้พูด (S)">
+      <span class="ico"></span><span class="lbl">โน้ตผู้พูด</span><span class="kbd">S</span>
+    </button>
+    <button class="btn" id="btn-motion" type="button" aria-pressed="false" title="เปิด/ปิดอนิเมชัน (A)">
+      <span class="ico"></span><span class="lbl">Motion</span><span class="kbd">A</span>
+    </button>
+    <button class="btn" id="btn-mode" type="button" aria-pressed="false" title="สลับโหมด เลื่อน/สไลด์ (M)">
+      <span class="ico"></span><span class="lbl">โหมด: เลื่อน</span><span class="kbd">M</span>
+    </button>
+  </header>
+
+  <!-- เด็คสไลด์ (เรนเดอร์โดย app.js) -->
+  <main class="deck" id="deck" aria-live="polite"></main>
+
+  <!-- ตัวควบคุมโหมดสไลด์ -->
+  <nav class="slide-nav" aria-label="ตัวควบคุมสไลด์">
+    <button class="nav-btn" id="nav-prev" type="button" aria-label="สไลด์ก่อนหน้า"></button>
+    <div class="dots" id="dots"></div>
+    <div class="counter" id="counter"></div>
+    <button class="nav-btn" id="nav-next" type="button" aria-label="สไลด์ถัดไป"></button>
+  </nav>
+
+  <!-- Speaker notes -->
+  <div class="notes-backdrop" id="notes-backdrop"></div>
+  <aside class="notes-panel" id="notes-panel" aria-label="โน้ตสำหรับผู้พูด">
+    <button class="np-close" type="button" aria-label="ปิดโน้ต"></button>
+    <div class="np-kicker"></div>
+    <div class="np-slide-title"></div>
+    <h3 style="margin-bottom:.5rem">โน้ตสำหรับผู้พูด</h3>
+    <div class="np-body"></div>
+    <div class="np-foot">มองเห็นเฉพาะผู้นำเสนอ · กด S เพื่อเปิด/ปิด · ผู้ชมไม่เห็นแผงนี้</div>
+  </aside>
+
+<script>
+/* === ข้อมูลเนื้อหา === */
+{{CONTENT}}
+/* === ตรรกะแอป === */
+{{APP}}
+</script>
+</body>
+</html>
