@@ -77,11 +77,7 @@
               <span>นายกฯ คนที่ 14</span><span>BJP</span><span>2014 – ปัจจุบัน</span><span>ประชากร 1.4 พันล้าน</span>
             </div>
           </div>
-          <div class="portrait" data-reveal style="--d:300ms" data-portrait>
-            <div class="flag-band">${flagSVG()}</div>
-            <div class="silhouette">${silhouetteSVG()}</div>
-            <div class="ph-note">ช่องสำหรับรูปจริง — แทนที่ <b>[data-portrait]</b> ด้วย &lt;img&gt; ภายหลังได้</div>
-          </div>
+          ${portraitHTML()}
         </div>`;
     }
 
@@ -202,6 +198,21 @@
     </svg>`;
   }
   function SVGghost() { return `<div class="ghost-chakra">${chakra('currentColor')}</div>`; }
+
+  /* พอร์เทรต: ใช้ภาพจริงถ้าฝังมา (MODI_PHOTO) ไม่งั้นใช้ placeholder ธง+เงา */
+  function portraitHTML() {
+    if (typeof MODI_PHOTO !== 'undefined' && MODI_PHOTO) {
+      return `<figure class="portrait has-photo" data-reveal style="--d:300ms">
+        <img class="portrait-img" src="${MODI_PHOTO}" alt="ภาพพอร์เทรตของนเรนทรา โมดี นายกรัฐมนตรีอินเดีย" loading="eager" decoding="async">
+        <figcaption class="portrait-credit">ภาพ: Government of India · PMO — GODL-India</figcaption>
+      </figure>`;
+    }
+    return `<div class="portrait" data-reveal style="--d:300ms" data-portrait>
+        <div class="flag-band">${flagSVG()}</div>
+        <div class="silhouette">${silhouetteSVG()}</div>
+        <div class="ph-note">ช่องสำหรับรูปจริง — วาง <b>assets/modi.jpg</b> แล้ว build ใหม่</div>
+      </div>`;
+  }
 
   /* ====================================================================
      สร้าง DOM

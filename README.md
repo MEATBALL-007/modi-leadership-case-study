@@ -74,10 +74,12 @@ node build.js
 bash scripts/fetch-fonts.sh && node build.js
 ```
 
-### เพิ่มรูปพอร์เทรตจริงของโมดี
+### รูปพอร์เทรตจริงของโมดี
 
-ในสไลด์แรกมีช่อง placeholder `[data-portrait]` — แทนที่ด้วย `<img>` ของจริงได้
-(แนะนำให้ฝังเป็น base64 หรือวางไฟล์ในโฟลเดอร์เดียวกัน เพื่อคงความ self-contained)
+สไลด์แรกใช้ภาพถ่ายจริงจาก **`assets/modi.jpg`** ซึ่ง `build.js` จะฝังเป็น base64 อัตโนมัติ
+ถ้าลบไฟล์นี้ออก ระบบจะกลับไปใช้ภาพ placeholder (ธง + เงา) แทน
+
+อยากเปลี่ยนรูป: วางไฟล์ใหม่เป็น `assets/modi.jpg` แล้วรัน `node build.js`
 
 ---
 
@@ -87,3 +89,7 @@ bash scripts/fetch-fonts.sh && node build.js
 **ควรเทียบกับต้นฉบับของผู้ใช้อีกครั้งก่อนนำเสนอจริง** — จัดทำเพื่อการศึกษา นำเสนออย่างเป็นกลาง
 
 ฟอนต์: Noto Sans Thai / Noto Serif Thai (SIL Open Font License) จาก Google Fonts
+
+ภาพพอร์เทรต: "Official portrait of the Prime Minister Narendra Modi, November 2020"
+โดย Government of India / Prime Minister's Office — สัญญาอนุญาต **GODL-India**
+(ใช้ได้โดยต้องให้เครดิต) ผ่าน Wikimedia Commons

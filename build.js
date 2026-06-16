@@ -45,13 +45,24 @@ function buildFonts() {
   ].join('\n');
 }
 
+/* ฝังภาพพอร์เทรตเป็น base64 (ถ้ามีไฟล์ assets/modi.jpg) — ไม่มีก็ใช้ placeholder */
+function buildPortrait() {
+  const p = path.join(ROOT, 'assets', 'modi.jpg');
+  if (!fs.existsSync(p)) {
+    console.log('  · ไม่พบ assets/modi.jpg — ใช้ภาพ placeholder แทน');
+    return 'const MODI_PHOTO = "";';
+  }
+  return 'const MODI_PHOTO = "data:image/jpeg;base64,' + b64(p) + '";';
+}
+
 function main() {
   const template = read(path.join(SRC, 'template.html'));
   const out = template
-    .replace('{{FONTS}}',   () => buildFonts())
-    .replace('{{STYLES}}',  () => read(path.join(SRC, 'styles.css')))
-    .replace('{{CONTENT}}', () => read(path.join(SRC, 'content.js')))
-    .replace('{{APP}}',     () => read(path.join(SRC, 'app.js')));
+    .replace('{{FONTS}}',    () => buildFonts())
+    .replace('{{STYLES}}',   () => read(path.join(SRC, 'styles.css')))
+    .replace('{{PORTRAIT}}', () => buildPortrait())
+    .replace('{{CONTENT}}',  () => read(path.join(SRC, 'content.js')))
+    .replace('{{APP}}',      () => read(path.join(SRC, 'app.js')));
 
   const dest = path.join(ROOT, 'index.html');
   fs.writeFileSync(dest, out, 'utf8');
