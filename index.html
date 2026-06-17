@@ -373,6 +373,107 @@ h1, h2 { font-family: var(--serif); font-weight: 900; line-height: 1.04; color: 
 
 .footnote { margin-top: 2.5rem; font-size: .8rem; color: var(--ink-faint); border-top: 1px solid var(--line); padding-top: 1rem; max-width: 70ch; }
 
+/* ---------- #1 citations ใต้สถิติ ---------- */
+.cite { font-size: .7rem; color: var(--ink-faint); margin-top: .55rem; line-height: 1.4; }
+
+/* ---------- #2 stats-grid (by the numbers) ---------- */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; margin-top: 1rem; }
+.stat-big {
+  background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--accent);
+  border-radius: 16px; padding: 1.5rem 1.4rem; box-shadow: var(--shadow);
+}
+.stat-big .num { font-family: var(--serif); font-weight: 900; font-size: clamp(2.2rem, 5vw, 2.9rem); color: var(--accent); line-height: 1; }
+.stat-big .slabel { font-size: .98rem; color: var(--ink-soft); margin-top: .45rem; }
+
+/* ---------- #7 balance scale + #3 discuss ---------- */
+.balance-wrap { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.2rem; align-items: center; margin-top: 1rem; }
+.balance-col { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 1.3rem 1.4rem; box-shadow: var(--shadow); }
+.balance-col.pos { border-top: 4px solid var(--green); }
+.balance-col.neg { border-top: 4px solid var(--clay); }
+.bcol-label { font-family: var(--serif); font-weight: 700; font-size: 1.15rem; margin-bottom: .7rem; }
+.balance-col.pos .bcol-label { color: var(--green); }
+.balance-col.neg .bcol-label { color: var(--clay); }
+.balance-col ul { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+.balance-col li { position: relative; padding-left: 1.25rem; color: var(--ink-soft); font-size: 1rem; }
+.balance-col li::before { content: ""; position: absolute; left: 0; top: .5em; width: 7px; height: 7px; border-radius: 50%; }
+.balance-col.pos li::before { background: var(--green); }
+.balance-col.neg li::before { background: var(--clay); }
+.balance-scale { width: 150px; color: var(--ink-soft); }
+.balance-scale svg { width: 100%; height: auto; display: block; }
+@media (max-width: 780px) {
+  .balance-wrap { grid-template-columns: 1fr; }
+  .balance-scale { width: 130px; margin: 0 auto; order: -1; }
+}
+.discuss { margin-top: 1.6rem; background: var(--accent-soft); border: 1.5px dashed var(--accent); border-radius: 14px; padding: 1.2rem 1.4rem; }
+.discuss-q { font-family: var(--serif); font-weight: 700; font-size: 1.2rem; display: flex; align-items: center; gap: .6rem; }
+.discuss-q svg { width: 22px; height: 22px; color: var(--accent); flex: 0 0 auto; }
+.discuss-prompts { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .85rem; }
+.discuss-prompts span { font-size: .9rem; color: var(--ink-soft); background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: .4rem .9rem; }
+
+/* ---------- #5 presenter timer ---------- */
+.timer {
+  font-variant-numeric: tabular-nums; font-weight: 700; font-size: .9rem; color: var(--ink-soft);
+  background: var(--card); border: 1px solid var(--line); border-radius: 999px;
+  padding: .55rem .85rem; min-width: 64px; cursor: pointer; box-shadow: var(--shadow);
+  transition: background .2s, color .2s, border-color .2s;
+}
+.timer::before { content: "⏱ "; opacity: .6; }
+.timer:hover { border-color: var(--accent); color: var(--accent); }
+.timer.flash { background: var(--accent); color: #fff; border-color: var(--accent); }
+@media (max-width: 600px) { .timer { display: none; } }
+
+/* ---------- #6 help overlay ---------- */
+.help-overlay {
+  position: fixed; inset: 0; z-index: 90; display: none; place-items: center; padding: 1.5rem;
+  background: rgba(10,12,18,.5); backdrop-filter: blur(3px);
+}
+.help-overlay.open { display: grid; }
+.help-card {
+  position: relative; background: var(--card); border: 1px solid var(--line);
+  border-radius: 18px; padding: 1.8rem; max-width: 460px; width: 100%; box-shadow: var(--shadow-lg);
+  animation: pop .25s var(--ease-out);
+}
+@keyframes pop { from { transform: translateY(12px) scale(.97); opacity: 0; } to { transform: none; opacity: 1; } }
+.help-card h3 { font-family: var(--serif); font-size: 1.4rem; margin-bottom: 1.1rem; }
+.help-list { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+.help-list li { display: flex; align-items: center; gap: .9rem; }
+.help-list kbd {
+  font-family: var(--sans); font-weight: 700; font-size: .76rem; min-width: 70px; text-align: center;
+  background: var(--paper); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 7px;
+  padding: .3rem .5rem; color: var(--ink);
+}
+.help-list span { color: var(--ink-soft); }
+.help-foot { margin-top: 1.2rem; font-size: .8rem; color: var(--ink-faint); }
+.help-close {
+  position: absolute; top: 1rem; right: 1rem; width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--paper); color: var(--ink); cursor: pointer; display: grid; place-items: center;
+}
+.help-close:hover { border-color: var(--accent); color: var(--accent); }
+.help-close svg { width: 16px; height: 16px; }
+
+/* ============================================================================
+   #9 ธีมมืด (Dark theme)
+   ============================================================================ */
+html[data-theme="dark"] {
+  --paper: #13151b; --paper-2: #191c24; --ink: #ece7da; --ink-soft: #aeb4c0; --ink-faint: #7e838f;
+  --line: #2a2f3a; --card: #1b1f29;
+  --saffron: #f0973f; --saffron-br: #ffac57; --green: #3bbd73; --clay: #e06a4f; --navy: #7aa7ff;
+  --shadow: 0 1px 2px rgba(0,0,0,.35), 0 16px 40px -18px rgba(0,0,0,.65);
+  --shadow-lg: 0 30px 80px -30px rgba(0,0,0,.75);
+}
+html[data-theme="dark"] [data-cat="neutral"]  { --accent: #7aa7ff; --accent-soft: rgba(122,167,255,.16); }
+html[data-theme="dark"] [data-cat="positive"] { --accent: #3bbd73; --accent-soft: rgba(59,189,115,.18); }
+html[data-theme="dark"] [data-cat="warning"]  { --accent: #e06a4f; --accent-soft: rgba(224,106,79,.16); }
+html[data-theme="dark"] [data-cat="insight"]  { --accent: #f0973f; --accent-soft: rgba(240,151,63,.18); }
+html[data-theme="dark"] body {
+  background-image:
+    radial-gradient(1200px 600px at 80% -10%, rgba(240,151,63,.10), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(59,189,115,.08), transparent 55%);
+}
+html[data-theme="dark"] body::before { mix-blend-mode: screen; opacity: .4; }
+html[data-theme="dark"] .portrait.has-photo { background: linear-gradient(165deg, #222734, #14171f); }
+html[data-theme="dark"] .btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
 /* ---------- decorative chakra background ใน hero/summary ---------- */
 .slide .ghost-chakra {
   position: absolute; right: -8%; top: 50%; transform: translateY(-50%);
@@ -498,11 +599,26 @@ body.motion-off .slide { transition: opacity .15s linear !important; }
   .bigcard .stat .num { font-size: 2rem; }
 }
 
-/* การพิมพ์ (เผื่อ export PDF) */
+/* ---------- #10 การพิมพ์ / Export PDF — แฮนด์เอาต์ 1 สไลด์ต่อหน้า ---------- */
 @media print {
-  .toolbar, .slide-nav, .notes-panel, .notes-backdrop, .progress { display: none !important; }
-  .slide { position: static !important; opacity: 1 !important; visibility: visible !important; transform: none !important; page-break-after: always; min-height: auto; }
-  body { background: #fff; }
+  @page { margin: 1.4cm; }
+  .toolbar, .slide-nav, .notes-panel, .notes-backdrop, .progress, .help-overlay, .ghost-chakra { display: none !important; }
+  html, body { background: #fff !important; height: auto !important; overflow: visible !important; }
+  body::before { display: none !important; }
+  .deck { display: block !important; height: auto !important; }
+  .slide {
+    position: static !important; inset: auto !important; width: auto !important; height: auto !important;
+    opacity: 1 !important; visibility: visible !important; transform: none !important;
+    min-height: auto !important; page-break-after: always; break-after: page;
+    padding: 0 0 1rem !important; border: none !important;
+  }
+  .slide:last-child { page-break-after: auto; break-after: auto; }
+  [data-reveal], .split-title .word { opacity: 1 !important; transform: none !important; }
+  /* ลากเส้นไทม์ไลน์ให้เต็มเมื่อพิมพ์ */
+  .timeline .rail-fill { top: 6px !important; bottom: 6px !important; height: auto !important; }
+  /* กันการ์ดถูกตัดกลางหน้า */
+  .bigcard, .stat-big, .balance-col, .pcard, .fact-mini, .qcard, .split-card, .takeaway, .tl-item { break-inside: avoid; }
+  .bigcard:hover, .split-card:hover { transform: none !important; }
 }
 
 </style>
@@ -519,6 +635,15 @@ body.motion-off .slide { transition: opacity .15s linear !important; }
       <span>นเรนทรา โมดี<small>กรณีศึกษาผู้นำ · Leadership Case Study</small></span>
     </div>
     <span class="spacer"></span>
+    <button class="btn" id="btn-help" type="button" title="คีย์ลัด/ความช่วยเหลือ (?)">
+      <span class="ico"></span><span class="kbd">?</span>
+    </button>
+    <button class="btn" id="btn-print" type="button" title="พิมพ์ / บันทึก PDF">
+      <span class="ico"></span><span class="lbl">พิมพ์/PDF</span>
+    </button>
+    <button class="btn" id="btn-theme" type="button" aria-pressed="false" title="สลับธีมสว่าง/มืด (T)">
+      <span class="ico"></span><span class="lbl">ธีม</span><span class="kbd">T</span>
+    </button>
     <button class="btn" id="btn-notes" type="button" aria-pressed="false" title="โน้ตผู้พูด (S)">
       <span class="ico"></span><span class="lbl">โน้ตผู้พูด</span><span class="kbd">S</span>
     </button>
@@ -538,8 +663,19 @@ body.motion-off .slide { transition: opacity .15s linear !important; }
     <button class="nav-btn" id="nav-prev" type="button" aria-label="สไลด์ก่อนหน้า"></button>
     <div class="dots" id="dots"></div>
     <div class="counter" id="counter"></div>
+    <button class="timer" id="timer" type="button" title="เวลาที่ใช้นำเสนอ — คลิกเพื่อรีเซ็ต">00:00</button>
     <button class="nav-btn" id="nav-next" type="button" aria-label="สไลด์ถัดไป"></button>
   </nav>
+
+  <!-- Help / keyboard overlay -->
+  <div class="help-overlay" id="help-overlay" role="dialog" aria-modal="true" aria-label="คีย์ลัด">
+    <div class="help-card">
+      <button class="help-close" id="help-close" type="button" aria-label="ปิด"></button>
+      <h3>คีย์ลัด & การควบคุม</h3>
+      <ul class="help-list" id="help-list"></ul>
+      <div class="help-foot">กด <b>Esc</b> หรือคลิกพื้นที่ว่างเพื่อปิด</div>
+    </div>
+  </div>
 
   <!-- Speaker notes -->
   <div class="notes-backdrop" id="notes-backdrop"></div>
@@ -624,6 +760,23 @@ const DATA = {
       note: 'จุดที่ทรงพลังในการเล่าเรื่อง: เด็กที่ช่วยพ่อขายน้ำชาที่สถานีรถไฟ ใช้ภูมิหลังนี้สร้างภาพ "ผู้นำของคนธรรมดา" ได้อย่างมีประสิทธิภาพ',
     },
 
+    /* 3.5 ภาพรวมเชิงตัวเลข (by the numbers) ---------------------------------- */
+    {
+      id: 'numbers',
+      cat: 'neutral',
+      kicker: 'ภาพรวมเชิงตัวเลข',
+      type: 'stats-grid',
+      title: 'สเกลที่กำลังพูดถึง',
+      lead: 'ก่อนเจาะรายละเอียด ลองดูขนาดของภาวะผู้นำนี้',
+      stats: [
+        { value: 1400, suffix: ' ล้าน', label: 'ประชากรที่ดูแล', src: 'ประมาณการสหประชาชาติ ~2023' },
+        { value: 14, prefix: 'คนที่ ', label: 'นายกรัฐมนตรีของอินเดีย' },
+        { value: 2014, label: 'ปีที่เริ่มดำรงตำแหน่งนายกฯ', plain: true },
+        { value: 13, suffix: ' ปี', label: 'บริหารรัฐกุจราตก่อนขึ้นระดับชาติ', src: 'ค.ศ. 2001–2014' },
+      ],
+      note: 'ใช้สไลด์นี้ "ตรึงสเกล" ในหัวผู้ฟัง: 1.4 พันล้านคน = ราว 20 เท่าของประชากรไทย ก่อนจะเข้ารายละเอียดนโยบาย',
+    },
+
     /* 4. เส้นทางสู่อำนาจ (มินิไทม์ไลน์) -------------------------------------- */
     {
       id: 'rise',
@@ -656,21 +809,21 @@ const DATA = {
           tag: 'การเงินดิจิทัล',
           head: 'ระบบชำระเงิน UPI + บัญชีคนจน',
           body: 'สร้างระบบชำระเงินดิจิทัล (UPI) และเปิดบัญชีธนาคารให้คนจนหลายร้อยล้านบัญชี เพื่อโอนสวัสดิการตรงถึงมือ ตัดคนกลาง และลดคอร์รัปชัน',
-          stat: { value: 500, suffix: '+ ล้านบัญชี*', label: 'บัญชีคนจนที่เปิดใหม่' },
+          stat: { value: 500, suffix: '+ ล้านบัญชี', label: 'บัญชีคนจนที่เปิดใหม่', src: 'โครงการ Jan Dhan Yojana — กระทรวงการคลังอินเดีย (ตัวเลขสะสมถึง ~2024)' },
         },
         {
           icon: 'factory',
           tag: 'เศรษฐกิจ',
           head: 'Make in India + ดึงทุนต่างชาติ',
           body: 'นโยบายดึงดูดเงินทุนต่างชาติและผลักดันฐานการผลิตในประเทศ ทำให้เศรษฐกิจและ GDP เติบโตหลายเท่าในรอบสิบปี',
-          stat: { value: 5, prefix: 'อันดับ ', suffix: '', label: 'เศรษฐกิจใหญ่ที่สุดของโลก*' },
+          stat: { value: 5, prefix: 'อันดับ ', suffix: '', label: 'เศรษฐกิจใหญ่ที่สุดของโลก', src: 'IMF — ขนาด GDP, ราว ค.ศ. 2022 (แซงสหราชอาณาจักร)' },
         },
         {
           icon: 'rocket',
           tag: 'วิทยาศาสตร์',
           head: 'ลงจอดขั้วใต้ดวงจันทร์ (Chandrayaan-3)',
           body: 'ผลักดันโครงการอวกาศจนส่งยานลงจอดบริเวณขั้วโลกใต้ของดวงจันทร์สำเร็จเป็นชาติแรกของโลก',
-          stat: { value: 1, prefix: 'ชาติที่ ', suffix: '', label: 'ของโลกที่ทำสำเร็จ · 2023' },
+          stat: { value: 1, prefix: 'ชาติที่ ', suffix: '', label: 'ของโลกที่ลงจอดขั้วใต้ดวงจันทร์', src: 'ISRO — Chandrayaan-3, 23 สิงหาคม ค.ศ. 2023' },
         },
       ],
       note: 'จุดขายระดับโลก: UPI กลายเป็นต้นแบบระบบชำระเงินที่หลายประเทศมาดูงาน และ Chandrayaan-3 (สิงหาคม 2023) คือชัยชนะเชิงสัญลักษณ์ที่ทรงพลังมาก',
@@ -738,6 +891,22 @@ const DATA = {
       note: 'ปิดท้ายส่วนบทเรียนด้วยการแยกให้ชัด: เราเรียนรู้ "วิธีตั้งเป้าและวินัย" ได้ โดยไม่จำเป็นต้องเห็นด้วยกับทุกการตัดสินใจของเขา',
     },
 
+    /* 8.5 ชั่งน้ำหนักสองด้าน + คำถามชวนคิด (balance + discuss) --------------- */
+    {
+      id: 'balance',
+      cat: 'insight',
+      kicker: 'ชั่งน้ำหนักสองด้าน',
+      type: 'balance',
+      title: 'ก่อนสรุป — ลองชั่งดู',
+      pros: ['UPI + บัญชีคนจน', 'Make in India / เศรษฐกิจโต', 'Chandrayaan-3 ลงจอดดวงจันทร์', 'สื่อสารตรงถึงประชาชน'],
+      cons: ['จลาจลกุจราต 2002', 'ยกเลิกธนบัตร 2016', 'กฎหมาย CAA 2019', 'ข้อจำกัดเสรีภาพสื่อ'],
+      prosLabel: 'ผลงาน',
+      consLabel: 'ข้อวิจารณ์',
+      question: 'ถ้าคุณเป็นผู้นำ — จะเอา “วิธีคิด” แบบใดมาใช้ และจะหลีกเลี่ยงอะไร?',
+      prompts: ['อะไรคือสิ่งที่ควรเอาเป็นแบบอย่าง?', 'อะไรคือบทเรียนที่ไม่ควรทำซ้ำ?'],
+      note: 'จุดอินเทอแรกทีฟกับผู้ฟัง: ให้เวลา 30 วินาทีคิด แล้วถามความเห็น 2–3 คน ก่อนเปิดสไลด์สรุป ใช้ตาชั่งเป็นภาพช่วยให้เห็นว่าผู้นำต้องมองทั้งสองด้าน',
+    },
+
     /* 9. สรุป + Quiz --------------------------------------------------------- */
     {
       id: 'summary',
@@ -777,7 +946,7 @@ const DATA = {
   ],
 
   /* ---- เครดิต/หมายเหตุท้ายเล่ม ---- */
-  footnote: '* ตัวเลขบางจุด (จำนวนบัญชีธนาคาร อันดับเศรษฐกิจ) ควรเทียบกับอินโฟกราฟิกต้นฉบับก่อนนำเสนอจริง · จัดทำเพื่อการศึกษา นำเสนอทั้งด้านบวกและด้านลบอย่างเป็นกลาง',
+  footnote: 'ตัวเลขอ้างอิงจากแหล่งข้อมูลสาธารณะ (ระบุที่มาใต้สถิติแต่ละจุด) เป็นค่าประมาณการ ควรเทียบกับต้นฉบับล่าสุดก่อนนำเสนอจริง · จัดทำเพื่อการศึกษา นำเสนอทั้งด้านบวกและด้านลบอย่างเป็นกลาง',
 };
 
 /* === ตรรกะแอป === */
@@ -810,6 +979,9 @@ const DATA = {
     note:  P('M5 4h11l3 3v13H5z M14 4v4h4 M8 12h7 M8 16h5'),
     quiz:  '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M9.2 9.2a2.8 2.8 0 1 1 3.6 2.7c-.7.3-.8.8-.8 1.6 M12 16.5v.01', 'stroke-width="2"'),
     close: P('M6 6l12 12 M18 6 6 18'),
+    help:  '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M9.2 9.2a2.8 2.8 0 1 1 3.6 2.7c-.7.3-.8.8-.8 1.6 M12 16.5v.01', 'stroke-width="2"'),
+    theme: P('M21 12.8A8 8 0 1 1 11.2 3a6.2 6.2 0 0 0 9.8 9.8z'),
+    print: '<rect x="6" y="13" width="12" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M6 13V4h12v9 M6 9h12') + '<rect x="3" y="9" width="18" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="12" r=".9" fill="currentColor" stroke="none"/>',
   };
 
   /* ---------- จักรอโศก (Ashoka Chakra) 24 ซี่ ---------- */
@@ -911,7 +1083,8 @@ const DATA = {
             const st = c.stat;
             const statHTML = st ? `<div class="stat">
                 <div class="num"><span data-count="${st.value}" data-prefix="${esc(st.prefix||'')}" data-suffix="${esc(st.suffix||'')}">${esc(st.prefix||'')}0${esc(st.suffix||'')}</span></div>
-                <div class="slabel">${esc(st.label)}</div></div>` : '';
+                <div class="slabel">${esc(st.label)}</div>
+                ${st.src ? `<div class="cite">ที่มา: ${esc(st.src)}</div>` : ''}</div>` : '';
             return `<div class="bigcard" data-reveal style="--d:${200 + i * 130}ms">
               <div class="bico">${ICONS[c.icon] || ''}</div>
               <div class="tag">${esc(c.tag)}</div>
@@ -931,6 +1104,39 @@ const DATA = {
             <div class="sico">${ICONS[p.icon] || ''}</div>
             <div><div class="shead">${esc(p.head)}</div><div class="sbody">${esc(p.body)}</div></div>
           </div>`).join('')}
+        </div>`;
+    }
+
+    if (s.type === 'stats-grid') {
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        <div class="stats-grid">
+          ${s.stats.map((st, i) => `<div class="stat-big" data-reveal style="--d:${220 + i * 120}ms">
+            <div class="num"><span data-count="${st.value}" data-prefix="${esc(st.prefix||'')}" data-suffix="${esc(st.suffix||'')}"${st.plain ? ' data-plain="1"' : ''}>${esc(st.prefix||'')}0${esc(st.suffix||'')}</span></div>
+            <div class="slabel">${esc(st.label)}</div>
+            ${st.src ? `<div class="cite">ที่มา: ${esc(st.src)}</div>` : ''}
+          </div>`).join('')}
+        </div>`;
+    }
+
+    if (s.type === 'balance') {
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        <div class="balance-wrap" data-reveal style="--d:180ms">
+          <div class="balance-col pos">
+            <div class="bcol-label">${esc(s.prosLabel)}</div>
+            <ul>${s.pros.map(p => `<li>${esc(p)}</li>`).join('')}</ul>
+          </div>
+          <div class="balance-scale">${scaleSVG()}</div>
+          <div class="balance-col neg">
+            <div class="bcol-label">${esc(s.consLabel)}</div>
+            <ul>${s.cons.map(p => `<li>${esc(p)}</li>`).join('')}</ul>
+          </div>
+        </div>
+        <div class="discuss" data-reveal style="--d:340ms">
+          <div class="discuss-q">${ICONS.quiz} ${esc(s.question)}</div>
+          <div class="discuss-prompts">${s.prompts.map(p => `<span>${esc(p)}</span>`).join('')}</div>
         </div>`;
     }
 
@@ -982,6 +1188,26 @@ const DATA = {
   }
   function SVGghost() { return `<div class="ghost-chakra">${chakra('currentColor')}</div>`; }
 
+  /* ตาชั่ง (balance scale) — ซ้าย=ผลงาน(เขียว) ขวา=ข้อวิจารณ์(แดง) สมดุล */
+  function scaleSVG() {
+    return `<svg viewBox="0 0 200 150" aria-hidden="true">
+      <line x1="100" y1="18" x2="100" y2="120" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <line x1="40" y1="34" x2="160" y2="34" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="100" cy="18" r="6" fill="currentColor"/>
+      <path d="M70 120h60 M85 120c0-9 6-14 15-14s15 5 15 14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- จานซ้าย (เขียว) -->
+      <g stroke="#1c7a45" stroke-width="2.5" fill="none">
+        <line x1="40" y1="34" x2="22" y2="64"/><line x1="40" y1="34" x2="58" y2="64"/>
+        <path d="M18 64a22 22 0 0 0 44 0z" fill="rgba(28,122,69,.16)"/>
+      </g>
+      <!-- จานขวา (แดง) -->
+      <g stroke="#b23a25" stroke-width="2.5" fill="none">
+        <line x1="160" y1="34" x2="142" y2="64"/><line x1="160" y1="34" x2="178" y2="64"/>
+        <path d="M138 64a22 22 0 0 0 44 0z" fill="rgba(178,58,37,.16)"/>
+      </g>
+    </svg>`;
+  }
+
   /* พอร์เทรต: ใช้ภาพจริงถ้าฝังมา (MODI_PHOTO) ไม่งั้นใช้ placeholder ธง+เงา */
   function portraitHTML() {
     if (typeof MODI_PHOTO !== 'undefined' && MODI_PHOTO) {
@@ -1030,6 +1256,9 @@ const DATA = {
   setIcon('btn-mode', ICONS.mode);
   setIcon('btn-motion', ICONS.motion);
   setIcon('btn-notes', ICONS.note);
+  setIcon('btn-help', ICONS.help);
+  setIcon('btn-theme', ICONS.theme);
+  setIcon('btn-print', ICONS.print);
   document.getElementById('nav-prev').innerHTML = ICONS.arrowL;
   document.getElementById('nav-next').innerHTML = ICONS.arrowR;
   document.querySelector('.np-close').innerHTML = ICONS.close;
@@ -1078,13 +1307,15 @@ const DATA = {
     el.dataset.done = '1';
     const target = parseFloat(el.dataset.count);
     const prefix = el.dataset.prefix || '', suffix = el.dataset.suffix || '';
-    if (!motionOn) { el.textContent = prefix + target.toLocaleString('en-US') + suffix; return; }
+    const sep = !el.dataset.plain; // years/รหัส ไม่ใส่ลูกน้ำคั่นหลัก
+    const fmtNum = n => sep ? n.toLocaleString('en-US') : String(n);
+    if (!motionOn) { el.textContent = prefix + fmtNum(target) + suffix; return; }
     const dur = 1100, t0 = performance.now();
     function tick(now) {
       const p = Math.min(1, (now - t0) / dur);
       const eased = 1 - Math.pow(1 - p, 3);
       const val = Math.round(target * eased);
-      el.textContent = prefix + val.toLocaleString('en-US') + suffix;
+      el.textContent = prefix + fmtNum(val) + suffix;
       if (p < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
@@ -1142,6 +1373,7 @@ const DATA = {
       // ซ่อน reveal ทั้งหมดก่อน แล้วค่อยโชว์สไลด์ปัจจุบัน
       slides.forEach(resetSlide);
       document.body.classList.add('mode-slide');
+      startTimer();
       goTo(current, true);
     } else {
       document.body.classList.remove('mode-slide');
@@ -1190,6 +1422,19 @@ const DATA = {
     counter.innerHTML = `<b>${current + 1}</b> / ${total}`;
     document.getElementById('nav-prev').disabled = current === 0;
     document.getElementById('nav-next').disabled = current === total - 1;
+    updateHash();
+  }
+
+  /* ---------- #4 deep-link: ผูกสไลด์ปัจจุบันกับ URL hash (ไม่เด้งหน้าจอ) ---------- */
+  function updateHash() {
+    const s = DATA.slides[current];
+    if (!s) return;
+    try { history.replaceState(null, '', '#' + s.id); }
+    catch (_) { /* file:// บางเบราว์เซอร์ไม่ให้ replaceState — ข้ามไป */ }
+  }
+  function slideIndexFromHash() {
+    const id = (location.hash || '').replace('#', '');
+    return DATA.slides.findIndex(s => s.id === id);
   }
 
   /* ---------- ติดตามสไลด์ปัจจุบันใน scroll mode (เพื่อ notes/counter) ---------- */
@@ -1251,6 +1496,9 @@ const DATA = {
   document.getElementById('btn-mode').addEventListener('click', () => setMode(mode === 'slide' ? 'scroll' : 'slide'));
   document.getElementById('btn-motion').addEventListener('click', () => { motionOn = !motionOn; applyMotion(); });
   document.getElementById('btn-notes').addEventListener('click', () => toggleNotes());
+  document.getElementById('btn-theme').addEventListener('click', () => toggleTheme());
+  document.getElementById('btn-help').addEventListener('click', () => toggleHelp());
+  document.getElementById('btn-print').addEventListener('click', () => window.print());
   document.getElementById('nav-prev').addEventListener('click', prev);
   document.getElementById('nav-next').addEventListener('click', next);
 
@@ -1261,7 +1509,9 @@ const DATA = {
     if (k === 'm') { e.preventDefault(); setMode(mode === 'slide' ? 'scroll' : 'slide'); }
     else if (k === 'a') { e.preventDefault(); motionOn = !motionOn; applyMotion(); }
     else if (k === 's' || k === 'n') { e.preventDefault(); toggleNotes(); }
-    else if (k === 'escape') { toggleNotes(false); }
+    else if (k === 't') { e.preventDefault(); toggleTheme(); }
+    else if (k === '?' || (k === '/' && e.shiftKey)) { e.preventDefault(); toggleHelp(); }
+    else if (k === 'escape') { toggleNotes(false); toggleHelp(false); }
     else if (mode === 'slide') {
       if (k === 'arrowright' || k === ' ' || k === 'pagedown') { e.preventDefault(); next(); }
       else if (k === 'arrowleft' || k === 'pageup') { e.preventDefault(); prev(); }
@@ -1283,15 +1533,121 @@ const DATA = {
      scroll progress
      ==================================================================== */
   const bar = document.getElementById('progress');
-  window.addEventListener('scroll', () => {
+  let scrollRAF = 0;
+  function onScroll() {
     if (mode === 'slide') return;
     const h = document.documentElement.scrollHeight - window.innerHeight;
     bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+    updateTimelineRails();
+  }
+  window.addEventListener('scroll', () => {
+    if (scrollRAF) return;
+    scrollRAF = requestAnimationFrame(() => { scrollRAF = 0; onScroll(); });
   }, { passive: true });
 
-  /* ---------- เริ่มทำงาน ---------- */
+  /* #8 เส้นเวลาไหลตามตำแหน่งสกรอลล์ — รางค่อย ๆ "ลากเส้น" ขณะอ่าน */
+  function updateTimelineRails() {
+    if (mode !== 'scroll') return;
+    const refLine = window.innerHeight * 0.62; // จุดอ้างอิงกลางค่อนล่างของจอ
+    deck.querySelectorAll('[data-timeline]').forEach(tl => {
+      const rf = tl.querySelector('.rail-fill');
+      if (!rf) return;
+      const items = tl.querySelectorAll('[data-tl]');
+      let fill = 0;
+      items.forEach(it => {
+        const r = it.getBoundingClientRect();
+        if (r.top <= refLine) { fill = it.offsetTop + 14; it.classList.add('is-visible'); }
+      });
+      rf.style.height = fill + 'px';
+    });
+  }
+
+  /* ====================================================================
+     #9 THEME (สว่าง/มืด) — จำค่าไว้ด้วย localStorage
+     ==================================================================== */
+  const THEME_KEY = 'modi-theme';
+  function currentTheme() { return document.documentElement.getAttribute('data-theme') || 'light'; }
+  function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    const b = document.getElementById('btn-theme');
+    b.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
+    b.querySelector('.lbl').textContent = t === 'dark' ? 'ธีม: มืด' : 'ธีม: สว่าง';
+  }
+  function toggleTheme() {
+    const t = currentTheme() === 'dark' ? 'light' : 'dark';
+    applyTheme(t);
+    try { localStorage.setItem(THEME_KEY, t); } catch (_) {}
+  }
+  // พิมพ์ให้สว่างเสมอ (กันตัวอักษรขาวบนพื้นขาว) แล้วคืนธีมเดิม
+  let printPrevTheme = null;
+  window.addEventListener('beforeprint', () => { printPrevTheme = currentTheme(); applyTheme('light'); });
+  window.addEventListener('afterprint', () => { if (printPrevTheme) applyTheme(printPrevTheme); });
+
+  /* ====================================================================
+     #6 HELP OVERLAY (คีย์ลัด)
+     ==================================================================== */
+  let helpOpen = false;
+  const helpOverlay = document.getElementById('help-overlay');
+  document.getElementById('help-close').innerHTML = ICONS.close;
+  const HELP_ROWS = [
+    ['M', 'สลับโหมด เลื่อน ↔ สไลด์'],
+    ['← →', 'เปลี่ยนสไลด์ (โหมดสไลด์)'],
+    ['Space', 'สไลด์ถัดไป'],
+    ['Home / End', 'สไลด์แรก / สุดท้าย'],
+    ['S / N', 'โน้ตผู้พูด (ผู้ชมไม่เห็น)'],
+    ['A', 'เปิด/ปิดอนิเมชัน'],
+    ['T', 'สลับธีม สว่าง/มืด'],
+    ['?', 'เปิด/ปิดหน้าต่างนี้'],
+    ['Esc', 'ปิดแผง/หน้าต่าง'],
+  ];
+  document.getElementById('help-list').innerHTML =
+    HELP_ROWS.map(r => `<li><kbd>${r[0]}</kbd><span>${r[1]}</span></li>`).join('');
+  function toggleHelp(force) {
+    helpOpen = (force === undefined) ? !helpOpen : force;
+    helpOverlay.classList.toggle('open', helpOpen);
+  }
+  helpOverlay.addEventListener('click', e => { if (e.target === helpOverlay) toggleHelp(false); });
+  document.getElementById('help-close').addEventListener('click', () => toggleHelp(false));
+
+  /* ====================================================================
+     #5 PRESENTER TIMER (โหมดสไลด์) — คลิกเพื่อรีเซ็ต
+     ==================================================================== */
+  const timerEl = document.getElementById('timer');
+  let timerStart = 0, timerInt = 0;
+  function fmt(ms) {
+    const s = Math.max(0, Math.floor(ms / 1000));
+    return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+  }
+  function timerTick() { timerEl.textContent = fmt(Date.now() - timerStart); }
+  function startTimer() {
+    timerStart = Date.now(); timerTick();
+    if (timerInt) clearInterval(timerInt);
+    timerInt = setInterval(timerTick, 1000);
+  }
+  timerEl.addEventListener('click', () => { startTimer(); timerEl.classList.add('flash'); setTimeout(() => timerEl.classList.remove('flash'), 300); });
+
+  /* ====================================================================
+     เริ่มทำงาน
+     ==================================================================== */
+  // ใช้ธีมที่เคยบันทึกไว้ (ถ้ามี)
+  try { const saved = localStorage.getItem(THEME_KEY); if (saved) applyTheme(saved); } catch (_) {}
+
   startObserver();
   updateUI();
+  updateTimelineRails();
+
+  // #4 กู้คืนสไลด์จาก URL hash (เช่น เปิดด้วย ...#policies)
+  const hashIdx = slideIndexFromHash();
+  if (hashIdx >= 0) {
+    current = hashIdx;
+    updateUI(); updateNotes();
+    // เลื่อนแบบทันที (ไม่ smooth) ทั้งตอนนี้และหลัง layout/โหลดเสร็จ เพื่อความชัวร์
+    const jump = () => slides[hashIdx].scrollIntoView({ behavior: 'auto', block: 'start' });
+    jump();
+    setTimeout(jump, 60);
+    window.addEventListener('load', jump);
+  }
+
   // เผยสไลด์แรกทันทีถ้าอยู่บนสุด
   requestAnimationFrame(() => { if (slides[0]) revealEl(slides[0].querySelector('.kicker')); });
 

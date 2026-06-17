@@ -24,6 +24,15 @@
       <span>นเรนทรา โมดี<small>กรณีศึกษาผู้นำ · Leadership Case Study</small></span>
     </div>
     <span class="spacer"></span>
+    <button class="btn" id="btn-help" type="button" title="คีย์ลัด/ความช่วยเหลือ (?)">
+      <span class="ico"></span><span class="kbd">?</span>
+    </button>
+    <button class="btn" id="btn-print" type="button" title="พิมพ์ / บันทึก PDF">
+      <span class="ico"></span><span class="lbl">พิมพ์/PDF</span>
+    </button>
+    <button class="btn" id="btn-theme" type="button" aria-pressed="false" title="สลับธีมสว่าง/มืด (T)">
+      <span class="ico"></span><span class="lbl">ธีม</span><span class="kbd">T</span>
+    </button>
     <button class="btn" id="btn-notes" type="button" aria-pressed="false" title="โน้ตผู้พูด (S)">
       <span class="ico"></span><span class="lbl">โน้ตผู้พูด</span><span class="kbd">S</span>
     </button>
@@ -43,8 +52,19 @@
     <button class="nav-btn" id="nav-prev" type="button" aria-label="สไลด์ก่อนหน้า"></button>
     <div class="dots" id="dots"></div>
     <div class="counter" id="counter"></div>
+    <button class="timer" id="timer" type="button" title="เวลาที่ใช้นำเสนอ — คลิกเพื่อรีเซ็ต">00:00</button>
     <button class="nav-btn" id="nav-next" type="button" aria-label="สไลด์ถัดไป"></button>
   </nav>
+
+  <!-- Help / keyboard overlay -->
+  <div class="help-overlay" id="help-overlay" role="dialog" aria-modal="true" aria-label="คีย์ลัด">
+    <div class="help-card">
+      <button class="help-close" id="help-close" type="button" aria-label="ปิด"></button>
+      <h3>คีย์ลัด & การควบคุม</h3>
+      <ul class="help-list" id="help-list"></ul>
+      <div class="help-foot">กด <b>Esc</b> หรือคลิกพื้นที่ว่างเพื่อปิด</div>
+    </div>
+  </div>
 
   <!-- Speaker notes -->
   <div class="notes-backdrop" id="notes-backdrop"></div>

@@ -27,6 +27,9 @@
     note:  P('M5 4h11l3 3v13H5z M14 4v4h4 M8 12h7 M8 16h5'),
     quiz:  '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M9.2 9.2a2.8 2.8 0 1 1 3.6 2.7c-.7.3-.8.8-.8 1.6 M12 16.5v.01', 'stroke-width="2"'),
     close: P('M6 6l12 12 M18 6 6 18'),
+    help:  '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M9.2 9.2a2.8 2.8 0 1 1 3.6 2.7c-.7.3-.8.8-.8 1.6 M12 16.5v.01', 'stroke-width="2"'),
+    theme: P('M21 12.8A8 8 0 1 1 11.2 3a6.2 6.2 0 0 0 9.8 9.8z'),
+    print: '<rect x="6" y="13" width="12" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M6 13V4h12v9 M6 9h12') + '<rect x="3" y="9" width="18" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="12" r=".9" fill="currentColor" stroke="none"/>',
   };
 
   /* ---------- จักรอโศก (Ashoka Chakra) 24 ซี่ ---------- */
@@ -128,7 +131,8 @@
             const st = c.stat;
             const statHTML = st ? `<div class="stat">
                 <div class="num"><span data-count="${st.value}" data-prefix="${esc(st.prefix||'')}" data-suffix="${esc(st.suffix||'')}">${esc(st.prefix||'')}0${esc(st.suffix||'')}</span></div>
-                <div class="slabel">${esc(st.label)}</div></div>` : '';
+                <div class="slabel">${esc(st.label)}</div>
+                ${st.src ? `<div class="cite">ที่มา: ${esc(st.src)}</div>` : ''}</div>` : '';
             return `<div class="bigcard" data-reveal style="--d:${200 + i * 130}ms">
               <div class="bico">${ICONS[c.icon] || ''}</div>
               <div class="tag">${esc(c.tag)}</div>
@@ -148,6 +152,39 @@
             <div class="sico">${ICONS[p.icon] || ''}</div>
             <div><div class="shead">${esc(p.head)}</div><div class="sbody">${esc(p.body)}</div></div>
           </div>`).join('')}
+        </div>`;
+    }
+
+    if (s.type === 'stats-grid') {
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        <div class="stats-grid">
+          ${s.stats.map((st, i) => `<div class="stat-big" data-reveal style="--d:${220 + i * 120}ms">
+            <div class="num"><span data-count="${st.value}" data-prefix="${esc(st.prefix||'')}" data-suffix="${esc(st.suffix||'')}"${st.plain ? ' data-plain="1"' : ''}>${esc(st.prefix||'')}0${esc(st.suffix||'')}</span></div>
+            <div class="slabel">${esc(st.label)}</div>
+            ${st.src ? `<div class="cite">ที่มา: ${esc(st.src)}</div>` : ''}
+          </div>`).join('')}
+        </div>`;
+    }
+
+    if (s.type === 'balance') {
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        <div class="balance-wrap" data-reveal style="--d:180ms">
+          <div class="balance-col pos">
+            <div class="bcol-label">${esc(s.prosLabel)}</div>
+            <ul>${s.pros.map(p => `<li>${esc(p)}</li>`).join('')}</ul>
+          </div>
+          <div class="balance-scale">${scaleSVG()}</div>
+          <div class="balance-col neg">
+            <div class="bcol-label">${esc(s.consLabel)}</div>
+            <ul>${s.cons.map(p => `<li>${esc(p)}</li>`).join('')}</ul>
+          </div>
+        </div>
+        <div class="discuss" data-reveal style="--d:340ms">
+          <div class="discuss-q">${ICONS.quiz} ${esc(s.question)}</div>
+          <div class="discuss-prompts">${s.prompts.map(p => `<span>${esc(p)}</span>`).join('')}</div>
         </div>`;
     }
 
@@ -199,6 +236,26 @@
   }
   function SVGghost() { return `<div class="ghost-chakra">${chakra('currentColor')}</div>`; }
 
+  /* ตาชั่ง (balance scale) — ซ้าย=ผลงาน(เขียว) ขวา=ข้อวิจารณ์(แดง) สมดุล */
+  function scaleSVG() {
+    return `<svg viewBox="0 0 200 150" aria-hidden="true">
+      <line x1="100" y1="18" x2="100" y2="120" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <line x1="40" y1="34" x2="160" y2="34" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="100" cy="18" r="6" fill="currentColor"/>
+      <path d="M70 120h60 M85 120c0-9 6-14 15-14s15 5 15 14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- จานซ้าย (เขียว) -->
+      <g stroke="#1c7a45" stroke-width="2.5" fill="none">
+        <line x1="40" y1="34" x2="22" y2="64"/><line x1="40" y1="34" x2="58" y2="64"/>
+        <path d="M18 64a22 22 0 0 0 44 0z" fill="rgba(28,122,69,.16)"/>
+      </g>
+      <!-- จานขวา (แดง) -->
+      <g stroke="#b23a25" stroke-width="2.5" fill="none">
+        <line x1="160" y1="34" x2="142" y2="64"/><line x1="160" y1="34" x2="178" y2="64"/>
+        <path d="M138 64a22 22 0 0 0 44 0z" fill="rgba(178,58,37,.16)"/>
+      </g>
+    </svg>`;
+  }
+
   /* พอร์เทรต: ใช้ภาพจริงถ้าฝังมา (MODI_PHOTO) ไม่งั้นใช้ placeholder ธง+เงา */
   function portraitHTML() {
     if (typeof MODI_PHOTO !== 'undefined' && MODI_PHOTO) {
@@ -247,6 +304,9 @@
   setIcon('btn-mode', ICONS.mode);
   setIcon('btn-motion', ICONS.motion);
   setIcon('btn-notes', ICONS.note);
+  setIcon('btn-help', ICONS.help);
+  setIcon('btn-theme', ICONS.theme);
+  setIcon('btn-print', ICONS.print);
   document.getElementById('nav-prev').innerHTML = ICONS.arrowL;
   document.getElementById('nav-next').innerHTML = ICONS.arrowR;
   document.querySelector('.np-close').innerHTML = ICONS.close;
@@ -295,13 +355,15 @@
     el.dataset.done = '1';
     const target = parseFloat(el.dataset.count);
     const prefix = el.dataset.prefix || '', suffix = el.dataset.suffix || '';
-    if (!motionOn) { el.textContent = prefix + target.toLocaleString('en-US') + suffix; return; }
+    const sep = !el.dataset.plain; // years/รหัส ไม่ใส่ลูกน้ำคั่นหลัก
+    const fmtNum = n => sep ? n.toLocaleString('en-US') : String(n);
+    if (!motionOn) { el.textContent = prefix + fmtNum(target) + suffix; return; }
     const dur = 1100, t0 = performance.now();
     function tick(now) {
       const p = Math.min(1, (now - t0) / dur);
       const eased = 1 - Math.pow(1 - p, 3);
       const val = Math.round(target * eased);
-      el.textContent = prefix + val.toLocaleString('en-US') + suffix;
+      el.textContent = prefix + fmtNum(val) + suffix;
       if (p < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
@@ -359,6 +421,7 @@
       // ซ่อน reveal ทั้งหมดก่อน แล้วค่อยโชว์สไลด์ปัจจุบัน
       slides.forEach(resetSlide);
       document.body.classList.add('mode-slide');
+      startTimer();
       goTo(current, true);
     } else {
       document.body.classList.remove('mode-slide');
@@ -407,6 +470,19 @@
     counter.innerHTML = `<b>${current + 1}</b> / ${total}`;
     document.getElementById('nav-prev').disabled = current === 0;
     document.getElementById('nav-next').disabled = current === total - 1;
+    updateHash();
+  }
+
+  /* ---------- #4 deep-link: ผูกสไลด์ปัจจุบันกับ URL hash (ไม่เด้งหน้าจอ) ---------- */
+  function updateHash() {
+    const s = DATA.slides[current];
+    if (!s) return;
+    try { history.replaceState(null, '', '#' + s.id); }
+    catch (_) { /* file:// บางเบราว์เซอร์ไม่ให้ replaceState — ข้ามไป */ }
+  }
+  function slideIndexFromHash() {
+    const id = (location.hash || '').replace('#', '');
+    return DATA.slides.findIndex(s => s.id === id);
   }
 
   /* ---------- ติดตามสไลด์ปัจจุบันใน scroll mode (เพื่อ notes/counter) ---------- */
@@ -468,6 +544,9 @@
   document.getElementById('btn-mode').addEventListener('click', () => setMode(mode === 'slide' ? 'scroll' : 'slide'));
   document.getElementById('btn-motion').addEventListener('click', () => { motionOn = !motionOn; applyMotion(); });
   document.getElementById('btn-notes').addEventListener('click', () => toggleNotes());
+  document.getElementById('btn-theme').addEventListener('click', () => toggleTheme());
+  document.getElementById('btn-help').addEventListener('click', () => toggleHelp());
+  document.getElementById('btn-print').addEventListener('click', () => window.print());
   document.getElementById('nav-prev').addEventListener('click', prev);
   document.getElementById('nav-next').addEventListener('click', next);
 
@@ -478,7 +557,9 @@
     if (k === 'm') { e.preventDefault(); setMode(mode === 'slide' ? 'scroll' : 'slide'); }
     else if (k === 'a') { e.preventDefault(); motionOn = !motionOn; applyMotion(); }
     else if (k === 's' || k === 'n') { e.preventDefault(); toggleNotes(); }
-    else if (k === 'escape') { toggleNotes(false); }
+    else if (k === 't') { e.preventDefault(); toggleTheme(); }
+    else if (k === '?' || (k === '/' && e.shiftKey)) { e.preventDefault(); toggleHelp(); }
+    else if (k === 'escape') { toggleNotes(false); toggleHelp(false); }
     else if (mode === 'slide') {
       if (k === 'arrowright' || k === ' ' || k === 'pagedown') { e.preventDefault(); next(); }
       else if (k === 'arrowleft' || k === 'pageup') { e.preventDefault(); prev(); }
@@ -500,15 +581,121 @@
      scroll progress
      ==================================================================== */
   const bar = document.getElementById('progress');
-  window.addEventListener('scroll', () => {
+  let scrollRAF = 0;
+  function onScroll() {
     if (mode === 'slide') return;
     const h = document.documentElement.scrollHeight - window.innerHeight;
     bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+    updateTimelineRails();
+  }
+  window.addEventListener('scroll', () => {
+    if (scrollRAF) return;
+    scrollRAF = requestAnimationFrame(() => { scrollRAF = 0; onScroll(); });
   }, { passive: true });
 
-  /* ---------- เริ่มทำงาน ---------- */
+  /* #8 เส้นเวลาไหลตามตำแหน่งสกรอลล์ — รางค่อย ๆ "ลากเส้น" ขณะอ่าน */
+  function updateTimelineRails() {
+    if (mode !== 'scroll') return;
+    const refLine = window.innerHeight * 0.62; // จุดอ้างอิงกลางค่อนล่างของจอ
+    deck.querySelectorAll('[data-timeline]').forEach(tl => {
+      const rf = tl.querySelector('.rail-fill');
+      if (!rf) return;
+      const items = tl.querySelectorAll('[data-tl]');
+      let fill = 0;
+      items.forEach(it => {
+        const r = it.getBoundingClientRect();
+        if (r.top <= refLine) { fill = it.offsetTop + 14; it.classList.add('is-visible'); }
+      });
+      rf.style.height = fill + 'px';
+    });
+  }
+
+  /* ====================================================================
+     #9 THEME (สว่าง/มืด) — จำค่าไว้ด้วย localStorage
+     ==================================================================== */
+  const THEME_KEY = 'modi-theme';
+  function currentTheme() { return document.documentElement.getAttribute('data-theme') || 'light'; }
+  function applyTheme(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    const b = document.getElementById('btn-theme');
+    b.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
+    b.querySelector('.lbl').textContent = t === 'dark' ? 'ธีม: มืด' : 'ธีม: สว่าง';
+  }
+  function toggleTheme() {
+    const t = currentTheme() === 'dark' ? 'light' : 'dark';
+    applyTheme(t);
+    try { localStorage.setItem(THEME_KEY, t); } catch (_) {}
+  }
+  // พิมพ์ให้สว่างเสมอ (กันตัวอักษรขาวบนพื้นขาว) แล้วคืนธีมเดิม
+  let printPrevTheme = null;
+  window.addEventListener('beforeprint', () => { printPrevTheme = currentTheme(); applyTheme('light'); });
+  window.addEventListener('afterprint', () => { if (printPrevTheme) applyTheme(printPrevTheme); });
+
+  /* ====================================================================
+     #6 HELP OVERLAY (คีย์ลัด)
+     ==================================================================== */
+  let helpOpen = false;
+  const helpOverlay = document.getElementById('help-overlay');
+  document.getElementById('help-close').innerHTML = ICONS.close;
+  const HELP_ROWS = [
+    ['M', 'สลับโหมด เลื่อน ↔ สไลด์'],
+    ['← →', 'เปลี่ยนสไลด์ (โหมดสไลด์)'],
+    ['Space', 'สไลด์ถัดไป'],
+    ['Home / End', 'สไลด์แรก / สุดท้าย'],
+    ['S / N', 'โน้ตผู้พูด (ผู้ชมไม่เห็น)'],
+    ['A', 'เปิด/ปิดอนิเมชัน'],
+    ['T', 'สลับธีม สว่าง/มืด'],
+    ['?', 'เปิด/ปิดหน้าต่างนี้'],
+    ['Esc', 'ปิดแผง/หน้าต่าง'],
+  ];
+  document.getElementById('help-list').innerHTML =
+    HELP_ROWS.map(r => `<li><kbd>${r[0]}</kbd><span>${r[1]}</span></li>`).join('');
+  function toggleHelp(force) {
+    helpOpen = (force === undefined) ? !helpOpen : force;
+    helpOverlay.classList.toggle('open', helpOpen);
+  }
+  helpOverlay.addEventListener('click', e => { if (e.target === helpOverlay) toggleHelp(false); });
+  document.getElementById('help-close').addEventListener('click', () => toggleHelp(false));
+
+  /* ====================================================================
+     #5 PRESENTER TIMER (โหมดสไลด์) — คลิกเพื่อรีเซ็ต
+     ==================================================================== */
+  const timerEl = document.getElementById('timer');
+  let timerStart = 0, timerInt = 0;
+  function fmt(ms) {
+    const s = Math.max(0, Math.floor(ms / 1000));
+    return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+  }
+  function timerTick() { timerEl.textContent = fmt(Date.now() - timerStart); }
+  function startTimer() {
+    timerStart = Date.now(); timerTick();
+    if (timerInt) clearInterval(timerInt);
+    timerInt = setInterval(timerTick, 1000);
+  }
+  timerEl.addEventListener('click', () => { startTimer(); timerEl.classList.add('flash'); setTimeout(() => timerEl.classList.remove('flash'), 300); });
+
+  /* ====================================================================
+     เริ่มทำงาน
+     ==================================================================== */
+  // ใช้ธีมที่เคยบันทึกไว้ (ถ้ามี)
+  try { const saved = localStorage.getItem(THEME_KEY); if (saved) applyTheme(saved); } catch (_) {}
+
   startObserver();
   updateUI();
+  updateTimelineRails();
+
+  // #4 กู้คืนสไลด์จาก URL hash (เช่น เปิดด้วย ...#policies)
+  const hashIdx = slideIndexFromHash();
+  if (hashIdx >= 0) {
+    current = hashIdx;
+    updateUI(); updateNotes();
+    // เลื่อนแบบทันที (ไม่ smooth) ทั้งตอนนี้และหลัง layout/โหลดเสร็จ เพื่อความชัวร์
+    const jump = () => slides[hashIdx].scrollIntoView({ behavior: 'auto', block: 'start' });
+    jump();
+    setTimeout(jump, 60);
+    window.addEventListener('load', jump);
+  }
+
   // เผยสไลด์แรกทันทีถ้าอยู่บนสุด
   requestAnimationFrame(() => { if (slides[0]) revealEl(slides[0].querySelector('.kicker')); });
 
