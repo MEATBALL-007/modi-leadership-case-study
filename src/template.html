@@ -14,6 +14,22 @@
 </head>
 <body>
 
+  <!-- #2 chakra loader (เปิดครั้งแรก) -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader-chakra" id="loader-chakra"></div>
+    <div class="loader-name">นเรนทรา โมดี</div>
+    <div class="loader-sub">Leadership Case Study</div>
+  </div>
+
+  <!-- #4 color wash overlay (เปลี่ยนหมวด) -->
+  <div class="cat-wash" id="cat-wash" aria-hidden="true"></div>
+
+  <!-- #8/#10 tooltip ลอย (แหล่งอ้างอิง + อภิธานศัพท์) -->
+  <div class="tip" id="tip" role="tooltip" aria-hidden="true"></div>
+
+  <!-- #15 ตัวบอกสถานะซิงก์หลายหน้าต่าง -->
+  <div class="sync-badge" id="sync-badge" aria-hidden="true" hidden>🔗 ซิงก์หลายหน้าต่าง</div>
+
   <!-- progress bar (โหมดเลื่อน) -->
   <div class="progress" id="progress"></div>
 
@@ -24,6 +40,9 @@
       <span>นเรนทรา โมดี<small>กรณีศึกษาผู้นำ · Leadership Case Study</small></span>
     </div>
     <span class="spacer"></span>
+    <button class="btn" id="btn-sound" type="button" aria-pressed="false" title="เปิด/ปิดเสียงประกอบ (Y)">
+      <span class="ico"></span><span class="lbl">เสียง</span><span class="kbd">Y</span>
+    </button>
     <button class="btn" id="btn-help" type="button" title="คีย์ลัด/ความช่วยเหลือ (?)">
       <span class="ico"></span><span class="kbd">?</span>
     </button>
