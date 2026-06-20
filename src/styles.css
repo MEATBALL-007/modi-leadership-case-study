@@ -862,11 +862,82 @@ body.motion-off .cat-wash { display: none !important; }
   .loader.spin .loader-chakra { animation: none !important; }
 }
 
+/* ============================================================================
+   ★★ ชุดที่สอง: ผู้นำเสนอ · อ่านออกเสียง · แหล่งอ้างอิง · สรุปของฉัน
+   ============================================================================ */
+
+/* ---------- #8(ใหม่) สไลด์แหล่งอ้างอิง ---------- */
+.src-legend { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.1rem; }
+.conf-pill {
+  font-size: .68rem; font-weight: 800; letter-spacing: .02em; padding: .22rem .6rem; border-radius: 999px;
+  border: 1px solid; white-space: nowrap;
+}
+.conf-pill.verified { color: var(--green); background: rgba(28,122,69,.10); border-color: rgba(28,122,69,.4); }
+.conf-pill.approx { color: var(--saffron); background: rgba(217,119,42,.10); border-color: rgba(217,119,42,.4); }
+.conf-pill.illus { color: var(--clay); background: rgba(178,58,37,.10); border-color: rgba(178,58,37,.4); }
+.src-list { display: flex; flex-direction: column; gap: .6rem; margin-top: .3rem; }
+.src-row {
+  display: flex; gap: .8rem; align-items: flex-start;
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: .85rem 1.1rem; box-shadow: var(--shadow);
+}
+.src-row .conf-pill { flex: 0 0 auto; margin-top: .15rem; }
+.src-row-label { font-weight: 700; font-size: 1rem; }
+.src-row-src { font-size: .85rem; color: var(--ink-soft); margin-top: .15rem; line-height: 1.45; }
+
+/* ---------- #10(ใหม่) ปุ่มสรุปของฉัน ---------- */
+.takehome-btn {
+  display: inline-flex; align-items: center; gap: .5rem; font-family: var(--sans); font-size: 1rem; font-weight: 700;
+  color: #fff; background: var(--accent); border: none; border-radius: 999px; padding: .8rem 1.5rem;
+  cursor: pointer; box-shadow: var(--shadow); margin: .3rem 0 1.5rem; transition: transform .18s var(--ease), box-shadow .18s;
+}
+.takehome-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.takehome-btn:active { transform: translateY(0) scale(.98); }
+.takehome-btn svg { width: 18px; height: 18px; }
+
+/* ---------- #1(ใหม่) หน้าต่างผู้นำเสนอ ---------- */
+body.is-presenter { overflow: auto; height: auto; background: #0f1118; }
+body.is-presenter::before { display: none; }
+body.is-presenter .toolbar, body.is-presenter .deck, body.is-presenter .slide-nav,
+body.is-presenter .progress, body.is-presenter .help-overlay, body.is-presenter .notes-panel,
+body.is-presenter .notes-backdrop, body.is-presenter .cat-wash, body.is-presenter .sync-badge,
+body.is-presenter .loader, body.is-presenter .tip { display: none !important; }
+.pv {
+  position: fixed; inset: 0; display: flex; flex-direction: column; gap: 1rem;
+  padding: clamp(1rem, 3vw, 2rem); color: #ece7da; font-family: var(--sans);
+}
+.pv-head { font-size: .9rem; color: #aeb4c0; display: flex; align-items: center; gap: .5rem; }
+.pv-head b { color: #fff; font-size: 1.1rem; }
+.pv-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green-br); box-shadow: 0 0 0 4px rgba(59,189,115,.25); }
+.pv-timer { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 800; font-size: 1.4rem; color: #fff; background: #1b1f29; border: 1px solid #2a2f3a; border-radius: 10px; padding: .25rem .8rem; cursor: pointer; }
+.pv-timer::before { content: "⏱ "; opacity: .6; }
+.pv-grid { flex: 1; display: grid; grid-template-columns: 1.3fr .9fr; gap: 1.2rem; min-height: 0; }
+.pv-current { background: #15151c; border: 1px solid #2a2f3a; border-radius: 18px; padding: 1.8rem; display: flex; flex-direction: column; justify-content: center; overflow: auto; }
+.pv-kicker { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--saffron-br); font-weight: 700; margin-bottom: .6rem; }
+.pv-title { font-family: var(--serif); font-weight: 900; font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.05; color: #fff; }
+.pv-lead { font-size: 1.15rem; line-height: 1.6; color: #c9cdd6; margin-top: 1rem; }
+.pv-side { display: flex; flex-direction: column; gap: 1rem; min-height: 0; }
+.pv-next-card { background: #1b1f29; border: 1px solid #2a2f3a; border-left: 4px solid var(--saffron-br); border-radius: 14px; padding: 1.1rem 1.3rem; }
+.pv-next-tag { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: #8e939e; font-weight: 700; }
+.pv-next-title { font-family: var(--serif); font-weight: 700; font-size: 1.3rem; color: #fff; margin-top: .3rem; }
+.pv-notes-box { flex: 1; background: #1b1f29; border: 1px solid #2a2f3a; border-radius: 14px; padding: 1.1rem 1.3rem; overflow: auto; min-height: 0; }
+.pv-notes-tag { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: #8e939e; font-weight: 700; margin-bottom: .5rem; }
+.pv-notes { font-size: 1.05rem; line-height: 1.7; color: #d8d2c4; }
+.pv-controls { display: flex; gap: 1rem; }
+.pv-controls button { flex: 1; font-family: var(--sans); font-size: 1.05rem; font-weight: 700; color: #fff; background: var(--navy); border: none; border-radius: 12px; padding: 1rem; cursor: pointer; transition: background .18s, transform .12s; }
+.pv-controls button:hover:not(:disabled) { background: #14438f; }
+.pv-controls button:active:not(:disabled) { transform: scale(.98); }
+.pv-controls button:disabled { opacity: .35; cursor: default; }
+@media (max-width: 720px) { .pv-grid { grid-template-columns: 1fr; } }
+
+/* ---------- #6(ใหม่) ปุ่มอ่านออกเสียงตอนทำงาน ---------- */
+.btn#btn-tts[aria-pressed="true"] { background: var(--green); color: #fff; border-color: var(--green); }
+
 /* ---------- #10 การพิมพ์ / Export PDF — แฮนด์เอาต์ 1 สไลด์ต่อหน้า ---------- */
 @media print {
   @page { margin: 1.4cm; }
   .toolbar, .slide-nav, .notes-panel, .notes-backdrop, .progress, .help-overlay, .ghost-chakra,
-  .loader, .cat-wash, .tip, .sync-badge { display: none !important; }
+  .loader, .cat-wash, .tip, .sync-badge, .pv, .takehome-btn { display: none !important; }
+  .src-row { break-inside: avoid; }
   /* เผยกราฟ/แผนที่/คน ให้เต็มเมื่อพิมพ์ */
   .mc-line { stroke-dashoffset: 0 !important; }
   .mc-area, .mc-dot, .ppl, .in-nation, .in-guj { opacity: 1 !important; }

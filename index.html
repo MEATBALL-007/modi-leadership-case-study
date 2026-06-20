@@ -876,11 +876,82 @@ body.motion-off .cat-wash { display: none !important; }
   .loader.spin .loader-chakra { animation: none !important; }
 }
 
+/* ============================================================================
+   ★★ ชุดที่สอง: ผู้นำเสนอ · อ่านออกเสียง · แหล่งอ้างอิง · สรุปของฉัน
+   ============================================================================ */
+
+/* ---------- #8(ใหม่) สไลด์แหล่งอ้างอิง ---------- */
+.src-legend { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.1rem; }
+.conf-pill {
+  font-size: .68rem; font-weight: 800; letter-spacing: .02em; padding: .22rem .6rem; border-radius: 999px;
+  border: 1px solid; white-space: nowrap;
+}
+.conf-pill.verified { color: var(--green); background: rgba(28,122,69,.10); border-color: rgba(28,122,69,.4); }
+.conf-pill.approx { color: var(--saffron); background: rgba(217,119,42,.10); border-color: rgba(217,119,42,.4); }
+.conf-pill.illus { color: var(--clay); background: rgba(178,58,37,.10); border-color: rgba(178,58,37,.4); }
+.src-list { display: flex; flex-direction: column; gap: .6rem; margin-top: .3rem; }
+.src-row {
+  display: flex; gap: .8rem; align-items: flex-start;
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: .85rem 1.1rem; box-shadow: var(--shadow);
+}
+.src-row .conf-pill { flex: 0 0 auto; margin-top: .15rem; }
+.src-row-label { font-weight: 700; font-size: 1rem; }
+.src-row-src { font-size: .85rem; color: var(--ink-soft); margin-top: .15rem; line-height: 1.45; }
+
+/* ---------- #10(ใหม่) ปุ่มสรุปของฉัน ---------- */
+.takehome-btn {
+  display: inline-flex; align-items: center; gap: .5rem; font-family: var(--sans); font-size: 1rem; font-weight: 700;
+  color: #fff; background: var(--accent); border: none; border-radius: 999px; padding: .8rem 1.5rem;
+  cursor: pointer; box-shadow: var(--shadow); margin: .3rem 0 1.5rem; transition: transform .18s var(--ease), box-shadow .18s;
+}
+.takehome-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.takehome-btn:active { transform: translateY(0) scale(.98); }
+.takehome-btn svg { width: 18px; height: 18px; }
+
+/* ---------- #1(ใหม่) หน้าต่างผู้นำเสนอ ---------- */
+body.is-presenter { overflow: auto; height: auto; background: #0f1118; }
+body.is-presenter::before { display: none; }
+body.is-presenter .toolbar, body.is-presenter .deck, body.is-presenter .slide-nav,
+body.is-presenter .progress, body.is-presenter .help-overlay, body.is-presenter .notes-panel,
+body.is-presenter .notes-backdrop, body.is-presenter .cat-wash, body.is-presenter .sync-badge,
+body.is-presenter .loader, body.is-presenter .tip { display: none !important; }
+.pv {
+  position: fixed; inset: 0; display: flex; flex-direction: column; gap: 1rem;
+  padding: clamp(1rem, 3vw, 2rem); color: #ece7da; font-family: var(--sans);
+}
+.pv-head { font-size: .9rem; color: #aeb4c0; display: flex; align-items: center; gap: .5rem; }
+.pv-head b { color: #fff; font-size: 1.1rem; }
+.pv-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green-br); box-shadow: 0 0 0 4px rgba(59,189,115,.25); }
+.pv-timer { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 800; font-size: 1.4rem; color: #fff; background: #1b1f29; border: 1px solid #2a2f3a; border-radius: 10px; padding: .25rem .8rem; cursor: pointer; }
+.pv-timer::before { content: "⏱ "; opacity: .6; }
+.pv-grid { flex: 1; display: grid; grid-template-columns: 1.3fr .9fr; gap: 1.2rem; min-height: 0; }
+.pv-current { background: #15151c; border: 1px solid #2a2f3a; border-radius: 18px; padding: 1.8rem; display: flex; flex-direction: column; justify-content: center; overflow: auto; }
+.pv-kicker { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--saffron-br); font-weight: 700; margin-bottom: .6rem; }
+.pv-title { font-family: var(--serif); font-weight: 900; font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.05; color: #fff; }
+.pv-lead { font-size: 1.15rem; line-height: 1.6; color: #c9cdd6; margin-top: 1rem; }
+.pv-side { display: flex; flex-direction: column; gap: 1rem; min-height: 0; }
+.pv-next-card { background: #1b1f29; border: 1px solid #2a2f3a; border-left: 4px solid var(--saffron-br); border-radius: 14px; padding: 1.1rem 1.3rem; }
+.pv-next-tag { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: #8e939e; font-weight: 700; }
+.pv-next-title { font-family: var(--serif); font-weight: 700; font-size: 1.3rem; color: #fff; margin-top: .3rem; }
+.pv-notes-box { flex: 1; background: #1b1f29; border: 1px solid #2a2f3a; border-radius: 14px; padding: 1.1rem 1.3rem; overflow: auto; min-height: 0; }
+.pv-notes-tag { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: #8e939e; font-weight: 700; margin-bottom: .5rem; }
+.pv-notes { font-size: 1.05rem; line-height: 1.7; color: #d8d2c4; }
+.pv-controls { display: flex; gap: 1rem; }
+.pv-controls button { flex: 1; font-family: var(--sans); font-size: 1.05rem; font-weight: 700; color: #fff; background: var(--navy); border: none; border-radius: 12px; padding: 1rem; cursor: pointer; transition: background .18s, transform .12s; }
+.pv-controls button:hover:not(:disabled) { background: #14438f; }
+.pv-controls button:active:not(:disabled) { transform: scale(.98); }
+.pv-controls button:disabled { opacity: .35; cursor: default; }
+@media (max-width: 720px) { .pv-grid { grid-template-columns: 1fr; } }
+
+/* ---------- #6(ใหม่) ปุ่มอ่านออกเสียงตอนทำงาน ---------- */
+.btn#btn-tts[aria-pressed="true"] { background: var(--green); color: #fff; border-color: var(--green); }
+
 /* ---------- #10 การพิมพ์ / Export PDF — แฮนด์เอาต์ 1 สไลด์ต่อหน้า ---------- */
 @media print {
   @page { margin: 1.4cm; }
   .toolbar, .slide-nav, .notes-panel, .notes-backdrop, .progress, .help-overlay, .ghost-chakra,
-  .loader, .cat-wash, .tip, .sync-badge { display: none !important; }
+  .loader, .cat-wash, .tip, .sync-badge, .pv, .takehome-btn { display: none !important; }
+  .src-row { break-inside: avoid; }
   /* เผยกราฟ/แผนที่/คน ให้เต็มเมื่อพิมพ์ */
   .mc-line { stroke-dashoffset: 0 !important; }
   .mc-area, .mc-dot, .ppl, .in-nation, .in-guj { opacity: 1 !important; }
@@ -934,6 +1005,12 @@ body.motion-off .cat-wash { display: none !important; }
       <span>นเรนทรา โมดี<small>กรณีศึกษาผู้นำ · Leadership Case Study</small></span>
     </div>
     <span class="spacer"></span>
+    <button class="btn" id="btn-present" type="button" title="เปิดหน้าต่างผู้นำเสนอ (P)">
+      <span class="ico"></span><span class="lbl">ผู้นำเสนอ</span><span class="kbd">P</span>
+    </button>
+    <button class="btn" id="btn-tts" type="button" aria-pressed="false" title="อ่านออกเสียงสไลด์ (V)">
+      <span class="ico"></span><span class="lbl">อ่านออกเสียง</span><span class="kbd">V</span>
+    </button>
     <button class="btn" id="btn-sound" type="button" aria-pressed="false" title="เปิด/ปิดเสียงประกอบ (Y)">
       <span class="ico"></span><span class="lbl">เสียง</span><span class="kbd">Y</span>
     </button>
@@ -1027,6 +1104,7 @@ const DATA = {
     poll:          'การมีส่วนร่วม',
     balance:       'คิดเชิงวิพากษ์',
     summary:       'ถอดบทเรียน',
+    sources:       'ความโปร่งใส',
     closing:       'นำไปใช้ต่อ',
   },
 
@@ -1313,6 +1391,17 @@ const DATA = {
       note: 'เปิดให้ผู้ฟังลองตอบ quiz ด้วยตัวเอง ใช้เป็นช่วง interactive ปิดท้าย ถ้ามีเวลาให้ถามต่อว่า "คุณคิดว่าเราควรเอาอะไรเป็นแบบอย่าง และอะไรที่ไม่ควรทำตาม"',
     },
 
+    /* 9.5 แหล่งอ้างอิง & ข้อควรระวัง (สร้างอัตโนมัติจากข้อมูล) --------------- */
+    {
+      id: 'sources',
+      cat: 'neutral',
+      kicker: 'แหล่งอ้างอิง & ความน่าเชื่อถือ',
+      type: 'sources',
+      title: 'ที่มาของตัวเลข',
+      lead: 'เพื่อความโปร่งใส — ตัวเลขทุกจุดมาจากไหน และควรเชื่อได้แค่ไหน',
+      note: 'สไลด์นี้สร้างอัตโนมัติจากการอ้างอิงในทุกสไลด์ ใช้ตอบคำถามเรื่องความน่าเชื่อถือ ป้ายสีบอกว่าตัวเลขไหน "ยืนยันได้" "โดยประมาณ" หรือ "ภาพประกอบ" — ตอกย้ำว่านี่คือการนำเสนอเชิงวิชาการ',
+    },
+
     /* 10. ปิดท้าย — คำถามชวนคิด (#18) ---------------------------------------- */
     {
       id: 'closing',
@@ -1389,6 +1478,9 @@ const DATA = {
     soundOff: P('M4 9v6h4l5 4V5L8 9H4z M16 9l5 6 M21 9l-5 6'),
     download: P('M12 4v11 M8 11l4 4 4-4 M5 20h14'),
     lens: '<circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M20 20l-4-4'),
+    present: '<rect x="3" y="4" width="18" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M9 20h6 M12 16v4 M9 12l4-2.5L9 7z'),
+    tts: P('M5 5h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H10l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z') + P('M8.5 9.5v1 M11.5 8.5v3 M14.5 7.5v5 M17 9v2', 'stroke-width="1.6"'),
+    ttsOff: P('M5 5h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H10l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z') + P('M4 4l16 16', 'stroke-width="2"'),
   };
 
   /* ---------- จักรอโศก (Ashoka Chakra) 24 ซี่ ---------- */
@@ -1419,6 +1511,9 @@ const DATA = {
   }
 
   const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  /* #1(ใหม่) ถ้าเปิดด้วย #presenter → เรนเดอร์ "หน้าต่างผู้นำเสนอ" แล้วจบ ไม่สร้างเด็คปกติ */
+  if (location.hash === '#presenter') { initPresenterView(); return; }
 
   /* ---------- เรนเดอร์เนื้อหาในแต่ละสไลด์ ---------- */
   /* #8 superscript ⓘ ที่แตะ/โฮเวอร์เพื่อดูแหล่งอ้างอิง (แทนข้อความ cite ที่รก) */
@@ -1557,13 +1652,32 @@ const DATA = {
         ${pollHTML(DATA.poll)}`;
     }
 
+    if (s.type === 'sources') {
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        <div class="src-legend" data-reveal style="--d:240ms">
+          <span class="conf-pill verified">ยืนยันได้</span>
+          <span class="conf-pill approx">โดยประมาณ</span>
+          <span class="conf-pill illus">ภาพประกอบ</span>
+        </div>
+        <div class="src-list">
+          ${collectSources().map((it, i) => `<div class="src-row" data-reveal style="--d:${300 + i * 70}ms">
+            <span class="conf-pill ${it.conf}">${CONF_LABEL[it.conf]}</span>
+            <div class="src-row-main"><div class="src-row-label">${esc(it.label)}</div><div class="src-row-src">${esc(it.src)}</div></div>
+          </div>`).join('')}
+        </div>
+        <div class="footnote" data-reveal>${esc(DATA.footnote)}</div>`;
+    }
+
     if (s.type === 'closing') {
       return `${SVGghost()}${head}
         <h2 data-reveal style="--d:80ms" class="closing-title">${splitWords(s.title)}</h2>
         ${s.lead ? `<p class="lead closing-lead" data-reveal style="--d:320ms">${esc(s.lead)}</p>` : ''}
         <div class="closing-echo" data-reveal style="--d:420ms" data-reflection-echo hidden></div>
         ${s.cta ? `<div class="closing-cta" data-reveal style="--d:520ms">${esc(s.cta)}</div>` : ''}
-        <div class="footnote" data-reveal style="--d:640ms">${esc(DATA.footnote)}</div>`;
+        <button type="button" class="takehome-btn" id="btn-takehome" data-reveal style="--d:600ms">${ICONS.download}<span>ดาวน์โหลดสรุปของฉัน (PNG)</span></button>
+        <div class="footnote" data-reveal style="--d:700ms">${esc(DATA.footnote)}</div>`;
     }
 
     if (s.type === 'balance') {
@@ -1774,6 +1888,29 @@ const DATA = {
     </div>`;
   }
 
+  /* #8(ใหม่) รวบรวมแหล่งอ้างอิงทั้งหมดจาก DATA + จัดระดับความเชื่อมั่น */
+  const CONF_LABEL = { verified: 'ยืนยันได้', approx: 'โดยประมาณ', illus: 'ภาพประกอบ' };
+  function classifyConf(src) {
+    if (/ภาพประกอบ|illustrative/i.test(src)) return 'illus';
+    if (/~|ราว|ประมาณ|สะสม|โดยประมาณ/.test(src)) return 'approx';
+    return 'verified';
+  }
+  function collectSources() {
+    const out = [], seen = new Set();
+    const add = (label, src, conf) => {
+      const key = src; if (!src || seen.has(key)) return; seen.add(key);
+      out.push({ label, src, conf: conf || classifyConf(src) });
+    };
+    DATA.slides.forEach(s => {
+      (s.stats || []).forEach(st => add(st.label, st.src));
+      (s.cards || []).forEach(c => {
+        if (c.stat) add(c.stat.label, c.stat.src);
+        if (c.chart) add(c.chart.title, c.chart.src, c.chart.illustrative ? 'illus' : null);
+      });
+    });
+    return out;
+  }
+
   /* ====================================================================
      สร้าง DOM
      ==================================================================== */
@@ -1811,6 +1948,8 @@ const DATA = {
   setIcon('btn-theme', ICONS.theme);
   setIcon('btn-print', ICONS.print);
   setIcon('btn-sound', ICONS.sound);
+  setIcon('btn-present', ICONS.present);
+  setIcon('btn-tts', ICONS.ttsOff);
   document.getElementById('nav-prev').innerHTML = ICONS.arrowL;
   document.getElementById('nav-next').innerHTML = ICONS.arrowR;
   document.querySelector('.np-close').innerHTML = ICONS.close;
@@ -2002,6 +2141,8 @@ const DATA = {
         updateUI(); updateNotes();
         if (catChanged) washTo(idx);
         if (DATA.slides[idx].id === 'closing') updateReflectionEcho();
+        if (typeof broadcastState === 'function') broadcastState();
+        if (typeof narrateCurrent === 'function') narrateCurrent();
       }
     });
   }, { threshold: 0.5 });
@@ -2072,6 +2213,8 @@ const DATA = {
     else if (k === 's' || k === 'n') { e.preventDefault(); toggleNotes(); }
     else if (k === 't') { e.preventDefault(); toggleTheme(); }
     else if (k === 'y') { e.preventDefault(); toggleSound(); }
+    else if (k === 'v') { e.preventDefault(); toggleTts(); }
+    else if (k === 'p') { e.preventDefault(); openPresenter(); }
     else if (k === '?' || (k === '/' && e.shiftKey)) { e.preventDefault(); toggleHelp(); }
     else if (k === 'escape') { toggleNotes(false); toggleHelp(false); hideTip(); }
     else if (mode === 'slide') {
@@ -2160,6 +2303,8 @@ const DATA = {
     ['A', 'เปิด/ปิดอนิเมชัน'],
     ['T', 'สลับธีม สว่าง/มืด'],
     ['Y', 'เปิด/ปิดเสียงประกอบ'],
+    ['V', 'อ่านสไลด์ออกเสียง (ไทย)'],
+    ['P', 'เปิดหน้าต่างผู้นำเสนอ'],
     ['?', 'เปิด/ปิดหน้าต่างนี้'],
     ['Esc', 'ปิดแผง/หน้าต่าง'],
   ];
@@ -2253,7 +2398,16 @@ const DATA = {
       const m = ev.data || {};
       if (m.type === 'hello') { showSyncBadge(); bc.postMessage({ type: 'hi' }); return; }
       if (m.type === 'hi') { showSyncBadge(); return; }
-      if (m.type === 'nav') {
+      if (m.type === 'request') { broadcastState(); showSyncBadge(); return; }
+      if (m.type === 'remote') {           // คำสั่งจากหน้าต่างผู้นำเสนอ
+        showSyncBadge();
+        if (mode !== 'slide') setMode('slide');
+        if (m.action === 'next') next();
+        else if (m.action === 'prev') prev();
+        else if (m.action === 'goto' && typeof m.index === 'number') goTo(m.index);
+        return;
+      }
+      if (m.type === 'nav') {              // ซิงก์จากหน้าต่าง audience อื่น
         showSyncBadge();
         applyingRemote = true;
         if (m.mode && m.mode !== mode) setMode(m.mode);
@@ -2265,6 +2419,10 @@ const DATA = {
       }
     };
     try { bc.postMessage({ type: 'hello' }); } catch (_) {}
+  }
+  function broadcastState() {
+    if (!bc) return;
+    try { bc.postMessage({ type: 'nav', index: current, mode, total }); } catch (_) {}
   }
   let syncTimer = 0;
   function showSyncBadge() {
@@ -2279,8 +2437,9 @@ const DATA = {
     if (opts.play) sfxNav();
     if (DATA.slides[idx] && DATA.slides[idx].id === 'closing') updateReflectionEcho();
     if (opts.broadcast && bc && !applyingRemote) {
-      try { bc.postMessage({ type: 'nav', index: idx, mode }); } catch (_) {}
+      try { bc.postMessage({ type: 'nav', index: idx, mode, total }); } catch (_) {}
     }
+    narrateCurrent();
   }
 
   /* ====================================================================
@@ -2414,7 +2573,7 @@ const DATA = {
         if (voted) return;
         const data = readPoll(id, DATA.poll.options);
         data[btn.dataset.key] = (data[btn.dataset.key] || 0) + 1;
-        try { localStorage.setItem(pollKey(id), JSON.stringify(data)); localStorage.setItem(pollKey(id) + '-voted', '1'); } catch (_) {}
+        try { localStorage.setItem(pollKey(id), JSON.stringify(data)); localStorage.setItem(pollKey(id) + '-voted', '1'); localStorage.setItem(pollKey(id) + '-choice', btn.dataset.key); } catch (_) {}
         sfxNav();
         renderPoll(wrap);
       });
@@ -2584,6 +2743,195 @@ const DATA = {
   document.getElementById('deck').addEventListener('click', (e) => {
     if (e.target.closest('#qs-dl')) downloadResultCard();
   });
+
+  /* ====================================================================
+     #6(ใหม่) TEXT-TO-SPEECH — อ่านสไลด์เป็นเสียงไทย (Web Speech API)
+     ==================================================================== */
+  const synth = window.speechSynthesis || null;
+  let ttsOn = false, thaiVoice = null;
+  function pickVoice() {
+    if (!synth) return;
+    const vs = synth.getVoices() || [];
+    thaiVoice = vs.find(v => /^th(-|_|$)/i.test(v.lang)) || vs.find(v => /thai/i.test(v.name)) || null;
+  }
+  if (synth) { pickVoice(); if (typeof synth.addEventListener === 'function') synth.addEventListener('voiceschanged', pickVoice); }
+  function narrationFor(s) {
+    const parts = [];
+    if (s.title) parts.push(s.title);
+    if (s.lead) parts.push(s.lead);
+    (s.facts || []).forEach(f => parts.push((f.k ? f.k + ' ' : '') + f.v));
+    (s.agenda || []).forEach(a => parts.push(a.head + '. ' + a.body));
+    (s.timeline || []).forEach(t => parts.push(t.year + ' ' + t.head + '. ' + t.body));
+    (s.cards || []).forEach(c => parts.push(c.head + '. ' + c.body));
+    (s.points || []).forEach(p => parts.push(p.head + '. ' + p.body));
+    (s.takeaways || []).forEach(t => parts.push(t));
+    return parts.join('. ');
+  }
+  function narrateCurrent() {
+    if (!ttsOn || !synth) return;
+    try {
+      synth.cancel();
+      const u = new SpeechSynthesisUtterance(narrationFor(DATA.slides[current]));
+      u.lang = 'th-TH'; u.rate = 0.98; u.pitch = 1;
+      if (thaiVoice) u.voice = thaiVoice;
+      synth.speak(u);
+    } catch (_) {}
+  }
+  function updateTtsBtn() {
+    const b = document.getElementById('btn-tts');
+    b.setAttribute('aria-pressed', ttsOn ? 'true' : 'false');
+    b.querySelector('.ico').innerHTML = ttsOn ? ICONS.tts : ICONS.ttsOff;
+    b.querySelector('.lbl').textContent = ttsOn ? 'อ่านออกเสียง' : 'อ่านออกเสียง: ปิด';
+  }
+  function toggleTts() {
+    if (!synth) { alert('เบราว์เซอร์นี้ไม่รองรับการอ่านออกเสียง (Web Speech API)'); return; }
+    ttsOn = !ttsOn;
+    updateTtsBtn();
+    if (ttsOn) { pickVoice(); narrateCurrent(); } else { try { synth.cancel(); } catch (_) {} }
+  }
+  document.getElementById('btn-tts').addEventListener('click', toggleTts);
+  updateTtsBtn();
+
+  /* ====================================================================
+     #1(ใหม่) ปุ่มเปิดหน้าต่างผู้นำเสนอ
+     ==================================================================== */
+  function openPresenter() {
+    const base = location.href.split('#')[0];
+    const w = window.open(base + '#presenter', 'modi-presenter', 'width=820,height=620');
+    if (!w) { alert('โปรดอนุญาตป๊อปอัปเพื่อเปิดหน้าต่างผู้นำเสนอ'); return; }
+    setTimeout(broadcastState, 400);
+  }
+  document.getElementById('btn-present').addEventListener('click', openPresenter);
+
+  /* ====================================================================
+     #10(ใหม่) สรุปของฉัน (take-home) — รวม quiz + โพล + reflection + บทเรียน
+     ==================================================================== */
+  function downloadTakeHome() {
+    const W = 1080, H = 1500, cv = document.createElement('canvas');
+    cv.width = W; cv.height = H; const x = cv.getContext('2d');
+    const wrap = (text, max, lh, fx, fy) => {
+      const words = String(text).split(/(\s+)/); let line = '', y = fy;
+      for (const w of words) { if (x.measureText(line + w).width > max && line) { x.fillText(line, fx, y); line = w.replace(/^\s+/, ''); y += lh; } else line += w; }
+      if (line) { x.fillText(line, fx, y); y += lh; } return y;
+    };
+    x.fillStyle = '#f4efe4'; x.fillRect(0, 0, W, H);
+    x.fillStyle = '#FF9933'; x.fillRect(0, 0, W, 16);
+    x.fillStyle = '#138808'; x.fillRect(0, H - 16, W, 16);
+    let y = 100; x.textAlign = 'left'; x.fillStyle = '#0e2f63';
+    x.font = '900 52px "Noto Serif Thai", serif'; x.fillText('สรุปของฉัน', 80, y);
+    x.fillStyle = '#8a8475'; x.font = '400 26px "Noto Sans Thai", sans-serif';
+    x.fillText('นเรนทรา โมดี — กรณีศึกษาผู้นำ', 80, y + 40); y += 120;
+    // quiz
+    const totalQ = DATA.quiz.length, correct = Object.values(quizState).filter(Boolean).length, answered = Object.keys(quizState).length;
+    x.fillStyle = '#1c7a45'; x.font = '700 34px "Noto Sans Thai", sans-serif';
+    x.fillText('คะแนนทดสอบ', 80, y);
+    x.fillStyle = '#1d2436'; x.font = '900 40px "Noto Serif Thai", serif';
+    x.fillText(answered ? (correct + ' / ' + totalQ) : 'ยังไม่ได้ทำแบบทดสอบ', 80, y + 50); y += 130;
+    // poll
+    let pollLabel = 'ยังไม่ได้โหวต';
+    try {
+      const choice = localStorage.getItem('modi-poll-' + DATA.poll.id + '-choice');
+      const opt = DATA.poll.options.find(o => o.key === choice);
+      if (opt) pollLabel = opt.label;
+    } catch (_) {}
+    x.fillStyle = '#d9772a'; x.font = '700 34px "Noto Sans Thai", sans-serif';
+    x.fillText('ความเห็นของฉัน', 80, y);
+    x.fillStyle = '#1d2436'; x.font = '400 32px "Noto Sans Thai", sans-serif';
+    y = wrap(pollLabel, W - 160, 44, 80, y + 50) + 50;
+    // reflection
+    let refl = ''; try { refl = localStorage.getItem('modi-reflection') || ''; } catch (_) {}
+    x.fillStyle = '#0e2f63'; x.font = '700 34px "Noto Sans Thai", sans-serif';
+    x.fillText('นิสัยผู้นำที่จะลองใช้', 80, y);
+    x.fillStyle = '#1d2436'; x.font = '400 32px "Noto Sans Thai", sans-serif';
+    y = wrap(refl ? '“' + refl + '”' : '(ยังไม่ได้กรอก)', W - 160, 44, 80, y + 50) + 50;
+    // takeaways
+    const sum = DATA.slides.find(s => s.id === 'summary');
+    x.fillStyle = '#d9772a'; x.font = '700 34px "Noto Sans Thai", sans-serif';
+    x.fillText('3 บทเรียนสำคัญ', 80, y); y += 50;
+    x.fillStyle = '#4a5266'; x.font = '400 28px "Noto Sans Thai", sans-serif';
+    (sum ? sum.takeaways : []).forEach((t, i) => { y = wrap((i + 1) + '. ' + t, W - 160, 40, 80, y) + 16; });
+    x.fillStyle = '#8a8475'; x.font = '400 22px "Noto Sans Thai", sans-serif';
+    x.fillText('จัดทำเพื่อการศึกษา · นำเสนอทั้งด้านบวกและด้านลบอย่างเป็นกลาง', 80, H - 60);
+    try { const a = document.createElement('a'); a.download = 'modi-my-summary.png'; a.href = cv.toDataURL('image/png'); a.click(); } catch (_) {}
+  }
+  deck.addEventListener('click', (e) => { if (e.target.closest('#btn-takehome')) downloadTakeHome(); });
+
+  /* ====================================================================
+     #1(ใหม่) หน้าต่างผู้นำเสนอ — เรนเดอร์เมื่อเปิดด้วย #presenter
+     ==================================================================== */
+  function initPresenterView() {
+    document.body.classList.add('is-presenter');
+    const ld = document.getElementById('loader'); if (ld) ld.remove();
+    const S = DATA.slides, N = S.length;
+    let pi = 0, pmode = 'slide';
+    const root = document.createElement('div');
+    root.className = 'pv';
+    document.body.appendChild(root);
+    const txt = s => (s.lead || (s.takeaways ? s.takeaways[0] : '') || '');
+    function render() {
+      const cur = S[pi], nxt = S[pi + 1];
+      const lens = (DATA.lenses && DATA.lenses[cur.id]) || '';
+      root.innerHTML = `
+        <div class="pv-head">
+          <span class="pv-dot"></span> หน้าต่างผู้นำเสนอ · <b>${pi + 1}</b> / ${N}
+          <span class="pv-timer" id="pv-timer" title="คลิกเพื่อรีเซ็ต">00:00</span>
+        </div>
+        <div class="pv-grid">
+          <div class="pv-current">
+            <div class="pv-kicker">${esc(cur.kicker || '')}${lens ? ' · ' + esc(lens) : ''}</div>
+            <div class="pv-title">${esc(cur.title || '')}</div>
+            <div class="pv-lead">${esc(txt(cur))}</div>
+          </div>
+          <div class="pv-side">
+            <div class="pv-next-card">
+              <div class="pv-next-tag">ถัดไป →</div>
+              <div class="pv-next-title">${nxt ? esc(nxt.title || nxt.kicker || '') : '— สไลด์สุดท้าย —'}</div>
+            </div>
+            <div class="pv-notes-box">
+              <div class="pv-notes-tag">โน้ตผู้พูด</div>
+              <div class="pv-notes">${esc(cur.note || '— ไม่มีโน้ต —')}</div>
+            </div>
+          </div>
+        </div>
+        <div class="pv-controls">
+          <button type="button" id="pv-prev" ${pi === 0 ? 'disabled' : ''}>◀ ก่อนหน้า</button>
+          <button type="button" id="pv-next" ${pi === N - 1 ? 'disabled' : ''}>ถัดไป ▶</button>
+        </div>`;
+      root.querySelector('#pv-prev').onclick = () => send('prev');
+      root.querySelector('#pv-next').onclick = () => send('next');
+      root.querySelector('#pv-timer').onclick = resetTimer;
+      timerEl = root.querySelector('#pv-timer');
+    }
+    // ช่องสื่อสารกับหน้าต่าง audience
+    let pbc = null; try { pbc = new BroadcastChannel('modi-deck'); } catch (_) {}
+    function send(action) {
+      if (action === 'next' && pi < N - 1) pi++;
+      else if (action === 'prev' && pi > 0) pi--;
+      render();
+      if (pbc) { try { pbc.postMessage({ type: 'remote', action }); } catch (_) {} }
+    }
+    if (pbc) {
+      pbc.onmessage = (ev) => {
+        const m = ev.data || {};
+        if (m.type === 'nav' && typeof m.index === 'number') { pi = m.index; if (m.mode) pmode = m.mode; render(); }
+      };
+      try { pbc.postMessage({ type: 'request' }); } catch (_) {}
+    }
+    // คีย์ลูกศรในหน้าต่างผู้นำเสนอ
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); send('next'); }
+      else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); send('prev'); }
+    });
+    // ตัวจับเวลา
+    let timerEl = null, t0 = Date.now();
+    function resetTimer() { t0 = Date.now(); }
+    setInterval(() => {
+      if (!timerEl) return;
+      const s = Math.floor((Date.now() - t0) / 1000);
+      timerEl.textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+    }, 1000);
+    render();
+  }
 
   /* ====================================================================
      เริ่มทำงาน
