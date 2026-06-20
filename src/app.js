@@ -30,6 +30,10 @@
     help:  '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M9.2 9.2a2.8 2.8 0 1 1 3.6 2.7c-.7.3-.8.8-.8 1.6 M12 16.5v.01', 'stroke-width="2"'),
     theme: P('M21 12.8A8 8 0 1 1 11.2 3a6.2 6.2 0 0 0 9.8 9.8z'),
     print: '<rect x="6" y="13" width="12" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M6 13V4h12v9 M6 9h12') + '<rect x="3" y="9" width="18" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="12" r=".9" fill="currentColor" stroke="none"/>',
+    sound: P('M4 9v6h4l5 4V5L8 9H4z M16 9.5a3.5 3.5 0 0 1 0 5 M18.5 7a7 7 0 0 1 0 10'),
+    soundOff: P('M4 9v6h4l5 4V5L8 9H4z M16 9l5 6 M21 9l-5 6'),
+    download: P('M12 4v11 M8 11l4 4 4-4 M5 20h14'),
+    lens: '<circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M20 20l-4-4'),
   };
 
   /* ---------- จักรอโศก (Ashoka Chakra) 24 ซี่ ---------- */
@@ -62,10 +66,17 @@
   const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
   /* ---------- เรนเดอร์เนื้อหาในแต่ละสไลด์ ---------- */
+  /* #8 superscript ⓘ ที่แตะ/โฮเวอร์เพื่อดูแหล่งอ้างอิง (แทนข้อความ cite ที่รก) */
+  function srcMark(src) {
+    return src ? ` <sup class="src-mark" tabindex="0" role="button" aria-label="ดูแหล่งอ้างอิง" data-src="${esc(src)}">i</sup>` : '';
+  }
+
   function slideInner(s, idx) {
     const cat = DATA.categories[s.cat] || '';
+    const lens = (DATA.lenses && DATA.lenses[s.id]) || '';
+    const lensHTML = lens ? ` <span class="lens-badge" title="เลนส์ภาวะผู้นำ">${ICONS.lens}${esc(lens)}</span>` : '';
     const head = `
-      <div class="kicker" data-reveal>${esc(s.kicker)} <span class="cat-pill">${esc(cat)}</span></div>`;
+      <div class="kicker" data-reveal>${esc(s.kicker)} <span class="cat-pill">${esc(cat)}</span>${lensHTML}</div>`;
 
     if (s.type === 'hero') {
       return `
@@ -131,14 +142,17 @@
             const st = c.stat;
             const statHTML = st ? `<div class="stat">
                 <div class="num"><span data-count="${st.value}" data-prefix="${esc(st.prefix||'')}" data-suffix="${esc(st.suffix||'')}">${esc(st.prefix||'')}0${esc(st.suffix||'')}</span></div>
-                <div class="slabel">${esc(st.label)}</div>
-                ${st.src ? `<div class="cite">ที่มา: ${esc(st.src)}</div>` : ''}</div>` : '';
+                <div class="slabel">${esc(st.label)}${srcMark(st.src)}</div></div>` : '';
+            const chartHTML = c.chart ? chartSVG(c.chart) : '';
+            const counterHTML = c.counter ? `<div class="counter-note">${ICONS.quiz}<span>${esc(c.counter)}</span></div>` : '';
             return `<div class="bigcard" data-reveal style="--d:${200 + i * 130}ms">
               <div class="bico">${ICONS[c.icon] || ''}</div>
               <div class="tag">${esc(c.tag)}</div>
               <div class="bhead">${esc(c.head)}</div>
               <div class="bbody">${esc(c.body)}</div>
               ${statHTML}
+              ${chartHTML}
+              ${counterHTML}
             </div>`;
           }).join('')}
         </div>`;
@@ -152,7 +166,8 @@
             <div class="sico">${ICONS[p.icon] || ''}</div>
             <div><div class="shead">${esc(p.head)}</div><div class="sbody">${esc(p.body)}</div></div>
           </div>`).join('')}
-        </div>`;
+        </div>
+        ${s.reflection ? reflectionHTML() : ''}`;
     }
 
     if (s.type === 'stats-grid') {
@@ -162,25 +177,71 @@
         <div class="stats-grid">
           ${s.stats.map((st, i) => `<div class="stat-big" data-reveal style="--d:${220 + i * 120}ms">
             <div class="num"><span data-count="${st.value}" data-prefix="${esc(st.prefix||'')}" data-suffix="${esc(st.suffix||'')}"${st.plain ? ' data-plain="1"' : ''}>${esc(st.prefix||'')}0${esc(st.suffix||'')}</span></div>
-            <div class="slabel">${esc(st.label)}</div>
-            ${st.src ? `<div class="cite">ที่มา: ${esc(st.src)}</div>` : ''}
+            <div class="slabel">${esc(st.label)}${srcMark(st.src)}</div>
+          </div>`).join('')}
+        </div>
+        ${s.id === 'numbers' ? scaleVizHTML() : ''}`;
+    }
+
+    if (s.type === 'agenda') {
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        <div class="agenda">
+          ${s.agenda.map((a, i) => `<div class="agenda-item" data-reveal style="--d:${240 + i * 130}ms">
+            <div class="agenda-n">${esc(a.n)}</div>
+            <div><div class="agenda-head">${esc(a.head)}</div><div class="agenda-body">${esc(a.body)}</div></div>
           </div>`).join('')}
         </div>`;
     }
 
-    if (s.type === 'balance') {
+    if (s.type === 'poll') {
       return `${head}
         <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
-        <div class="balance-wrap" data-reveal style="--d:180ms">
-          <div class="balance-col pos">
-            <div class="bcol-label">${esc(s.prosLabel)}</div>
-            <ul>${s.pros.map(p => `<li>${esc(p)}</li>`).join('')}</ul>
+        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        ${pollHTML(DATA.poll)}`;
+    }
+
+    if (s.type === 'closing') {
+      return `${SVGghost()}${head}
+        <h2 data-reveal style="--d:80ms" class="closing-title">${splitWords(s.title)}</h2>
+        ${s.lead ? `<p class="lead closing-lead" data-reveal style="--d:320ms">${esc(s.lead)}</p>` : ''}
+        <div class="closing-echo" data-reveal style="--d:420ms" data-reflection-echo hidden></div>
+        ${s.cta ? `<div class="closing-cta" data-reveal style="--d:520ms">${esc(s.cta)}</div>` : ''}
+        <div class="footnote" data-reveal style="--d:640ms">${esc(DATA.footnote)}</div>`;
+    }
+
+    if (s.type === 'balance') {
+      const chips = s.pros.map(p => ({ t: p, side: 'pos' })).concat(s.cons.map(c => ({ t: c, side: 'neg' })));
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        <div class="dragscale" data-reveal style="--d:180ms" data-dragscale>
+          <div class="ds-hint">ลากแต่ละข้อขึ้น “จาน” ฝั่งซ้าย/ขวา แล้วดูตาชั่งเอียงตามน้ำหนัก — หรือใช้ปุ่ม ◀ ▶ บนแต่ละชิป</div>
+          <div class="ds-stage">
+            <div class="ds-pan-zone left">
+              <div class="ds-pan-label" style="color:var(--green)">${esc(s.prosLabel)}</div>
+              <div class="ds-pan" data-pan="pos" aria-label="จานฝั่งผลงาน"></div>
+            </div>
+            <div class="ds-beam-wrap">
+              <div class="ds-stand"></div>
+              <div class="ds-beam" data-beam>
+                <span class="ds-beam-end l"></span><span class="ds-beam-end r"></span>
+              </div>
+              <div class="ds-fulcrum"></div>
+            </div>
+            <div class="ds-pan-zone right">
+              <div class="ds-pan-label" style="color:var(--clay)">${esc(s.consLabel)}</div>
+              <div class="ds-pan" data-pan="neg" aria-label="จานฝั่งข้อวิจารณ์"></div>
+            </div>
           </div>
-          <div class="balance-scale">${scaleSVG()}</div>
-          <div class="balance-col neg">
-            <div class="bcol-label">${esc(s.consLabel)}</div>
-            <ul>${s.cons.map(p => `<li>${esc(p)}</li>`).join('')}</ul>
+          <div class="ds-pool" data-pool>
+            ${chips.map((c, i) => `<button type="button" class="ds-chip ${c.side}" data-chip="${i}" data-side="${c.side}" data-where="pool">
+              <span class="ds-arrow l" data-move="pos" aria-label="ย้ายไปฝั่งซ้าย">◀</span>
+              <span class="ds-chip-t">${esc(c.t)}</span>
+              <span class="ds-arrow r" data-move="neg" aria-label="ย้ายไปฝั่งขวา">▶</span>
+            </button>`).join('')}
           </div>
+          <div class="ds-readout" data-readout>วางทั้งหมดเพื่อชั่งน้ำหนักทั้งสองด้าน</div>
         </div>
         <div class="discuss" data-reveal style="--d:340ms">
           <div class="discuss-q">${ICONS.quiz} ${esc(s.question)}</div>
@@ -212,6 +273,10 @@
         </div>
         <div class="why"><b>เฉลย:</b> ${esc(q.why)}</div>
       </div>`).join('')}
+      <div class="quiz-score" id="quiz-score" hidden>
+        <div class="qs-ring"><svg viewBox="0 0 80 80"><circle class="qs-bg" cx="40" cy="40" r="34"/><circle class="qs-fg" cx="40" cy="40" r="34"/></svg><span class="qs-num">0/0</span></div>
+        <div class="qs-text"><div class="qs-msg" id="qs-msg"></div><button type="button" class="qs-dl" id="qs-dl">${ICONS.download}<span>บันทึกการ์ดผลคะแนน</span></button></div>
+      </div>
     </div>`;
   }
 
@@ -271,6 +336,89 @@
       </div>`;
   }
 
+  /* #6 มินิกราฟเส้นแสดงการเติบโต (inline SVG, ภาพประกอบ) */
+  function chartSVG(ch) {
+    const pts = ch.points || [];
+    if (!pts.length) return '';
+    const W = 260, H = 96, padL = 6, padR = 6, padT = 8, padB = 18;
+    const max = Math.max.apply(null, pts.map(p => p.y)) || 1;
+    const xAt = i => padL + (i / (pts.length - 1)) * (W - padL - padR);
+    const yAt = v => padT + (1 - v / max) * (H - padT - padB);
+    const coords = pts.map((p, i) => [xAt(i), yAt(p.y)]);
+    const line = coords.map((c, i) => (i ? 'L' : 'M') + c[0].toFixed(1) + ' ' + c[1].toFixed(1)).join(' ');
+    const area = line + ` L${xAt(pts.length - 1).toFixed(1)} ${(H - padB)} L${padL} ${(H - padB)} Z`;
+    const len = 520; // ความยาวเส้นโดยประมาณสำหรับอนิเมชัน draw
+    return `<div class="mini-chart" data-chart>
+      <div class="mc-head">${esc(ch.title)} <span class="mc-unit">(${esc(ch.unit)}${ch.illustrative ? ' · ภาพประกอบ' : ''})</span>${srcMark(ch.src)}</div>
+      <svg viewBox="0 0 ${W} ${H}" class="mc-svg" preserveAspectRatio="none" aria-hidden="true">
+        <path class="mc-area" d="${area}"/>
+        <path class="mc-line" d="${line}" style="--len:${len}"/>
+        ${coords.map((c, i) => `<circle class="mc-dot" cx="${c[0].toFixed(1)}" cy="${c[1].toFixed(1)}" r="2.6" style="--di:${i * 140 + 600}ms"/>`).join('')}
+        ${pts.map((p, i) => `<text class="mc-x" x="${xAt(i).toFixed(1)}" y="${H - 5}" text-anchor="middle">${esc(p.x)}</text>`).join('')}
+      </svg>
+    </div>`;
+  }
+
+  /* #5 + #7 ภาพสเกล: แผนที่อินเดีย (กุจราต→ทั้งชาติ) + บล็อกคนเทียบไทย */
+  function scaleVizHTML() {
+    const THAI = 70;   // ล้านคนต่อ 1 ไอคอน (ราวประชากรไทย)
+    const total = 1400;
+    const blocks = Math.round(total / THAI); // ~20
+    let icons = '';
+    for (let i = 0; i < blocks; i++) icons += `<span class="ppl" style="--pi:${i * 45}ms"></span>`;
+    return `<div class="scaleviz" data-reveal style="--d:360ms">
+      <div class="sv-map">
+        <div class="sv-cap">จากรัฐเดียว สู่ทั้งประเทศ</div>
+        ${indiaMapSVG()}
+        <div class="sv-map-legend"><span class="lg guj"></span>รัฐกุจราต (ห้องทดลอง) <span class="lg nat"></span>ทั้งอินเดีย</div>
+      </div>
+      <div class="sv-people">
+        <div class="sv-cap">1.4 พันล้านคน ≈ <b>20×</b> ประชากรไทย</div>
+        <div class="ppl-grid" data-people>${icons}</div>
+        <div class="sv-people-note">1 รูป ≈ 70 ล้านคน (ราวประชากรไทย 1 ประเทศ)</div>
+      </div>
+    </div>`;
+  }
+
+  /* แผนที่อินเดียอย่างง่าย (วาดเอง) — ไฮไลต์กุจราตก่อน แล้วทั้งชาติ */
+  function indiaMapSVG() {
+    const india = 'M97 33 L112 30 L121 38 L138 36 L150 45 L146 58 L158 66 L150 78 L156 92 L146 96 L150 110 ' +
+      'L138 116 L132 132 L120 150 L110 168 L101 182 L95 169 L90 150 L82 140 L70 140 L58 130 L50 116 ' +
+      'L40 110 L33 96 L40 86 L34 74 L44 66 L40 54 L54 50 L66 54 L74 46 L84 40 Z';
+    const gujarat = 'M40 86 L34 74 L44 66 L40 54 L54 50 L60 60 L56 74 L62 86 L52 96 L44 94 Z';
+    return `<svg viewBox="0 0 190 200" class="india-svg" aria-label="แผนที่อินเดียอย่างง่าย">
+      <path class="in-nation" d="${india}"/>
+      <path class="in-guj" d="${gujarat}"/>
+      <circle class="in-ping" cx="49" cy="74" r="4"/>
+    </svg>`;
+  }
+
+  /* #11 โพล (อ่าน/เขียน localStorage) */
+  function pollHTML(poll) {
+    if (!poll) return '';
+    return `<div class="poll" data-reveal style="--d:240ms" data-poll="${esc(poll.id)}">
+      <div class="poll-q">${esc(poll.question)}</div>
+      <div class="poll-hint">${esc(poll.hint || '')}</div>
+      <div class="poll-options">
+        ${poll.options.map(o => `<button type="button" class="poll-opt" data-cat="${esc(o.cat)}" data-key="${esc(o.key)}">
+          <span class="po-bar"></span>
+          <span class="po-label">${esc(o.label)}</span>
+          <span class="po-pct"></span>
+        </button>`).join('')}
+      </div>
+      <div class="poll-foot"><span data-poll-total>0</span> โหวต · <button type="button" class="poll-reset" data-poll-reset>ล้างผลในเครื่องนี้</button></div>
+    </div>`;
+  }
+
+  /* #14 กล่องสะท้อนความคิด */
+  function reflectionHTML() {
+    return `<div class="reflection" data-reveal style="--d:520ms">
+      <label class="rf-label" for="rf-input">${esc(DATA.reflectionPrompt || '')}</label>
+      <textarea id="rf-input" class="rf-input" rows="2" data-reflection placeholder="${esc(DATA.reflectionPlaceholder || '')}"></textarea>
+      <div class="rf-saved" data-rf-saved hidden>บันทึกแล้ว ✓ จะไปปรากฏที่สไลด์สุดท้าย</div>
+    </div>`;
+  }
+
   /* ====================================================================
      สร้าง DOM
      ==================================================================== */
@@ -307,6 +455,7 @@
   setIcon('btn-help', ICONS.help);
   setIcon('btn-theme', ICONS.theme);
   setIcon('btn-print', ICONS.print);
+  setIcon('btn-sound', ICONS.sound);
   document.getElementById('nav-prev').innerHTML = ICONS.arrowL;
   document.getElementById('nav-next').innerHTML = ICONS.arrowR;
   document.querySelector('.np-close').innerHTML = ICONS.close;
@@ -458,9 +607,11 @@
       void sec.offsetWidth; // บังคับ reflow เพื่อให้ transition เล่นซ้ำได้
       revealSlide(sec);
     }
+    const changed = current !== i || force;
     current = i;
     updateUI();
     updateNotes();
+    onNavigate(i, { play: mode === 'slide' && changed, broadcast: true });
   }
   function next() { if (mode === 'slide') goTo(current + 1); }
   function prev() { if (mode === 'slide') goTo(current - 1); }
@@ -490,8 +641,12 @@
     if (mode !== 'scroll') return;
     entries.forEach(e => {
       if (e.isIntersecting) {
-        current = parseInt(e.target.dataset.index, 10);
+        const idx = parseInt(e.target.dataset.index, 10);
+        const catChanged = current === undefined || DATA.slides[current].cat !== DATA.slides[idx].cat;
+        current = idx;
         updateUI(); updateNotes();
+        if (catChanged) washTo(idx);
+        if (DATA.slides[idx].id === 'closing') updateReflectionEcho();
       }
     });
   }, { threshold: 0.5 });
@@ -536,6 +691,9 @@
       if (k === correct) c.classList.add('correct');
       else if (k === ci) c.classList.add('wrong');
     });
+    quizState[qi] = (ci === correct);
+    if (ci === correct) sfxNav();
+    updateQuizScore();
   });
 
   /* ====================================================================
@@ -558,8 +716,9 @@
     else if (k === 'a') { e.preventDefault(); motionOn = !motionOn; applyMotion(); }
     else if (k === 's' || k === 'n') { e.preventDefault(); toggleNotes(); }
     else if (k === 't') { e.preventDefault(); toggleTheme(); }
+    else if (k === 'y') { e.preventDefault(); toggleSound(); }
     else if (k === '?' || (k === '/' && e.shiftKey)) { e.preventDefault(); toggleHelp(); }
-    else if (k === 'escape') { toggleNotes(false); toggleHelp(false); }
+    else if (k === 'escape') { toggleNotes(false); toggleHelp(false); hideTip(); }
     else if (mode === 'slide') {
       if (k === 'arrowright' || k === ' ' || k === 'pagedown') { e.preventDefault(); next(); }
       else if (k === 'arrowleft' || k === 'pageup') { e.preventDefault(); prev(); }
@@ -645,6 +804,7 @@
     ['S / N', 'โน้ตผู้พูด (ผู้ชมไม่เห็น)'],
     ['A', 'เปิด/ปิดอนิเมชัน'],
     ['T', 'สลับธีม สว่าง/มืด'],
+    ['Y', 'เปิด/ปิดเสียงประกอบ'],
     ['?', 'เปิด/ปิดหน้าต่างนี้'],
     ['Esc', 'ปิดแผง/หน้าต่าง'],
   ];
@@ -673,6 +833,402 @@
     timerInt = setInterval(timerTick, 1000);
   }
   timerEl.addEventListener('click', () => { startTimer(); timerEl.classList.add('flash'); setTimeout(() => timerEl.classList.remove('flash'), 300); });
+
+  /* ====================================================================
+     #4 COLOR WASH — แฟลชสีหมวดสั้น ๆ เมื่อข้ามโซน
+     ==================================================================== */
+  const washEl = document.getElementById('cat-wash');
+  let washPrevCat = null;
+  function washTo(idx) {
+    const s = DATA.slides[idx]; if (!s || !washEl) return;
+    if (s.cat === washPrevCat) return;
+    washPrevCat = s.cat;
+    if (!motionOn) return;
+    const accent = getComputedStyle(slides[idx]).getPropertyValue('--accent').trim() || '#888';
+    washEl.style.background = `radial-gradient(120% 120% at 50% 50%, ${accent}, transparent 70%)`;
+    washEl.classList.remove('flash'); void washEl.offsetWidth; washEl.classList.add('flash');
+  }
+
+  /* ====================================================================
+     #19 SOUND — สังเคราะห์ด้วย WebAudio (ไม่มีไฟล์เสียง → ออฟไลน์ได้)
+     ==================================================================== */
+  let soundOn = false, actx = null;
+  try { soundOn = localStorage.getItem('modi-sound') === 'on'; } catch (_) {}
+  function ensureCtx() {
+    if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (_) { actx = null; } }
+    if (actx && actx.state === 'suspended') actx.resume();
+    return actx;
+  }
+  function tone(freq, dur, type, gain, slideTo) {
+    const c = ensureCtx(); if (!c) return;
+    const t0 = c.currentTime;
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = type || 'sine'; o.frequency.setValueAtTime(freq, t0);
+    if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(gain || 0.06, t0 + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(c.destination); o.start(t0); o.stop(t0 + dur + 0.02);
+  }
+  function sfxNav() { if (soundOn) tone(420, 0.18, 'sine', 0.05, 620); }
+  function sfxSting() { if (soundOn) { tone(330, 0.5, 'triangle', 0.05, 495); setTimeout(() => tone(495, 0.6, 'sine', 0.04, 660), 90); } }
+  function updateSoundBtn() {
+    const b = document.getElementById('btn-sound');
+    b.setAttribute('aria-pressed', soundOn ? 'true' : 'false');
+    b.querySelector('.ico').innerHTML = soundOn ? ICONS.sound : ICONS.soundOff;
+    b.querySelector('.lbl').textContent = soundOn ? 'เสียง' : 'เสียง: ปิด';
+  }
+  function toggleSound() {
+    soundOn = !soundOn;
+    if (soundOn) { ensureCtx(); sfxNav(); }
+    try { localStorage.setItem('modi-sound', soundOn ? 'on' : 'off'); } catch (_) {}
+    updateSoundBtn();
+  }
+  document.getElementById('btn-sound').addEventListener('click', toggleSound);
+  updateSoundBtn();
+
+  /* ====================================================================
+     #15 ซิงก์หลายหน้าต่าง (BroadcastChannel) — รีโมตแบบออฟไลน์
+     ==================================================================== */
+  let bc = null, applyingRemote = false;
+  const syncBadge = document.getElementById('sync-badge');
+  try { bc = new BroadcastChannel('modi-deck'); } catch (_) { bc = null; }
+  if (bc) {
+    bc.onmessage = (ev) => {
+      const m = ev.data || {};
+      if (m.type === 'hello') { showSyncBadge(); bc.postMessage({ type: 'hi' }); return; }
+      if (m.type === 'hi') { showSyncBadge(); return; }
+      if (m.type === 'nav') {
+        showSyncBadge();
+        applyingRemote = true;
+        if (m.mode && m.mode !== mode) setMode(m.mode);
+        if (typeof m.index === 'number' && m.index !== current) {
+          if (mode === 'slide') goTo(m.index, true);
+          else { current = m.index; slides[m.index].scrollIntoView({ behavior: 'smooth', block: 'start' }); updateUI(); updateNotes(); }
+        }
+        applyingRemote = false;
+      }
+    };
+    try { bc.postMessage({ type: 'hello' }); } catch (_) {}
+  }
+  let syncTimer = 0;
+  function showSyncBadge() {
+    if (!syncBadge) return;
+    syncBadge.hidden = false; syncBadge.classList.add('on');
+    clearTimeout(syncTimer); syncTimer = setTimeout(() => syncBadge.classList.remove('on'), 2600);
+  }
+
+  function onNavigate(idx, opts) {
+    opts = opts || {};
+    washTo(idx);
+    if (opts.play) sfxNav();
+    if (DATA.slides[idx] && DATA.slides[idx].id === 'closing') updateReflectionEcho();
+    if (opts.broadcast && bc && !applyingRemote) {
+      try { bc.postMessage({ type: 'nav', index: idx, mode }); } catch (_) {}
+    }
+  }
+
+  /* ====================================================================
+     #8 / #10 TOOLTIP ลอย (แหล่งอ้างอิง + อภิธานศัพท์)
+     ==================================================================== */
+  const tip = document.getElementById('tip');
+  let tipFor = null;
+  function showTip(el, text) {
+    if (!tip) return;
+    tip.textContent = text; tip.classList.add('on'); tip.setAttribute('aria-hidden', 'false');
+    const r = el.getBoundingClientRect();
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    let left = r.left + r.width / 2 - tw / 2;
+    left = Math.max(8, Math.min(window.innerWidth - tw - 8, left));
+    let top = r.top - th - 10;
+    if (top < 8) top = r.bottom + 10;
+    tip.style.left = left + 'px'; tip.style.top = top + 'px';
+    tipFor = el;
+  }
+  function hideTip() { if (tip) { tip.classList.remove('on'); tip.setAttribute('aria-hidden', 'true'); tipFor = null; } }
+  function tipText(el) {
+    if (el.dataset.src) return 'ที่มา: ' + el.dataset.src;
+    if (el.dataset.term) return (DATA.glossary && DATA.glossary[el.dataset.term]) || '';
+    return '';
+  }
+  function tipTarget(t) { return t.closest && t.closest('.src-mark, .term'); }
+  document.addEventListener('mouseover', (e) => { const m = tipTarget(e.target); if (m) showTip(m, tipText(m)); });
+  document.addEventListener('mouseout', (e) => { const m = tipTarget(e.target); if (m && m === tipFor) hideTip(); });
+  document.addEventListener('focusin', (e) => { const m = tipTarget(e.target); if (m) showTip(m, tipText(m)); });
+  document.addEventListener('focusout', (e) => { const m = tipTarget(e.target); if (m && m === tipFor) hideTip(); });
+  document.addEventListener('click', (e) => {
+    const m = tipTarget(e.target);
+    if (m) { e.preventDefault(); (tipFor === m) ? hideTip() : showTip(m, tipText(m)); }
+    else if (tipFor) hideTip();
+  });
+  window.addEventListener('scroll', hideTip, { passive: true });
+
+  /* #10 ห่อคำศัพท์ในเนื้อความ (ครั้งแรกที่พบต่อคำ) ด้วย TreeWalker */
+  (function wrapGlossary() {
+    if (!DATA.glossary) return;
+    const SEL = '.bbody, .tl-body, .sbody, .lead, .agenda-body, .bhead';
+    const terms = Object.keys(DATA.glossary).sort((a, b) => b.length - a.length);
+    terms.forEach(term => {
+      const hosts = deck.querySelectorAll(SEL);
+      for (const host of hosts) {
+        const w = document.createTreeWalker(host, NodeFilter.SHOW_TEXT, null);
+        let node, done = false;
+        while ((node = w.nextNode())) {
+          const p = node.parentNode;
+          if (p.closest('.term, .src-mark')) continue;
+          const i = node.nodeValue.indexOf(term);
+          if (i < 0) continue;
+          const after = node.splitText(i);
+          after.nodeValue = after.nodeValue.slice(term.length);
+          const span = document.createElement('span');
+          span.className = 'term'; span.tabIndex = 0; span.setAttribute('role', 'button');
+          span.dataset.term = term; span.textContent = term;
+          p.insertBefore(span, after);
+          done = true; break;
+        }
+        if (done) break;
+      }
+    });
+  })();
+
+  /* ====================================================================
+     #2 LOADER (chakra) — เปิดครั้งแรก แล้วเฟดเข้า hero
+     ==================================================================== */
+  (function initLoader() {
+    const loader = document.getElementById('loader');
+    if (!loader) return;
+    const lc = document.getElementById('loader-chakra');
+    if (lc) lc.innerHTML = chakra(getComputedStyle(document.documentElement).getPropertyValue('--navy').trim() || '#0e2f63');
+    if (prefersReduced || !motionOn) { loader.remove(); return; }
+    loader.classList.add('spin');
+    setTimeout(() => loader.classList.add('done'), 1150);
+    setTimeout(() => loader.remove(), 1750);
+  })();
+
+  /* ====================================================================
+     #1 HERO PARALLAX — ขยับเลเยอร์ตามเมาส์ (เบา ๆ)
+     ==================================================================== */
+  (function initParallax() {
+    const hero = deck.querySelector('.slide.hero');
+    if (!hero) return;
+    window.addEventListener('pointermove', (e) => {
+      if (!motionOn || mode === 'slide') return;
+      if (e.pointerType === 'touch') return;
+      const dx = (e.clientX / window.innerWidth - 0.5);
+      const dy = (e.clientY / window.innerHeight - 0.5);
+      hero.style.setProperty('--px', (dx * 14).toFixed(1) + 'px');
+      hero.style.setProperty('--py', (dy * 14).toFixed(1) + 'px');
+    }, { passive: true });
+  })();
+
+  /* ====================================================================
+     #11 POLL
+     ==================================================================== */
+  function pollKey(id) { return 'modi-poll-' + id; }
+  function readPoll(id, opts) {
+    let data = {};
+    try { data = JSON.parse(localStorage.getItem(pollKey(id)) || '{}'); } catch (_) {}
+    opts.forEach(o => { if (typeof data[o.key] !== 'number') data[o.key] = 0; });
+    return data;
+  }
+  function renderPoll(wrap) {
+    const id = wrap.dataset.poll;
+    const opts = DATA.poll.options;
+    const data = readPoll(id, opts);
+    const total = opts.reduce((s, o) => s + (data[o.key] || 0), 0);
+    let voted = false;
+    try { voted = localStorage.getItem(pollKey(id) + '-voted') === '1'; } catch (_) {}
+    wrap.classList.toggle('voted', voted);
+    let maxKey = null, maxN = -1;
+    opts.forEach(o => { if ((data[o.key] || 0) > maxN) { maxN = data[o.key] || 0; maxKey = o.key; } });
+    wrap.querySelectorAll('.poll-opt').forEach(btn => {
+      const k = btn.dataset.key; const n = data[k] || 0;
+      const pct = total ? Math.round((n / total) * 100) : 0;
+      btn.querySelector('.po-bar').style.width = (voted ? pct : 0) + '%';
+      btn.querySelector('.po-pct').textContent = voted ? pct + '%' : '';
+      btn.classList.toggle('lead', voted && total > 0 && k === maxKey);
+    });
+    const tEl = wrap.querySelector('[data-poll-total]'); if (tEl) tEl.textContent = total;
+  }
+  function initPoll(wrap) {
+    const id = wrap.dataset.poll;
+    renderPoll(wrap);
+    wrap.querySelectorAll('.poll-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        let voted = false; try { voted = localStorage.getItem(pollKey(id) + '-voted') === '1'; } catch (_) {}
+        if (voted) return;
+        const data = readPoll(id, DATA.poll.options);
+        data[btn.dataset.key] = (data[btn.dataset.key] || 0) + 1;
+        try { localStorage.setItem(pollKey(id), JSON.stringify(data)); localStorage.setItem(pollKey(id) + '-voted', '1'); } catch (_) {}
+        sfxNav();
+        renderPoll(wrap);
+      });
+    });
+    wrap.querySelector('[data-poll-reset]').addEventListener('click', () => {
+      try { localStorage.removeItem(pollKey(id)); localStorage.removeItem(pollKey(id) + '-voted'); } catch (_) {}
+      renderPoll(wrap);
+    });
+  }
+  deck.querySelectorAll('[data-poll]').forEach(initPoll);
+
+  /* ====================================================================
+     #14 REFLECTION — บันทึก localStorage + สะท้อนที่สไลด์ปิดท้าย
+     ==================================================================== */
+  const RF_KEY = 'modi-reflection';
+  function updateReflectionEcho() {
+    let v = ''; try { v = localStorage.getItem(RF_KEY) || ''; } catch (_) {}
+    deck.querySelectorAll('[data-reflection-echo]').forEach(el => {
+      if (v.trim()) { el.hidden = false; el.innerHTML = `<span class="ce-q">${esc(DATA.reflectionPrompt || '')}</span><span class="ce-a">“${esc(v)}”</span>`; }
+      else { el.hidden = true; }
+    });
+  }
+  (function initReflection() {
+    const ta = deck.querySelector('[data-reflection]');
+    if (!ta) return;
+    try { ta.value = localStorage.getItem(RF_KEY) || ''; } catch (_) {}
+    let saveT = 0;
+    ta.addEventListener('input', () => {
+      try { localStorage.setItem(RF_KEY, ta.value); } catch (_) {}
+      const saved = ta.closest('.reflection').querySelector('[data-rf-saved]');
+      if (saved) { saved.hidden = false; clearTimeout(saveT); saveT = setTimeout(() => { saved.hidden = true; }, 1500); }
+      updateReflectionEcho();
+    });
+  })();
+
+  /* ====================================================================
+     #12 DRAG-THE-BALANCE
+     ==================================================================== */
+  (function initDragScale() {
+    const root = deck.querySelector('[data-dragscale]');
+    if (!root) return;
+    const pool = root.querySelector('[data-pool]');
+    const pans = { pos: root.querySelector('[data-pan="pos"]'), neg: root.querySelector('[data-pan="neg"]') };
+    const beam = root.querySelector('[data-beam]');
+    const readout = root.querySelector('[data-readout]');
+
+    function place(chip, where) {
+      chip.dataset.where = where;
+      (where === 'pool' ? pool : pans[where]).appendChild(chip);
+      update();
+    }
+    function update() {
+      const pos = pans.pos.querySelectorAll('.ds-chip').length;
+      const neg = pans.neg.querySelectorAll('.ds-chip').length;
+      const diff = pos - neg;
+      const ang = Math.max(-14, Math.min(14, -diff * 4));
+      beam.style.transform = `rotate(${ang}deg)`;
+      pans.pos.style.transform = `translateY(${Math.max(-22, Math.min(22, diff * 6))}px)`;
+      pans.neg.style.transform = `translateY(${Math.max(-22, Math.min(22, -diff * 6))}px)`;
+      const placed = pos + neg, totalChips = root.querySelectorAll('.ds-chip').length;
+      if (placed < totalChips) readout.textContent = `วางแล้ว ${placed}/${totalChips} — ลากที่เหลือขึ้นตาชั่ง`;
+      else if (diff > 0) { readout.textContent = `ฝั่งผลงานหนักกว่า (${pos} : ${neg})`; readout.className = 'ds-readout pos'; }
+      else if (diff < 0) { readout.textContent = `ฝั่งข้อวิจารณ์หนักกว่า (${pos} : ${neg})`; readout.className = 'ds-readout neg'; }
+      else { readout.textContent = `สมดุลพอดี (${pos} : ${neg}) — แล้วคุณจะเอียงไปทางไหน?`; readout.className = 'ds-readout even'; }
+      if (placed === totalChips) readout.classList.add('done');
+    }
+
+    // ปุ่มลูกศร + แตะชิปในจานเพื่อคืน pool
+    root.addEventListener('click', (e) => {
+      const arrow = e.target.closest('.ds-arrow');
+      const chip = e.target.closest('.ds-chip');
+      if (!chip) return;
+      if (arrow) { e.stopPropagation(); place(chip, arrow.dataset.move); sfxNav(); return; }
+      if (chip.dataset.where !== 'pool') { place(chip, 'pool'); sfxNav(); }
+    });
+    // คีย์บอร์ด: ← → ย้ายซ้าย/ขวา, Backspace คืน pool
+    root.addEventListener('keydown', (e) => {
+      const chip = e.target.closest('.ds-chip'); if (!chip) return;
+      if (e.key === 'ArrowLeft') { e.preventDefault(); place(chip, 'pos'); sfxNav(); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); place(chip, 'neg'); sfxNav(); }
+      else if (e.key === 'Backspace') { e.preventDefault(); place(chip, 'pool'); }
+    });
+    // ลากด้วย pointer
+    let drag = null;
+    root.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('.ds-arrow')) return;
+      const chip = e.target.closest('.ds-chip'); if (!chip) return;
+      drag = { chip, x0: e.clientX, y0: e.clientY, moved: false };
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x0, dy = e.clientY - drag.y0;
+      if (!drag.moved && Math.hypot(dx, dy) < 6) return;
+      drag.moved = true;
+      drag.chip.classList.add('dragging');
+      drag.chip.style.transform = `translate(${dx}px, ${dy}px)`;
+      pans.pos.classList.toggle('hot', hitPan(e, pans.pos));
+      pans.neg.classList.toggle('hot', hitPan(e, pans.neg));
+    }, { passive: true });
+    window.addEventListener('pointerup', (e) => {
+      if (!drag) return;
+      const chip = drag.chip;
+      chip.classList.remove('dragging'); chip.style.transform = '';
+      pans.pos.classList.remove('hot'); pans.neg.classList.remove('hot');
+      if (drag.moved) {
+        if (hitPan(e, pans.pos)) place(chip, 'pos');
+        else if (hitPan(e, pans.neg)) place(chip, 'neg');
+        else place(chip, 'pool');
+        sfxNav();
+      }
+      drag = null;
+    });
+    function hitPan(e, pan) {
+      const r = pan.getBoundingClientRect();
+      return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    }
+  })();
+
+  /* ====================================================================
+     #13 QUIZ SCORE + การ์ดผลคะแนน (canvas)
+     ==================================================================== */
+  const quizState = {};
+  function updateQuizScore() {
+    const totalQ = DATA.quiz.length;
+    const answered = Object.keys(quizState).length;
+    if (answered < totalQ) return;
+    const correct = Object.values(quizState).filter(Boolean).length;
+    const box = document.getElementById('quiz-score'); if (!box) return;
+    box.hidden = false;
+    const pct = Math.round((correct / totalQ) * 100);
+    box.querySelector('.qs-num').textContent = correct + '/' + totalQ;
+    const fg = box.querySelector('.qs-fg'), C = 2 * Math.PI * 34;
+    fg.style.strokeDasharray = C; fg.style.strokeDashoffset = C * (1 - correct / totalQ);
+    const msg = pct === 100 ? 'เต็ม! คุณจับแก่นบทเรียนได้ครบ 🎯'
+      : pct >= 67 ? 'เยี่ยมมาก เข้าใจภาพรวมได้ดี 👍'
+      : pct >= 34 ? 'มาถูกทางแล้ว ลองทบทวนอีกนิด 💪'
+      : 'ไม่เป็นไร ย้อนดูสไลด์แล้วลองใหม่ได้เสมอ 🌱';
+    document.getElementById('qs-msg').textContent = msg;
+    if (!box.dataset.shown) { box.dataset.shown = '1'; sfxSting(); box.scrollIntoView({ behavior: motionOn ? 'smooth' : 'auto', block: 'center' }); }
+  }
+  function downloadResultCard() {
+    const totalQ = DATA.quiz.length;
+    const correct = Object.values(quizState).filter(Boolean).length;
+    const W = 1200, H = 630, cv = document.createElement('canvas');
+    cv.width = W; cv.height = H; const x = cv.getContext('2d');
+    x.fillStyle = '#f4efe4'; x.fillRect(0, 0, W, H);
+    x.fillStyle = '#FF9933'; x.fillRect(0, 0, W, 14);
+    x.fillStyle = '#138808'; x.fillRect(0, H - 14, W, 14);
+    x.fillStyle = '#0e2f63'; x.textAlign = 'left';
+    x.font = '700 34px "Noto Sans Thai", sans-serif';
+    x.fillText('นเรนทรา โมดี — กรณีศึกษาผู้นำ', 80, 110);
+    x.font = '900 120px "Noto Serif Thai", serif'; x.fillStyle = '#1c7a45';
+    x.fillText(correct + ' / ' + totalQ, 80, 300);
+    x.fillStyle = '#1d2436'; x.font = '700 46px "Noto Sans Thai", sans-serif';
+    x.fillText('คะแนนทดสอบความเข้าใจ', 80, 380);
+    x.fillStyle = '#4a5266'; x.font = '400 30px "Noto Sans Thai", sans-serif';
+    const pct = Math.round((correct / totalQ) * 100);
+    const msg = pct === 100 ? 'เต็ม! จับแก่นบทเรียนได้ครบ' : pct >= 67 ? 'เข้าใจภาพรวมได้ดีมาก' : pct >= 34 ? 'มาถูกทางแล้ว' : 'ลองทบทวนอีกครั้ง';
+    x.fillText(msg, 80, 440);
+    x.fillStyle = '#8a8475'; x.font = '400 24px "Noto Sans Thai", sans-serif';
+    x.fillText('จัดทำเพื่อการศึกษา · นำเสนอทั้งด้านบวกและด้านลบอย่างเป็นกลาง', 80, 560);
+    try {
+      const a = document.createElement('a');
+      a.download = 'modi-quiz-result.png'; a.href = cv.toDataURL('image/png'); a.click();
+    } catch (_) {}
+  }
+  document.getElementById('deck').addEventListener('click', (e) => {
+    if (e.target.closest('#qs-dl')) downloadResultCard();
+  });
 
   /* ====================================================================
      เริ่มทำงาน
