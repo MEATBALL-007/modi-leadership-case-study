@@ -962,17 +962,237 @@ body.is-presenter .loader, body.is-presenter .tip { display: none !important; }
 /* ---------- #6(ใหม่) ปุ่มอ่านออกเสียงตอนทำงาน ---------- */
 .btn#btn-tts[aria-pressed="true"] { background: var(--green); color: #fff; border-color: var(--green); }
 
+/* ============================================================================
+   ★★★ ชุดที่สาม: เนื้อหาเชิงลึก (INFORMATION)
+   ============================================================================ */
+
+/* ---------- #4 ป้าย ข้อเท็จจริง/การตีความ ---------- */
+.kind-tag { font-size: .6rem; font-weight: 800; letter-spacing: .02em; padding: .12rem .45rem; border-radius: 5px; vertical-align: middle; white-space: nowrap; }
+.kind-tag.fact { color: var(--green); background: rgba(28,122,69,.12); }
+.kind-tag.claim { color: var(--saffron); background: rgba(217,119,42,.14); }
+
+/* ---------- #10 ตราประทับ "ข้อมูล ณ" ---------- */
+.data-stamp { margin-top: 1rem; font-size: .76rem; color: var(--ink-faint); font-style: italic; }
+.data-stamp.inline { margin: 0; font-style: normal; padding: .22rem .6rem; border: 1px dashed var(--line); border-radius: 999px; }
+
+/* ---------- #8 ตัวกรองไทม์ไลน์ + แท็ก + บริบท ---------- */
+.tl-filter { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0 0 1.2rem; }
+.tlf { font: inherit; font-size: .8rem; font-weight: 600; color: var(--ink-soft); background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: .35rem .85rem; cursor: pointer; transition: all .18s; }
+.tlf:hover { border-color: var(--accent); color: var(--accent); }
+.tlf.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.tl-tag { font-size: .62rem; font-weight: 700; letter-spacing: .02em; color: var(--accent); background: var(--accent-soft); border-radius: 5px; padding: .1rem .45rem; vertical-align: middle; }
+.tl-item.tl-hidden { display: none; }
+.tl-context { margin-top: .5rem; font-size: .9rem; }
+.tl-context summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: .85rem; list-style: none; display: inline-flex; align-items: center; gap: .3rem; }
+.tl-context summary::before { content: "▸"; transition: transform .2s; display: inline-block; }
+.tl-context[open] summary::before { transform: rotate(90deg); }
+.tl-context summary::-webkit-details-marker { display: none; }
+.tl-context > div { margin-top: .5rem; color: var(--ink-soft); background: var(--accent-soft); border-radius: 8px; padding: .6rem .8rem; line-height: 1.55; }
+
+/* ---------- #2 dashboard ก่อน/หลัง ---------- */
+.dash { display: flex; flex-direction: column; gap: .7rem; margin-top: .5rem; }
+.dash-row { display: grid; grid-template-columns: 1.1fr auto; gap: 1rem; align-items: center; background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--green); border-radius: 12px; padding: 1rem 1.3rem; box-shadow: var(--shadow); }
+.dash-label { font-weight: 700; font-size: 1rem; }
+.dash-vals { display: flex; align-items: center; gap: .7rem; font-family: var(--serif); }
+.dash-from { color: var(--ink-faint); font-weight: 700; font-size: 1.1rem; text-decoration: line-through; text-decoration-color: var(--line); }
+.dash-arrow { font-weight: 900; font-size: 1.2rem; }
+.dash-arrow.up { color: var(--green); }
+.dash-arrow.down { color: var(--clay); }
+.dash-to { color: var(--ink); font-weight: 900; font-size: 1.5rem; }
+.dash.is-visible .dash-row, .bigcard.is-visible .dash-row { } /* placeholder */
+@media (max-width: 560px) { .dash-row { grid-template-columns: 1fr; gap: .4rem; } }
+
+/* ---------- #3 comparison bars ---------- */
+.cmp { display: flex; flex-direction: column; gap: .8rem; margin-top: .5rem; }
+.cmp-row { display: grid; grid-template-columns: 110px 1fr auto; gap: .8rem; align-items: center; }
+.cmp-name { font-weight: 700; font-size: .95rem; text-align: right; }
+.cmp-track { height: 26px; background: var(--paper-2); border-radius: 999px; overflow: hidden; }
+.cmp-bar { height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--saffron-br)); transition: width .9s var(--ease-out); transition-delay: var(--bd, 0ms); }
+.cmp-row.hot .cmp-name { color: var(--accent); }
+.cmp-row.hot .cmp-bar { background: linear-gradient(90deg, var(--green), var(--green-br)); }
+.cmp-val { font-family: var(--serif); font-weight: 900; font-size: 1.15rem; color: var(--ink); min-width: 56px; }
+.cmp.is-visible .cmp-bar { width: var(--w); }
+.cmp-unit { margin-top: 1rem; font-size: .8rem; color: var(--ink-faint); }
+@media (max-width: 520px) { .cmp-row { grid-template-columns: 80px 1fr auto; } .cmp-name { font-size: .82rem; } }
+
+/* ---------- #9 reception (สองคอลัมน์) ---------- */
+.recv { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: .5rem; }
+.recv-col { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 1.4rem 1.5rem; box-shadow: var(--shadow); }
+.recv-col.praise { border-top: 4px solid var(--green); }
+.recv-col.concern { border-top: 4px solid var(--clay); }
+.recv-h { font-family: var(--serif); font-weight: 700; font-size: 1.2rem; margin-bottom: .8rem; }
+.recv-col.praise .recv-h { color: var(--green); }
+.recv-col.concern .recv-h { color: var(--clay); }
+.recv-col ul { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+.recv-col li { position: relative; padding-left: 1.3rem; color: var(--ink-soft); font-size: .98rem; line-height: 1.5; }
+.recv-col li::before { content: ""; position: absolute; left: 0; top: .55em; width: 7px; height: 7px; border-radius: 50%; }
+.recv-col.praise li::before { background: var(--green); }
+.recv-col.concern li::before { background: var(--clay); }
+@media (max-width: 720px) { .recv { grid-template-columns: 1fr; } }
+
+/* ---------- #6 voices ---------- */
+.voices { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.1rem; margin-top: .5rem; }
+.voice { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 1.5rem 1.5rem 1.3rem; box-shadow: var(--shadow); overflow: hidden; }
+.voice::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; }
+.voice.pos::before { background: var(--green); }
+.voice.neg::before { background: var(--clay); }
+.voice.neutral::before { background: var(--navy); }
+.voice-q { font-family: var(--serif); font-size: 3rem; line-height: .6; color: var(--accent); opacity: .25; height: 1.4rem; }
+.voice-body { font-size: 1.05rem; line-height: 1.6; color: var(--ink); font-style: normal; margin: .3rem 0 1rem; }
+.voice-who { font-weight: 800; font-size: .9rem; color: var(--accent); }
+.voice.pos { --accent: var(--green); } .voice.neg { --accent: var(--clay); } .voice.neutral { --accent: var(--navy); }
+
+/* ---------- #7 leadership model ---------- */
+.model { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: .5rem; }
+.model-col { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 1.4rem 1.5rem; box-shadow: var(--shadow); }
+.model-col.pos { border-top: 4px solid var(--green); }
+.model-col.neg { border-top: 4px solid var(--clay); }
+.model-h { font-family: var(--serif); font-weight: 800; font-size: 1.2rem; line-height: 1.2; margin-bottom: .9rem; }
+.model-col.pos .model-h { color: var(--green); }
+.model-col.neg .model-h { color: var(--clay); }
+.model-sub { display: block; font-family: var(--sans); font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); margin-top: .2rem; }
+.model-col ul { list-style: none; display: flex; flex-direction: column; gap: .55rem; }
+.model-col li { position: relative; padding-left: 1.3rem; color: var(--ink-soft); font-size: .98rem; }
+.model-col li::before { content: ""; position: absolute; left: 0; top: .5em; width: 7px; height: 7px; border-radius: 2px; }
+.model-col.pos li::before { background: var(--green); }
+.model-col.neg li::before { background: var(--clay); }
+.model-insight { display: flex; gap: .7rem; align-items: center; margin-top: 1.3rem; background: var(--accent-soft); border: 1.5px dashed var(--accent); border-radius: 14px; padding: 1.1rem 1.4rem; font-size: 1.05rem; font-weight: 600; }
+.model-insight svg { width: 26px; height: 26px; color: var(--accent); flex: 0 0 auto; }
+@media (max-width: 720px) { .model { grid-template-columns: 1fr; } }
+
+/* ============================================================================
+   ★★★ ชุดที่สี่: MOTION GRAPHIC DESIGN
+   ============================================================================ */
+
+/* ---------- #15 ตัวคั่นบท (chapter divider) ---------- */
+.slide:has(.divider-stage) { justify-content: center; }
+.divider-stage {
+  position: relative; overflow: hidden; border-radius: 26px;
+  padding: clamp(2rem, 6vw, 4.5rem); min-height: min(58vh, 440px);
+  display: flex; align-items: center;
+  background: linear-gradient(135deg, var(--accent-soft), transparent 70%), var(--card);
+  border: 1px solid var(--line); box-shadow: var(--shadow-lg);
+}
+.divider-num {
+  position: absolute; right: .1em; bottom: -.22em; font-family: var(--serif); font-weight: 900;
+  font-size: clamp(9rem, 32vw, 22rem); line-height: 1; color: var(--accent); opacity: .08; pointer-events: none;
+}
+.divider-sweep { position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, var(--accent-soft) 50%, transparent 70%); transform: translateX(-120%); }
+.divider-stage.is-visible .divider-sweep { animation: dividerSweep 1.4s var(--ease-out) .1s; }
+@keyframes dividerSweep { to { transform: translateX(120%); } }
+.divider-chakra { position: absolute; right: -4%; top: 50%; width: min(40vw, 360px); aspect-ratio: 1; transform: translateY(-50%) rotate(-90deg) scale(.7); opacity: 0; color: var(--accent); pointer-events: none; }
+.divider-stage.is-visible .divider-chakra { animation: dividerChakra 1.3s var(--ease-out) .15s forwards; }
+@keyframes dividerChakra { to { opacity: .12; transform: translateY(-50%) rotate(0) scale(1); } }
+.divider-main { position: relative; z-index: 2; }
+.divider-title { font-size: clamp(2.4rem, 7vw, 5rem) !important; margin: .2rem 0 1rem; }
+.divider-lead { max-width: 40ch; font-size: clamp(1.05rem, 2.2vw, 1.4rem); }
+.divider-by {
+  display: inline-flex; align-items: center; gap: .5rem; margin-top: .4rem;
+  font-size: 1rem; color: var(--accent); background: var(--accent-soft);
+  border: 1px solid var(--accent); border-radius: 999px; padding: .45rem 1rem;
+}
+.divider-by svg { width: 17px; height: 17px; }
+.divider-by b { font-weight: 800; font-size: 1.15rem; letter-spacing: .03em; }
+
+/* ---------- #19 hero living background (gradient mesh + chakra particles / blob morph #16) ---------- */
+.hero-aura { position: absolute; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; }
+.hero-aura span {
+  position: absolute; border-radius: 42% 58% 60% 40% / 50% 45% 55% 50%;
+  filter: blur(36px); opacity: .5; mix-blend-mode: multiply;
+}
+.hero-aura span:nth-child(1) { width: 46vw; height: 46vw; left: 52%; top: -8%; background: radial-gradient(circle, rgba(217,119,42,.5), transparent 70%); animation: blob 18s ease-in-out infinite, drift1 24s ease-in-out infinite; }
+.hero-aura span:nth-child(2) { width: 38vw; height: 38vw; left: 60%; top: 30%; background: radial-gradient(circle, rgba(28,122,69,.4), transparent 70%); animation: blob 22s ease-in-out infinite reverse, drift2 28s ease-in-out infinite; }
+.hero-aura span:nth-child(3) { width: 30vw; height: 30vw; left: 40%; top: 50%; background: radial-gradient(circle, rgba(14,47,99,.3), transparent 70%); animation: blob 26s ease-in-out infinite, drift1 32s ease-in-out infinite reverse; }
+@keyframes blob {
+  0%,100% { border-radius: 42% 58% 60% 40% / 50% 45% 55% 50%; }
+  33% { border-radius: 60% 40% 45% 55% / 40% 60% 40% 60%; }
+  66% { border-radius: 40% 60% 55% 45% / 55% 40% 60% 45%; }
+}
+@keyframes drift1 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-4%, 5%); } }
+@keyframes drift2 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(5%, -4%); } }
+html[data-theme="dark"] .hero-aura span { mix-blend-mode: screen; opacity: .35; }
+
+/* ---------- #20 scroll-reactive brand chakra ---------- */
+.brand .chakra-mini { transition: transform .2s linear; }
+
+/* ---------- #13 odometer (เลขม้วน) ---------- */
+.odo { display: inline-flex; align-items: flex-start; }
+.odo-digit { display: inline-block; height: 1em; overflow: hidden; vertical-align: top; }
+.odo-reel { display: flex; flex-direction: column; transform: translateY(0); transition: transform 1.1s cubic-bezier(.16,1,.3,1); transition-delay: var(--dl, 0ms); will-change: transform; }
+.odo-n { height: 1em; line-height: 1; display: block; text-align: center; }
+.odo-fix { display: inline-block; }
+
+/* ---------- #18 kinetic typography ---------- */
+.kw { display: inline-block; opacity: 0; transform: translateY(.5em) scale(.92); transition: opacity .5s var(--ease-out), transform .5s var(--ease-out); transition-delay: var(--ki, 0ms); }
+[data-reveal].is-visible [data-kinetic] .kw, .voice.is-visible .kw { opacity: 1; transform: none; }
+
+/* ---------- #17 line-draw icons ---------- */
+.bico svg path, .sico svg path, .pico svg path { stroke-dasharray: 150; stroke-dashoffset: 150; }
+.bigcard.is-visible .bico svg path { animation: drawIcon 1s var(--ease) .2s forwards; }
+.split-card.is-visible .sico svg path { animation: drawIcon 1s var(--ease) .2s forwards; }
+.pcard.is-visible .pico svg path { animation: drawIcon 1s var(--ease) .2s forwards; }
+@keyframes drawIcon { to { stroke-dashoffset: 0; } }
+
+/* ---------- #14 journey route on India map ---------- */
+.in-route { fill: none; stroke: var(--saffron); stroke-width: 1.6; stroke-dasharray: 4 3; stroke-dashoffset: 90; opacity: 0; }
+.scaleviz.is-visible .in-route { animation: routeDraw 2.2s var(--ease) .5s forwards; }
+@keyframes routeDraw { from { stroke-dashoffset: 90; opacity: .9; } to { stroke-dashoffset: 0; opacity: .9; } }
+.in-route-dot { fill: var(--saffron); opacity: 0; }
+.scaleviz.is-visible .in-route-dot { opacity: 1; }
+body.motion-off .in-route-dot { display: none; }
+.in-delhi { fill: var(--accent); opacity: 0; }
+.scaleviz.is-visible .in-delhi { animation: mcDot .4s ease 2.4s forwards; }
+
+/* ---------- #12 Chandrayaan landing scene ---------- */
+.chandra { position: absolute; right: 8px; top: 8px; width: 92px; height: 62px; opacity: .9; pointer-events: none; }
+.chandra svg { width: 100%; height: 100%; overflow: visible; }
+.ch-moon { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1; }
+.ch-crater { fill: var(--accent); opacity: .25; }
+.ch-arc { fill: none; stroke: var(--accent); stroke-width: 1; stroke-dasharray: 2 3; opacity: 0; }
+.ch-craft { fill: var(--accent); opacity: 0; }
+.ch-flame { fill: var(--saffron-br); }
+.ch-dust { fill: var(--accent); }
+.bigcard.has-chandra.is-visible .ch-arc { animation: chArc .5s ease .15s forwards; }
+.bigcard.has-chandra.is-visible .ch-craft { animation: chShow .2s ease .2s forwards; }
+@keyframes chArc { to { opacity: .4; } }
+@keyframes chShow { to { opacity: 1; } }
+
+/* ---------- #11 scrollytelling dashboard focus ---------- */
+.dash-row { transition: border-color .3s, box-shadow .3s, transform .3s; }
+.dash-row.focus { border-left-color: var(--accent); box-shadow: var(--shadow-lg); transform: translateX(4px); }
+
+/* ---------- reduced-motion / motion-off guards (ชุด motion) ---------- */
+body.motion-off .hero-aura span,
+body.motion-off .divider-sweep, body.motion-off .divider-chakra { animation: none !important; }
+body.motion-off .divider-chakra { opacity: .1; transform: translateY(-50%); }
+body.motion-off .bico svg path, body.motion-off .sico svg path, body.motion-off .pico svg path { stroke-dashoffset: 0 !important; animation: none !important; }
+body.motion-off .in-route { stroke-dashoffset: 0 !important; opacity: .9 !important; animation: none !important; }
+body.motion-off .in-delhi, body.motion-off .ch-arc, body.motion-off .ch-craft { opacity: .9 !important; animation: none !important; }
+body.motion-off .kw { opacity: 1 !important; transform: none !important; transition: none !important; }
+body.motion-off .odo-reel { transition: none !important; }
+body.motion-off .chandra .ch-craft { opacity: 0 !important; } /* ซ่อนยานถ้าปิด motion (กันค้างกลางจอ) */
+@media (prefers-reduced-motion: reduce) {
+  .hero-aura span, .divider-sweep, .divider-chakra { animation: none !important; }
+  .bico svg path, .sico svg path, .pico svg path, .in-route { stroke-dashoffset: 0 !important; animation: none !important; }
+  .kw { opacity: 1 !important; transform: none !important; }
+  .odo-reel { transition: none !important; }
+  .chandra, .in-route-dot { display: none; }
+}
+
 /* ---------- #10 การพิมพ์ / Export PDF — แฮนด์เอาต์ 1 สไลด์ต่อหน้า ---------- */
 @media print {
   @page { margin: 1.4cm; }
   .toolbar, .slide-nav, .notes-panel, .notes-backdrop, .progress, .help-overlay, .ghost-chakra,
-  .loader, .cat-wash, .tip, .sync-badge, .pv, .takehome-btn { display: none !important; }
-  .src-row { break-inside: avoid; }
-  /* เผยกราฟ/แผนที่/คน ให้เต็มเมื่อพิมพ์ */
-  .mc-line { stroke-dashoffset: 0 !important; }
-  .mc-area, .mc-dot, .ppl, .in-nation, .in-guj { opacity: 1 !important; }
+  .loader, .cat-wash, .tip, .sync-badge, .pv, .takehome-btn,
+  .hero-aura, .chandra, .divider-sweep, .divider-chakra, .in-route-dot { display: none !important; }
+  .src-row, .dash-row, .voice, .model-col, .recv-col { break-inside: avoid; }
+  /* เผยกราฟ/แผนที่/คน/ไอคอน/เลข ให้เต็มเมื่อพิมพ์ */
+  .mc-line, .in-route { stroke-dashoffset: 0 !important; }
+  .bico svg path, .sico svg path, .pico svg path { stroke-dashoffset: 0 !important; }
+  .mc-area, .mc-dot, .ppl, .in-nation, .in-guj, .in-delhi, .kw { opacity: 1 !important; }
+  .kw { transform: none !important; }
   .in-ping { display: none !important; }
-  .scaleviz, .poll, .quiz-score, .agenda-item, .dragscale, .reflection { break-inside: avoid; }
+  .scaleviz, .poll, .quiz-score, .agenda-item, .dragscale, .reflection, .divider-stage, .cmp, .dash { break-inside: avoid; }
   html, body { background: #fff !important; height: auto !important; overflow: visible !important; }
   body::before { display: none !important; }
   .deck { display: block !important; height: auto !important; }
@@ -1112,18 +1332,30 @@ const DATA = {
     agenda:        'M',
     intro:         'M',
     personal:      'M',
+    'sec-achieve': 'NON',
     numbers:       'NON',
     rise:          'NON',
     policies:      'NON',
+    dashboard:     'NON',
+    comparison:    'NON',
+    foreign:       'NON',
+    'sec-critique':'KEN',
     controversies: 'KEN',
+    reception:     'KEN',
+    voices:        'KEN',
+    model:         'KEN',
     different:     'KEN',
     lessons:       'KEN',
+    'sec-wrap':    'PONG',
     poll:          'PONG',
     balance:       'PONG',
     summary:       'PONG',
     sources:       'PONG',
     closing:       'PONG',
   },
+
+  /* ---- ข้อมูล ณ วันที่ (ความโปร่งใส) ---- */
+  dataAsOf: 'ข้อมูล ณ ~กลางปี ค.ศ. 2024 (ค่าประมาณ)',
 
   /* ---- #17 "เลนส์ภาวะผู้นำ" ต่อสไลด์ (แท็กบอกว่าสไลด์นี้สอนเรื่องอะไร) ---- */
   lenses: {
@@ -1133,7 +1365,13 @@ const DATA = {
     numbers:       'การมองภาพใหญ่',
     rise:          'สะสมผลงานทีละขั้น',
     policies:      'ลงมือทำให้เห็นผล',
+    dashboard:     'หลักฐานเชิงประจักษ์',
+    comparison:    'มองเชิงเปรียบเทียบ',
+    foreign:       'ภาพลักษณ์ระดับโลก',
     controversies: 'การใช้อำนาจ',
+    reception:     'มองรอบด้าน',
+    voices:        'หลายมุมมอง',
+    model:         'กรอบวิเคราะห์',
     different:     'การสื่อสารตรง',
     lessons:       'วิสัยทัศน์ & วินัย',
     poll:          'การมีส่วนร่วม',
@@ -1153,6 +1391,9 @@ const DATA = {
     'GDP': 'มูลค่าผลิตภัณฑ์มวลรวมในประเทศ — ตัววัดขนาดเศรษฐกิจของทั้งประเทศ',
     'Jan Dhan': 'Jan Dhan Yojana — โครงการเปิดบัญชีธนาคารให้ประชาชนผู้มีรายได้น้อยหลายร้อยล้านบัญชี',
     'รัฐกุจราต': 'รัฐทางตะวันตกของอินเดียที่โมดีเป็นมุขมนตรี (ผู้ว่าการรัฐ) ระหว่างปี 2001–2014 ก่อนขึ้นเป็นนายกฯ',
+    'G20': 'กลุ่ม 20 ประเทศเศรษฐกิจขนาดใหญ่ของโลก เวทีความร่วมมือทางเศรษฐกิจระดับผู้นำ',
+    'Quad': 'กลุ่มความร่วมมือ 4 ชาติ (สหรัฐฯ ญี่ปุ่น ออสเตรเลีย อินเดีย) ด้านความมั่นคงอินโด-แปซิฟิก',
+    'MPI': 'ดัชนีความยากจนหลายมิติ — วัดความขาดแคลนหลายด้าน (สุขภาพ การศึกษา มาตรฐานชีวิต) ไม่ใช่แค่รายได้',
   },
 
   /* ---- #11 โพลความเห็นผู้ฟัง (เก็บผลใน localStorage) ---- */
@@ -1236,6 +1477,18 @@ const DATA = {
       note: 'จุดที่ทรงพลังในการเล่าเรื่อง: เด็กที่ช่วยพ่อขายน้ำชาที่สถานีรถไฟ ใช้ภูมิหลังนี้สร้างภาพ "ผู้นำของคนธรรมดา" ได้อย่างมีประสิทธิภาพ',
     },
 
+    /* ===== ตัวคั่นบท → NON (#15 chapter divider) ===== */
+    {
+      id: 'sec-achieve',
+      cat: 'positive',
+      type: 'divider',
+      kicker: 'เปลี่ยนผู้นำเสนอ',
+      title: 'ผลงานและการเติบโต',
+      lead: 'จากสเกลของประเทศ สู่ UPI ดวงจันทร์ และตัวเลขที่เปลี่ยนไปจริง',
+      num: '02',
+      note: 'จุดส่งไม้ต่อให้ NON เริ่มช่วงผลงาน ใช้สไลด์นี้เป็นจังหวะหายใจและเปลี่ยนโทน',
+    },
+
     /* 3.5 ภาพรวมเชิงตัวเลข (by the numbers) ---------------------------------- */
     {
       id: 'numbers',
@@ -1262,12 +1515,13 @@ const DATA = {
       title: 'จากรัฐกุจราตสู่ทำเนียบนายกฯ',
       lead: 'พิสูจน์ผลงานในระดับรัฐก่อน แล้วจึงขยับสู่ระดับชาติ — และครองอำนาจต่อเนื่องหลายสมัย',
       timeline: [
-        { year: '1950', head: 'ถือกำเนิด', body: 'เกิดในเมืองวาทนคร รัฐกุจราต ในครอบครัวชนชั้นล่าง' },
-        { year: '2001', head: 'มุขมนตรีรัฐกุจราต', body: 'ก้าวขึ้นเป็นผู้ว่าการรัฐ เริ่มต้นการบริหารแบบเน้นผลงานโครงสร้างพื้นฐาน', accent: true },
-        { year: '2014', head: 'นายกรัฐมนตรี สมัยที่ 1', body: 'นำพรรค BJP ชนะเลือกตั้งอย่างถล่มทลาย เป็นนายกฯ คนที่ 14', accent: true },
-        { year: '2019', head: 'นายกรัฐมนตรี สมัยที่ 2', body: 'ชนะเลือกตั้งอีกครั้งด้วยเสียงข้างมากที่แข็งแกร่งขึ้น' },
-        { year: '2024', head: 'นายกรัฐมนตรี สมัยที่ 3', body: 'ครองตำแหน่งต่อเนื่องเป็นสมัยที่สาม — ปัจจุบัน', accent: true },
+        { year: '1950', head: 'ถือกำเนิด', body: 'เกิดในเมืองวาทนคร รัฐกุจราต ในครอบครัวชนชั้นล่าง', theme: 'social' },
+        { year: '2001', head: 'มุขมนตรีรัฐกุจราต', body: 'ก้าวขึ้นเป็นผู้ว่าการรัฐ เริ่มต้นการบริหารแบบเน้นผลงานโครงสร้างพื้นฐาน', accent: true, theme: 'politics' },
+        { year: '2014', head: 'นายกรัฐมนตรี สมัยที่ 1', body: 'นำพรรค BJP ชนะเลือกตั้งอย่างถล่มทลาย เป็นนายกฯ คนที่ 14', accent: true, theme: 'politics' },
+        { year: '2019', head: 'นายกรัฐมนตรี สมัยที่ 2', body: 'ชนะเลือกตั้งอีกครั้งด้วยเสียงข้างมากที่แข็งแกร่งขึ้น', theme: 'politics' },
+        { year: '2024', head: 'นายกรัฐมนตรี สมัยที่ 3', body: 'ครองตำแหน่งต่อเนื่องเป็นสมัยที่สาม — ปัจจุบัน', accent: true, theme: 'politics' },
       ],
+      themes: { politics: 'การเมือง', social: 'สังคม' },
       note: 'ชี้ให้เห็น pattern สำคัญ: 13 ปีในรัฐกุจราต (2001–2014) คือ "ห้องทดลอง" ก่อนสเกลขึ้นระดับประเทศ นี่คือแก่นของสไตล์ผู้นำเขา',
     },
 
@@ -1321,6 +1575,90 @@ const DATA = {
       note: 'จุดขายระดับโลก: UPI กลายเป็นต้นแบบระบบชำระเงินที่หลายประเทศมาดูงาน และ Chandrayaan-3 (สิงหาคม 2023) คือชัยชนะเชิงสัญลักษณ์ที่ทรงพลังมาก',
     },
 
+    /* 5.3 ก่อน/หลัง อินเดีย (#2 dashboard) ----------------------------------- */
+    {
+      id: 'dashboard',
+      cat: 'positive',
+      kicker: 'หลักฐานเชิงตัวเลข',
+      type: 'dashboard',
+      title: 'อินเดีย 2014 → ปัจจุบัน',
+      lead: 'เทียบช่วงเริ่มดำรงตำแหน่งกับล่าสุด — เปลี่ยนไปแค่ไหน',
+      metrics: [
+        { label: 'อันดับเศรษฐกิจโลก (GDP)', from: 'อันดับ 10', to: 'อันดับ 5', dir: 'up', kind: 'fact', src: 'IMF — ขนาด GDP ปี 2014 เทียบ ~2024' },
+        { label: 'ผู้ใหญ่ที่มีบัญชีธนาคาร', from: '~53%', to: '~78%', dir: 'up', kind: 'fact', src: 'World Bank Global Findex (2014 → 2021)' },
+        { label: 'ครัวเรือนที่มีไฟฟ้าใช้', from: '~70%', to: '~97%+', dir: 'up', kind: 'fact', src: 'รายงานรัฐบาลอินเดีย (Saubhagya) — โดยประมาณ' },
+        { label: 'ผู้ใช้อินเทอร์เน็ต', from: '~250 ล้าน', to: '~900 ล้าน+', dir: 'up', kind: 'fact', src: 'ประมาณการอุตสาหกรรมโทรคมนาคม ~2014 → ~2024' },
+        { label: 'ความยากจนหลายมิติ (MPI)', from: 'สูงกว่า', to: 'ลดลงมาก', dir: 'down', kind: 'claim', src: 'NITI Aayog / UNDP — ราว 135 ล้านคนพ้นความยากจน 2015–2021 (โดยประมาณ)' },
+      ],
+      note: 'ใช้สไลด์นี้ตอบคำถาม "ผลงานวัดได้จริงไหม" ย้ำว่าตัวเลขเป็นค่าประมาณจากแหล่งสาธารณะ และบางตัว (เช่น ความยากจน) เป็นการตีความเชิงนโยบาย',
+    },
+
+    /* 5.4 เทียบกับโลก (#3 comparison) --------------------------------------- */
+    {
+      id: 'comparison',
+      cat: 'positive',
+      kicker: 'มองเชิงเปรียบเทียบ',
+      type: 'comparison',
+      title: 'โตเร็วแค่ไหน เมื่อเทียบกับคนอื่น',
+      lead: 'อัตราการเติบโต GDP ต่อปีโดยประมาณช่วงหลัง (ภาพประกอบเปรียบเทียบ)',
+      unit: '% ต่อปี',
+      bars: [
+        { label: 'อินเดีย', value: 7.0, hot: true },
+        { label: 'จีน', value: 5.0 },
+        { label: 'โลก (เฉลี่ย)', value: 3.0 },
+        { label: 'สหรัฐฯ', value: 2.5 },
+      ],
+      src: 'IMF / World Bank — ค่าประมาณช่วงหลัง (ภาพประกอบเปรียบเทียบ)',
+      illustrative: true,
+      note: 'สาระสำคัญไม่ใช่ตัวเลขเป๊ะ ๆ แต่คือ "อินเดียอยู่ในกลุ่มเศรษฐกิจใหญ่ที่โตเร็วที่สุด" ย้ำว่าเป็นภาพประกอบเปรียบเทียบ',
+    },
+
+    /* 5.5 บทบาทเวทีโลก (#1 foreign policy) ---------------------------------- */
+    {
+      id: 'foreign',
+      cat: 'positive',
+      kicker: 'บทบาทบนเวทีโลก',
+      type: 'cards',
+      title: 'อินเดียบนเวทีระหว่างประเทศ',
+      lead: 'ขยับจากผู้สังเกตการณ์ สู่ผู้เล่นที่ถูกจับตา',
+      cards: [
+        {
+          icon: 'globe',
+          tag: 'การทูตพหุภาคี',
+          head: 'เป็นเจ้าภาพ G20 (2023)',
+          body: 'จัดประชุมสุดยอด G20 ที่กรุงนิวเดลี และผลักดันให้สหภาพแอฟริกาเข้าเป็นสมาชิกถาวรของกลุ่ม',
+          stat: { value: 2023, plain: true, label: 'ปีที่อินเดียเป็นประธาน G20', src: 'รัฐบาลอินเดีย / G20 — กันยายน ค.ศ. 2023' },
+        },
+        {
+          icon: 'handshake',
+          tag: 'พันธมิตร',
+          head: 'Quad & หุ้นส่วนยุทธศาสตร์',
+          body: 'ร่วมกลุ่ม Quad (สหรัฐฯ–ญี่ปุ่น–ออสเตรเลีย–อินเดีย) พร้อมรักษาสมดุลความสัมพันธ์กับรัสเซียอย่างระมัดระวัง',
+          stat: { value: 4, plain: true, label: 'ชาติสมาชิกกลุ่ม Quad', src: 'Quad — ความร่วมมืออินโด-แปซิฟิก' },
+        },
+        {
+          icon: 'broadcast',
+          tag: 'ภาพลักษณ์',
+          head: '“เสียงของกลุ่มประเทศใต้”',
+          body: 'วางตำแหน่งอินเดียเป็นปากเสียงของประเทศกำลังพัฒนา ผ่านเวที Voice of the Global South',
+          counter: 'ผู้วิจารณ์มองว่าบทบาทระดับโลกบางส่วน เป็นการสร้างภาพลักษณ์เพื่อการเมืองในประเทศมากกว่าผลลัพธ์จริง',
+        },
+      ],
+      note: 'จุดที่มักถูกมองข้าม: นโยบายต่างประเทศคือเครื่องมือสร้างภาพ "ผู้นำระดับโลก" กลับเข้ามาเสริมความนิยมในประเทศ',
+    },
+
+    /* ===== ตัวคั่นบท → KEN ===== */
+    {
+      id: 'sec-critique',
+      cat: 'warning',
+      type: 'divider',
+      kicker: 'เปลี่ยนผู้นำเสนอ',
+      title: 'อีกด้าน และบทเรียน',
+      lead: 'ข้อวิจารณ์ที่หนักหน่วง การยอมรับและคำถามจากนานาชาติ และมุมมองหลายด้าน',
+      num: '03',
+      note: 'ส่งไม้ต่อให้ KEN เปลี่ยนโทนเข้าสู่ด้านวิพากษ์ ย้ำการนำเสนออย่างเป็นกลาง',
+    },
+
     /* 6. ข้อผิดพลาด / ผลกระทบเชิงลบ (ไทม์ไลน์ย่อย) -------------------------- */
     {
       id: 'controversies',
@@ -1330,13 +1668,71 @@ const DATA = {
       title: 'อีกด้านที่ต้องมอง',
       lead: 'ภาวะผู้นำที่ทรงพลังมาพร้อมข้อวิจารณ์ที่หนักหน่วงและคำถามเรื่องสิทธิเสรีภาพ',
       timeline: [
-        { year: '2002', head: 'จลาจลรัฐกุจราต', body: 'จลาจลฮินดู–มุสลิมรุนแรง เสียชีวิตนับพันคน โมดีถูกวิจารณ์ว่าล้มเหลวและปล่อยปละละเลยในฐานะมุขมนตรีขณะนั้น', warn: true },
-        { year: '2005', head: 'สหรัฐฯ ปฏิเสธวีซ่า', body: 'ถูกรัฐบาลสหรัฐฯ ปฏิเสธวีซ่าเข้าประเทศยาวนานหลายปี สืบเนื่องจากเหตุการณ์ปี 2002' },
-        { year: '2016', head: 'ยกเลิกธนบัตรกะทันหัน', body: 'สั่งยกเลิกธนบัตร 500 และ 1000 รูปีทันทีเพื่อปราบเงินมืด ทำให้เศรษฐกิจฐานรากปั่นป่วน แรงงานตกงานหลายล้านคน', warn: true },
-        { year: '2019', head: 'กฎหมายสัญชาติ CAA', body: 'ให้สัญชาติผู้ลี้ภัยโดยยกเว้นชาวมุสลิม นำไปสู่การประท้วงใหญ่ทั่วประเทศ เพราะถูกมองว่าเลือกปฏิบัติ', warn: true },
-        { year: 'ต่อเนื่อง', head: 'จำกัดเสรีภาพสื่อ', body: 'อันดับเสรีภาพสื่อลดลง มีการสั่งแบนและบุกค้นสำนักงานสื่อ (เช่น BBC) หลังเผยแพร่สารคดีวิพากษ์วิจารณ์เขา' },
+        { year: '2002', head: 'จลาจลรัฐกุจราต', body: 'จลาจลฮินดู–มุสลิมรุนแรง เสียชีวิตนับพันคน โมดีถูกวิจารณ์ว่าล้มเหลวและปล่อยปละละเลยในฐานะมุขมนตรีขณะนั้น', warn: true, theme: 'social', context: 'สถานะ: ต่อมาคณะสอบสวนพิเศษ (SIT) ที่ศาลสูงสุดตั้งขึ้น ระบุว่าไม่พบหลักฐานเอาผิดโมดีโดยตรง — แต่ยังเป็นประเด็นถกเถียงด้านความรับผิดชอบทางการเมือง' },
+        { year: '2005', head: 'สหรัฐฯ ปฏิเสธวีซ่า', body: 'ถูกรัฐบาลสหรัฐฯ ปฏิเสธวีซ่าเข้าประเทศยาวนานหลายปี สืบเนื่องจากเหตุการณ์ปี 2002', theme: 'foreign', context: 'สถานะ: หลังชนะเลือกตั้งเป็นนายกฯ ปี 2014 สหรัฐฯ กลับมาต้อนรับและเชิญเยือนทำเนียบขาว' },
+        { year: '2016', head: 'ยกเลิกธนบัตรกะทันหัน', body: 'สั่งยกเลิกธนบัตร 500 และ 1000 รูปีทันทีเพื่อปราบเงินมืด ทำให้เศรษฐกิจฐานรากปั่นป่วน แรงงานตกงานหลายล้านคน', warn: true, theme: 'economy', context: 'ผลตามมา: ธนาคารกลางอินเดียรายงานภายหลังว่า ธนบัตรเกือบทั้งหมดถูกนำกลับเข้าระบบ ทำให้เป้าหมาย "ปราบเงินมืด" ถูกตั้งคำถามอย่างหนัก' },
+        { year: '2019', head: 'กฎหมายสัญชาติ CAA', body: 'ให้สัญชาติผู้ลี้ภัยโดยยกเว้นชาวมุสลิม นำไปสู่การประท้วงใหญ่ทั่วประเทศ เพราะถูกมองว่าเลือกปฏิบัติ', warn: true, theme: 'social', context: 'สถานะ: รัฐบาลยืนยันว่าเป็นกฎหมายช่วยผู้ลี้ภัย ไม่ตัดสิทธิพลเมืองเดิม ขณะที่ผู้วิจารณ์มองว่าขัดหลักความเท่าเทียมตามรัฐธรรมนูญ' },
+        { year: 'ต่อเนื่อง', head: 'จำกัดเสรีภาพสื่อ', body: 'อันดับเสรีภาพสื่อลดลง มีการสั่งแบนและบุกค้นสำนักงานสื่อ (เช่น BBC) หลังเผยแพร่สารคดีวิพากษ์วิจารณ์เขา', theme: 'rights', context: 'บริบท: ดัชนีเสรีภาพสื่อโลก (RSF) จัดอันดับอินเดียอยู่ในกลุ่มท้าย ๆ ของโลกในช่วงหลัง — รัฐบาลปฏิเสธว่าวิธีวัดไม่เป็นธรรม' },
       ],
+      themes: { economy: 'เศรษฐกิจ', social: 'สังคม', foreign: 'ต่างประเทศ', rights: 'สิทธิเสรีภาพ' },
       note: 'สำคัญมากที่จะนำเสนอส่วนนี้ด้วยน้ำเสียงเป็นกลาง ใช้คำว่า "ถูกวิจารณ์ว่า" ไม่ฟันธงแทนศาล จุดนี้คือสิ่งที่ทำให้พรีเซนต์ดูเป็นวิชาการ ไม่ใช่โฆษณา',
+    },
+
+    /* 6.5 การยอมรับ ปะทะ ข้อกังวล (#9 international reception) -------------- */
+    {
+      id: 'reception',
+      cat: 'warning',
+      kicker: 'โลกมองอย่างไร',
+      type: 'reception',
+      title: 'การยอมรับ ปะทะ ข้อกังวล',
+      lead: 'ทั้งคำชื่นชมและเสียงวิจารณ์จากนานาชาติ — มองทั้งสองด้าน',
+      praiseLabel: 'การยอมรับ',
+      concernLabel: 'ข้อกังวล',
+      praise: [
+        'ได้รับเครื่องราชอิสริยาภรณ์/เกียรติยศสูงสุดจากหลายชาติ (เช่น สหรัฐอาหรับเอมิเรตส์ ซาอุดีอาระเบีย รัสเซีย สหรัฐฯ)',
+        'เป็นผู้นำที่มีผู้ติดตามบนโซเชียลมีเดียมากที่สุดคนหนึ่งของโลก',
+        'ถูกมองเป็นหุ้นส่วนยุทธศาสตร์สำคัญของชาติตะวันตกในอินโด-แปซิฟิก',
+      ],
+      concern: [
+        'ดัชนีเสรีภาพสื่อโลก (RSF) จัดอันดับอินเดียอยู่ในกลุ่มท้าย ๆ ในช่วงหลัง',
+        'องค์กร Freedom House ปรับสถานะอินเดียเป็น “เสรีบางส่วน” (ปี 2021)',
+        'นักวิชาการบางกลุ่ม (เช่น V-Dem) ใช้คำว่า “electoral autocracy” อธิบายแนวโน้ม',
+      ],
+      praiseSrc: 'รายงานข่าว/ประกาศของชาติผู้มอบเกียรติยศ',
+      concernSrc: 'RSF, Freedom House, V-Dem — รายงานประจำปี (เป็นการจัดอันดับ/ตีความ)',
+      note: 'สไลด์สมดุลที่สำคัญ: นำเสนอทั้งเกียรติยศและข้อกังวลคู่กัน ย้ำว่าฝั่งข้อกังวลคือ "การจัดอันดับ/การตีความ" ไม่ใช่คำตัดสิน',
+    },
+
+    /* 6.6 หลายมุมมอง (#6 voices) -------------------------------------------- */
+    {
+      id: 'voices',
+      cat: 'insight',
+      kicker: 'ถ้าถามคนสามกลุ่ม',
+      type: 'voices',
+      title: 'มุมมองที่ต่างกัน',
+      lead: 'มุมมองตัวแทน (เรียบเรียงเพื่อการศึกษา — ไม่ใช่คำพูดอ้างอิงจากบุคคลจริง)',
+      voices: [
+        { who: 'ผู้สนับสนุน', tone: 'pos', body: 'เขาทำให้คนตัวเล็กรู้สึกว่าประเทศกำลังไปข้างหน้า — มีไฟฟ้า มีบัญชีธนาคาร และมีศักดิ์ศรีบนเวทีโลก' },
+        { who: 'ผู้วิจารณ์', tone: 'neg', body: 'ความเข้มแข็งของผู้นำคนเดียว แลกมาด้วยพื้นที่ของเสียงเห็นต่างและกลุ่มชายขอบที่แคบลง' },
+        { who: 'นักเศรษฐศาสตร์', tone: 'neutral', body: 'ตัวเลขรวมดูดี แต่ต้องดูการกระจายด้วย — ทั้งการจ้างงานคนรุ่นใหม่และความเหลื่อมล้ำที่ยังสูง' },
+      ],
+      note: 'ใช้กระตุ้นให้ผู้ฟังเห็นว่า "ข้อมูลชุดเดียวกัน ตีความต่างกันได้" ย้ำชัดว่าเป็นมุมมองตัวแทนที่เรียบเรียงขึ้น',
+    },
+
+    /* 6.7 อ่านผ่านกรอบภาวะผู้นำ (#7 leadership model) ----------------------- */
+    {
+      id: 'model',
+      cat: 'insight',
+      kicker: 'กรอบวิเคราะห์',
+      type: 'model',
+      title: 'อ่านผ่านเลนส์ภาวะผู้นำ',
+      lead: 'ผู้นำคนเดียวกัน แสดงออกได้สองชุดคุณลักษณะ — นี่คือเหตุผลที่เป็น “กรณีศึกษา”',
+      cols: [
+        { label: 'ผู้นำเชิงเปลี่ยนแปลง', sub: 'Transformational', tone: 'pos', traits: ['วางวิสัยทัศน์ใหญ่ + ตัวชี้วัดชัด', 'สื่อสารปลุกพลังมวลชน', 'ลงมือทำให้เห็นผลจับต้องได้'] },
+        { label: 'ผู้นำแบบรวมศูนย์/ประชานิยม', sub: 'Centralizing / Populist', tone: 'neg', traits: ['อำนาจรวมศูนย์ที่ตัวบุคคล', 'พื้นที่ของเสียงเห็นต่างแคบลง', 'ใช้สัญลักษณ์/อัตลักษณ์ปลุกความนิยม'] },
+      ],
+      insight: 'บทเรียน: เรียนรู้ “วิธีตั้งเป้า–สื่อสาร–ลงมือ” ได้ โดยไม่จำเป็นต้องรับเอาการรวมศูนย์อำนาจมาด้วย',
+      note: 'นี่คือหัวใจของการเป็น "กรณีศึกษา" ไม่ใช่ชีวประวัติ: แยกทักษะที่ลอกเลียนได้ ออกจากสิ่งที่ควรระวัง',
     },
 
     /* 7. สิ่งที่ทำให้แตกต่าง -------------------------------------------------- */
@@ -1382,6 +1778,18 @@ const DATA = {
         },
       ],
       note: 'ปิดท้ายส่วนบทเรียนด้วยการแยกให้ชัด: เราเรียนรู้ "วิธีตั้งเป้าและวินัย" ได้ โดยไม่จำเป็นต้องเห็นด้วยกับทุกการตัดสินใจของเขา',
+    },
+
+    /* ===== ตัวคั่นบท → PONG ===== */
+    {
+      id: 'sec-wrap',
+      cat: 'insight',
+      type: 'divider',
+      kicker: 'เปลี่ยนผู้นำเสนอ',
+      title: 'ชั่งน้ำหนัก & สรุป',
+      lead: 'ลองตัดสินด้วยตัวเอง แล้วถอดบทเรียนกลับไปใช้',
+      num: '04',
+      note: 'ส่งไม้ต่อให้ PONG ปิดท้าย เริ่มจากโพลและตาชั่ง',
     },
 
     /* 8.4 โพลความเห็นผู้ฟัง (#11) -------------------------------------------- */
@@ -1514,6 +1922,8 @@ const DATA = {
     download: P('M12 4v11 M8 11l4 4 4-4 M5 20h14'),
     lens: '<circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M20 20l-4-4'),
     mic: P('M12 3a3 3 0 0 1 3 3v5a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z M6 11a6 6 0 0 0 12 0 M12 17v4 M8.5 21h7'),
+    globe: '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M3 12h18 M12 3c2.6 2.5 4 5.6 4 9s-1.4 6.5-4 9c-2.6-2.5-4-5.6-4-9s1.4-6.5 4-9z'),
+    handshake: P('M3 11l3-3 4 3 2-1.5L17 12l4 3 M7 13l3 3 M11 11l3 3 M9 15l2.5 2.5 M14 8l3-2 4 4-2 2'),
     present: '<rect x="3" y="4" width="18" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M9 20h6 M12 16v4 M9 12l4-2.5L9 7z'),
     tts: P('M5 5h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H10l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z') + P('M8.5 9.5v1 M11.5 8.5v3 M14.5 7.5v5 M17 9v2', 'stroke-width="1.6"'),
     ttsOff: P('M5 5h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H10l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z') + P('M4 4l16 16', 'stroke-width="2"'),
@@ -1557,6 +1967,13 @@ const DATA = {
     return src ? ` <sup class="src-mark" tabindex="0" role="button" aria-label="ดูแหล่งอ้างอิง" data-src="${esc(src)}">i</sup>` : '';
   }
 
+  /* #4 ป้าย "ข้อเท็จจริง" vs "การตีความ" */
+  function kindTag(kind) {
+    if (kind === 'fact') return ` <span class="kind-tag fact">ข้อเท็จจริง</span>`;
+    if (kind === 'claim') return ` <span class="kind-tag claim">การตีความ</span>`;
+    return '';
+  }
+
   function slideInner(s, idx) {
     const cat = DATA.categories[s.cat] || '';
     const lens = (DATA.lenses && DATA.lenses[s.id]) || '';
@@ -1568,6 +1985,7 @@ const DATA = {
 
     if (s.type === 'hero') {
       return `
+        <div class="hero-aura" aria-hidden="true"><span></span><span></span><span></span></div>
         ${SVGghost()}
         <div class="hero-grid">
           <div>
@@ -1607,16 +2025,23 @@ const DATA = {
     }
 
     if (s.type === 'timeline') {
+      const themes = s.themes || null;
+      const filterHTML = themes ? `<div class="tl-filter" data-reveal style="--d:140ms" data-tl-filter>
+          <button type="button" class="tlf active" data-theme="all">ทั้งหมด</button>
+          ${Object.keys(themes).map(k => `<button type="button" class="tlf" data-theme="${esc(k)}">${esc(themes[k])}</button>`).join('')}
+        </div>` : '';
       return `${head}
         <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
         ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        ${filterHTML}
         <div class="timeline" data-timeline>
           <div class="rail-fill"></div>
-          ${s.timeline.map((t, i) => `<div class="tl-item ${t.accent ? 'accent' : ''} ${t.warn ? 'warn' : ''}" data-reveal data-tl style="--d:${i * 140}ms">
+          ${s.timeline.map((t, i) => `<div class="tl-item ${t.accent ? 'accent' : ''} ${t.warn ? 'warn' : ''}" data-reveal data-tl data-theme="${esc(t.theme || '')}" style="--d:${i * 140}ms">
             <div class="dot"></div>
             <div class="tl-year">${esc(t.year)}</div>
-            <div class="tl-head">${esc(t.head)}</div>
+            <div class="tl-head">${esc(t.head)}${t.theme && themes ? ` <span class="tl-tag">${esc(themes[t.theme] || '')}</span>` : ''}</div>
             <div class="tl-body">${esc(t.body)}</div>
+            ${t.context ? `<details class="tl-context"><summary>บริบท / สถานะ</summary><div>${esc(t.context)}</div></details>` : ''}
           </div>`).join('')}
         </div>`;
     }
@@ -1633,7 +2058,9 @@ const DATA = {
                 <div class="slabel">${esc(st.label)}${srcMark(st.src)}</div></div>` : '';
             const chartHTML = c.chart ? chartSVG(c.chart) : '';
             const counterHTML = c.counter ? `<div class="counter-note">${ICONS.quiz}<span>${esc(c.counter)}</span></div>` : '';
-            return `<div class="bigcard" data-reveal style="--d:${200 + i * 130}ms">
+            const chandraHTML = c.icon === 'rocket' ? chandraSceneHTML() : '';
+            return `<div class="bigcard ${c.icon === 'rocket' ? 'has-chandra' : ''}" data-reveal style="--d:${200 + i * 130}ms">
+              ${chandraHTML}
               <div class="bico">${ICONS[c.icon] || ''}</div>
               <div class="tag">${esc(c.tag)}</div>
               <div class="bhead">${esc(c.head)}</div>
@@ -1690,6 +2117,101 @@ const DATA = {
         ${pollHTML(DATA.poll)}`;
     }
 
+    /* #15 ตัวคั่นบท (chapter divider) — full-bleed + ส่งไม้ต่อผู้นำเสนอ */
+    if (s.type === 'divider') {
+      const by = (DATA.presenters && DATA.presenters[s.id]) || '';
+      return `<div class="divider-stage" data-reveal>
+          <div class="divider-num">${esc(s.num || '')}</div>
+          <div class="divider-sweep"></div>
+          <div class="divider-chakra" data-divider-chakra></div>
+          <div class="divider-main">
+            <div class="kicker" data-reveal>${esc(s.kicker || '')}</div>
+            <h2 class="divider-title" data-reveal style="--d:120ms">${splitWords(s.title)}</h2>
+            ${s.lead ? `<p class="lead divider-lead" data-reveal style="--d:360ms">${esc(s.lead)}</p>` : ''}
+            ${by ? `<div class="divider-by" data-reveal style="--d:480ms">${ICONS.mic}<span>ช่วงนี้นำเสนอโดย</span> <b>${esc(by)}</b></div>` : ''}
+          </div>
+        </div>`;
+    }
+
+    /* #2 dashboard ก่อน/หลัง */
+    if (s.type === 'dashboard') {
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        <div class="dash" data-reveal style="--d:240ms" data-dash>
+          ${s.metrics.map((m, i) => `<div class="dash-row" data-dash-row style="--di:${i * 120}ms">
+            <div class="dash-label">${esc(m.label)}${kindTag(m.kind)}${srcMark(m.src)}</div>
+            <div class="dash-vals">
+              <span class="dash-from">${esc(m.from)}</span>
+              <span class="dash-arrow ${m.dir === 'down' ? 'down' : 'up'}">${m.dir === 'down' ? '↓' : '↑'}</span>
+              <span class="dash-to">${esc(m.to)}</span>
+            </div>
+          </div>`).join('')}
+        </div>
+        <div class="data-stamp" data-reveal>${esc(DATA.dataAsOf || '')}</div>`;
+    }
+
+    /* #3 comparison bars */
+    if (s.type === 'comparison') {
+      const max = Math.max.apply(null, s.bars.map(b => b.value)) || 1;
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        <div class="cmp" data-reveal style="--d:240ms" data-cmp>
+          ${s.bars.map((b, i) => `<div class="cmp-row ${b.hot ? 'hot' : ''}">
+            <div class="cmp-name">${esc(b.label)}</div>
+            <div class="cmp-track"><div class="cmp-bar" style="--w:${(b.value / max * 100).toFixed(1)}%;--bd:${200 + i * 130}ms"></div></div>
+            <div class="cmp-val">${esc(String(b.value))}${esc(s.unit ? ' ' + s.unit.replace(' ต่อปี','') : '')}</div>
+          </div>`).join('')}
+        </div>
+        <div class="cmp-unit" data-reveal>หน่วย: ${esc(s.unit || '')}${srcMark(s.src)}</div>`;
+    }
+
+    /* #9 international reception (สองคอลัมน์) */
+    if (s.type === 'reception') {
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        <div class="recv">
+          <div class="recv-col praise" data-reveal style="--d:240ms">
+            <div class="recv-h">${esc(s.praiseLabel)}${srcMark(s.praiseSrc)}</div>
+            <ul>${s.praise.map(p => `<li>${esc(p)}</li>`).join('')}</ul>
+          </div>
+          <div class="recv-col concern" data-reveal style="--d:340ms">
+            <div class="recv-h">${esc(s.concernLabel)}${srcMark(s.concernSrc)}</div>
+            <ul>${s.concern.map(p => `<li>${esc(p)}</li>`).join('')}</ul>
+          </div>
+        </div>`;
+    }
+
+    /* #6 voices (มุมมองตัวแทน) */
+    if (s.type === 'voices') {
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        <div class="voices">
+          ${s.voices.map((v, i) => `<figure class="voice ${v.tone}" data-reveal style="--d:${240 + i * 130}ms">
+            <div class="voice-q">“</div>
+            <blockquote class="voice-body" data-kinetic>${esc(v.body)}</blockquote>
+            <figcaption class="voice-who">${esc(v.who)}</figcaption>
+          </figure>`).join('')}
+        </div>`;
+    }
+
+    /* #7 leadership model (สองคอลัมน์ + บทสรุป) */
+    if (s.type === 'model') {
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        <div class="model">
+          ${s.cols.map((c, i) => `<div class="model-col ${c.tone}" data-reveal style="--d:${240 + i * 140}ms">
+            <div class="model-h">${esc(c.label)}<span class="model-sub">${esc(c.sub || '')}</span></div>
+            <ul>${c.traits.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
+          </div>`).join('')}
+        </div>
+        ${s.insight ? `<div class="model-insight" data-reveal style="--d:520ms">${ICONS.target}<span>${esc(s.insight)}</span></div>` : ''}`;
+    }
+
     if (s.type === 'sources') {
       return `${head}
         <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
@@ -1698,6 +2220,7 @@ const DATA = {
           <span class="conf-pill verified">ยืนยันได้</span>
           <span class="conf-pill approx">โดยประมาณ</span>
           <span class="conf-pill illus">ภาพประกอบ</span>
+          ${DATA.dataAsOf ? `<span class="data-stamp inline">${esc(DATA.dataAsOf)}</span>` : ''}
         </div>
         <div class="src-list">
           ${collectSources().map((it, i) => `<div class="src-row" data-reveal style="--d:${300 + i * 70}ms">
@@ -1893,11 +2416,39 @@ const DATA = {
       'L138 116 L132 132 L120 150 L110 168 L101 182 L95 169 L90 150 L82 140 L70 140 L58 130 L50 116 ' +
       'L40 110 L33 96 L40 86 L34 74 L44 66 L40 54 L54 50 L66 54 L74 46 L84 40 Z';
     const gujarat = 'M40 86 L34 74 L44 66 L40 54 L54 50 L60 60 L56 74 L62 86 L52 96 L44 94 Z';
+    /* #14 เส้นทางการเดินทาง กุจราต(49,74) → เดลี(~100,55) */
+    const route = 'M49 74 Q66 50 100 55';
     return `<svg viewBox="0 0 190 200" class="india-svg" aria-label="แผนที่อินเดียอย่างง่าย">
       <path class="in-nation" d="${india}"/>
       <path class="in-guj" d="${gujarat}"/>
+      <path class="in-route" d="${route}"/>
+      <circle class="in-route-dot" r="2.6"><animateMotion class="smil-begin" dur="2.2s" begin="indefinite" fill="freeze" path="${route}"/></circle>
       <circle class="in-ping" cx="49" cy="74" r="4"/>
+      <circle class="in-delhi" cx="100" cy="55" r="3"/>
     </svg>`;
+  }
+
+  /* #12 ฉากลงจอดจันทรายาน-3 (มินิอนิเมชัน บนการ์ดอวกาศ) */
+  function chandraSceneHTML() {
+    const arc = 'M6 72 Q46 4 86 40';
+    return `<div class="chandra" aria-hidden="true">
+      <svg viewBox="0 0 120 80">
+        <circle class="ch-moon" cx="92" cy="48" r="20"/>
+        <circle class="ch-crater" cx="86" cy="42" r="3"/>
+        <circle class="ch-crater" cx="99" cy="54" r="4"/>
+        <circle class="ch-crater" cx="95" cy="40" r="2"/>
+        <path class="ch-arc" d="${arc}"/>
+        <g class="ch-craft">
+          <path d="M-3 -6 L3 -6 L4 4 L-4 4 Z"/>
+          <path class="ch-flame" d="M-2.5 4 L2.5 4 L0 11 Z"/>
+          <animateMotion class="smil-begin" id="chMove" dur="2.1s" begin="indefinite" fill="freeze" rotate="auto" path="${arc}"/>
+        </g>
+        <circle class="ch-dust" cx="86" cy="40" r="2" opacity="0">
+          <animate attributeName="r" begin="chMove.end" dur="0.6s" from="2" to="16" fill="freeze"/>
+          <animate attributeName="opacity" begin="chMove.end" dur="0.6s" values="0;.5;0" fill="freeze"/>
+        </circle>
+      </svg>
+    </div>`;
   }
 
   /* #11 โพล (อ่าน/เขียน localStorage) */
@@ -1945,6 +2496,9 @@ const DATA = {
         if (c.stat) add(c.stat.label, c.stat.src);
         if (c.chart) add(c.chart.title, c.chart.src, c.chart.illustrative ? 'illus' : null);
       });
+      (s.metrics || []).forEach(m => add(m.label, m.src));     // dashboard
+      if (s.type === 'comparison') add(s.title, s.src, s.illustrative ? 'illus' : null);
+      if (s.type === 'reception') { add(s.praiseLabel, s.praiseSrc); add(s.concernLabel, s.concernSrc); }
     });
     return out;
   }
@@ -2015,6 +2569,7 @@ const DATA = {
     const st = el.querySelector(':scope > .split-title') || (el.classList.contains('split-title') ? el : el.querySelector('.split-title'));
     if (st) st.classList.add('is-visible');
     el.querySelectorAll('[data-count]').forEach(countUp);
+    triggerMotionIn(el);
   }
   function revealSlide(sec) {
     sec.querySelectorAll('.split-title').forEach(t => t.classList.add('is-visible'));
@@ -2022,12 +2577,19 @@ const DATA = {
     items.forEach(el => el.classList.add('is-visible'));
     sec.querySelectorAll('[data-count]').forEach(countUp);
     fillTimeline(sec);
+    triggerMotionIn(sec);
   }
   function resetSlide(sec) {
     sec.querySelectorAll('[data-reveal]').forEach(el => el.classList.remove('is-visible'));
     sec.querySelectorAll('.split-title').forEach(t => t.classList.remove('is-visible'));
-    sec.querySelectorAll('[data-count]').forEach(el => { el.dataset.done = ''; el.textContent = (el.dataset.prefix || '') + '0' + (el.dataset.suffix || ''); });
+    sec.querySelectorAll('[data-count]').forEach(el => { el.dataset.done = ''; el.classList.remove('odo'); el.textContent = (el.dataset.prefix || '') + '0' + (el.dataset.suffix || ''); });
     const rf = sec.querySelector('.rail-fill'); if (rf) rf.style.height = '0';
+  }
+
+  /* #12 + #14 จุดเริ่มอนิเมชัน SMIL เมื่อ element โผล่ (เส้นทางแผนที่ + จันทรายาน) */
+  function triggerMotionIn(scope) {
+    if (!motionOn || !scope || !scope.querySelectorAll) return;
+    scope.querySelectorAll('.smil-begin').forEach(a => { try { a.beginElement(); } catch (_) {} });
   }
 
   /* ---------- count up ---------- */
@@ -2039,6 +2601,8 @@ const DATA = {
     const sep = !el.dataset.plain; // years/รหัส ไม่ใส่ลูกน้ำคั่นหลัก
     const fmtNum = n => sep ? n.toLocaleString('en-US') : String(n);
     if (!motionOn) { el.textContent = prefix + fmtNum(target) + suffix; return; }
+    /* #13 odometer — ตัวเลขม้วนหลักเข้าตำแหน่ง (เฉพาะจำนวนเต็ม) */
+    if (Number.isInteger(target) && target >= 0) { odometer(el, prefix, fmtNum(target), suffix); return; }
     const dur = 1100, t0 = performance.now();
     function tick(now) {
       const p = Math.min(1, (now - t0) / dur);
@@ -2048,6 +2612,26 @@ const DATA = {
       if (p < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
+  }
+
+  /* #13 สร้างเลขม้วน (odometer): แต่ละหลักเป็นรีลแนวตั้ง 0–9 เลื่อนไปตำแหน่งเป้าหมาย */
+  function odometer(el, prefix, str, suffix) {
+    let digitIdx = 0, html = prefix ? `<span class="odo-fix">${esc(prefix)}</span>` : '';
+    for (const ch of str) {
+      if (/\d/.test(ch)) {
+        const reel = '0123456789'.split('').map(n => `<span class="odo-n">${n}</span>`).join('');
+        html += `<span class="odo-digit"><span class="odo-reel" data-d="${ch}" style="--dl:${digitIdx * 70}ms">${reel}</span></span>`;
+        digitIdx++;
+      } else {
+        html += `<span class="odo-fix">${esc(ch)}</span>`;
+      }
+    }
+    if (suffix) html += `<span class="odo-fix">${esc(suffix)}</span>`;
+    el.innerHTML = html;
+    el.classList.add('odo');
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      el.querySelectorAll('.odo-reel').forEach(r => { r.style.transform = `translateY(${-(+r.dataset.d)}em)`; });
+    }));
   }
 
   /* ---------- timeline rail fill ---------- */
@@ -2276,12 +2860,16 @@ const DATA = {
      scroll progress
      ==================================================================== */
   const bar = document.getElementById('progress');
+  const brandChakra = document.querySelector('.chakra-mini');
   let scrollRAF = 0;
   function onScroll() {
     if (mode === 'slide') return;
     const h = document.documentElement.scrollHeight - window.innerHeight;
-    bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+    const frac = h > 0 ? window.scrollY / h : 0;
+    bar.style.width = (frac * 100) + '%';
+    if (brandChakra && motionOn) brandChakra.style.transform = `rotate(${(frac * 720).toFixed(1)}deg)`; // #20 หมุนจักรตามสกรอลล์
     updateTimelineRails();
+    updateScrolly();
   }
   window.addEventListener('scroll', () => {
     if (scrollRAF) return;
@@ -2302,6 +2890,23 @@ const DATA = {
         if (r.top <= refLine) { fill = it.offsetTop + 14; it.classList.add('is-visible'); }
       });
       rf.style.height = fill + 'px';
+    });
+  }
+
+  /* #11 scrollytelling — ไฮไลต์แถวแดชบอร์ดทีละแถวตามตำแหน่งสกรอลล์ (guided read) */
+  function updateScrolly() {
+    if (mode !== 'scroll') return;
+    const ref = window.innerHeight * 0.5;
+    deck.querySelectorAll('[data-dash]').forEach(dash => {
+      const rows = dash.querySelectorAll('[data-dash-row]');
+      let best = -1, bestDist = Infinity;
+      rows.forEach((row, i) => {
+        const r = row.getBoundingClientRect();
+        const c = r.top + r.height / 2;
+        const d = Math.abs(c - ref);
+        if (d < bestDist) { bestDist = d; best = i; }
+      });
+      rows.forEach((row, i) => row.classList.toggle('focus', i === best && bestDist < window.innerHeight * 0.4));
     });
   }
 
@@ -2622,6 +3227,29 @@ const DATA = {
     });
   }
   deck.querySelectorAll('[data-poll]').forEach(initPoll);
+
+  /* #15 เติมจักรลงในตัวคั่นบท */
+  deck.querySelectorAll('[data-divider-chakra]').forEach(el => { el.innerHTML = chakra('currentColor'); });
+
+  /* #18 kinetic typography — ห่อคำในข้อความที่ทำเครื่องหมาย data-kinetic */
+  deck.querySelectorAll('[data-kinetic]').forEach(el => {
+    const words = el.textContent.split(' ');
+    el.innerHTML = words.map((w, i) => `<span class="kw" style="--ki:${i * 55}ms">${esc(w)}</span>`).join(' ');
+  });
+
+  /* #8 ตัวกรองไทม์ไลน์ตามธีม */
+  deck.querySelectorAll('[data-tl-filter]').forEach(bar => {
+    const tl = bar.parentElement.querySelector('[data-timeline]');
+    bar.addEventListener('click', (e) => {
+      const btn = e.target.closest('.tlf'); if (!btn || !tl) return;
+      const th = btn.dataset.theme;
+      bar.querySelectorAll('.tlf').forEach(b => b.classList.toggle('active', b === btn));
+      tl.querySelectorAll('[data-tl]').forEach(it => {
+        const show = th === 'all' || it.dataset.theme === th;
+        it.classList.toggle('tl-hidden', !show);
+      });
+    });
+  });
 
   /* ====================================================================
      #14 REFLECTION — บันทึก localStorage + สะท้อนที่สไลด์ปิดท้าย
