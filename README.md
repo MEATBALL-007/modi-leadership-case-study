@@ -9,7 +9,18 @@
 
 ---
 
-## เปิดใช้งาน
+## เปิดออนไลน์ (ทุกที่ ทุกเวลา)
+
+🌐 **เว็บไซต์:** https://meatball-007.github.io/modi-leadership-case-study/
+
+สแกน QR เพื่อเปิดบนมือถือ/แท็บเล็ตได้ทันที:
+
+<img src="assets/qr-code.png" alt="QR code เปิดเว็บไซต์พรีเซนต์" width="200">
+
+> เสิร์ฟผ่าน GitHub Pages (HTTPS) — อัปเดตอัตโนมัติเมื่อ push เข้าสาขา `main`
+> ไฟล์ QR: `assets/qr-code.png` (มีธีม) · `assets/qr-code.svg` (เวกเตอร์) · `assets/qr-code-bw.png` (ขาวดำ สำหรับพิมพ์)
+
+## เปิดใช้งาน (ออฟไลน์)
 
 ดับเบิลคลิก **`index.html`** ได้เลย — ใช้งานได้ออฟไลน์ 100%
 
