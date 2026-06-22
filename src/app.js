@@ -35,6 +35,8 @@
     download: P('M12 4v11 M8 11l4 4 4-4 M5 20h14'),
     lens: '<circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M20 20l-4-4'),
     mic: P('M12 3a3 3 0 0 1 3 3v5a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z M6 11a6 6 0 0 0 12 0 M12 17v4 M8.5 21h7'),
+    globe: '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M3 12h18 M12 3c2.6 2.5 4 5.6 4 9s-1.4 6.5-4 9c-2.6-2.5-4-5.6-4-9s1.4-6.5 4-9z'),
+    handshake: P('M3 11l3-3 4 3 2-1.5L17 12l4 3 M7 13l3 3 M11 11l3 3 M9 15l2.5 2.5 M14 8l3-2 4 4-2 2'),
     present: '<rect x="3" y="4" width="18" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M9 20h6 M12 16v4 M9 12l4-2.5L9 7z'),
     tts: P('M5 5h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H10l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z') + P('M8.5 9.5v1 M11.5 8.5v3 M14.5 7.5v5 M17 9v2', 'stroke-width="1.6"'),
     ttsOff: P('M5 5h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H10l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z') + P('M4 4l16 16', 'stroke-width="2"'),
@@ -78,6 +80,13 @@
     return src ? ` <sup class="src-mark" tabindex="0" role="button" aria-label="ดูแหล่งอ้างอิง" data-src="${esc(src)}">i</sup>` : '';
   }
 
+  /* #4 ป้าย "ข้อเท็จจริง" vs "การตีความ" */
+  function kindTag(kind) {
+    if (kind === 'fact') return ` <span class="kind-tag fact">ข้อเท็จจริง</span>`;
+    if (kind === 'claim') return ` <span class="kind-tag claim">การตีความ</span>`;
+    return '';
+  }
+
   function slideInner(s, idx) {
     const cat = DATA.categories[s.cat] || '';
     const lens = (DATA.lenses && DATA.lenses[s.id]) || '';
@@ -89,6 +98,7 @@
 
     if (s.type === 'hero') {
       return `
+        <div class="hero-aura" aria-hidden="true"><span></span><span></span><span></span></div>
         ${SVGghost()}
         <div class="hero-grid">
           <div>
@@ -128,16 +138,23 @@
     }
 
     if (s.type === 'timeline') {
+      const themes = s.themes || null;
+      const filterHTML = themes ? `<div class="tl-filter" data-reveal style="--d:140ms" data-tl-filter>
+          <button type="button" class="tlf active" data-theme="all">ทั้งหมด</button>
+          ${Object.keys(themes).map(k => `<button type="button" class="tlf" data-theme="${esc(k)}">${esc(themes[k])}</button>`).join('')}
+        </div>` : '';
       return `${head}
         <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
         ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        ${filterHTML}
         <div class="timeline" data-timeline>
           <div class="rail-fill"></div>
-          ${s.timeline.map((t, i) => `<div class="tl-item ${t.accent ? 'accent' : ''} ${t.warn ? 'warn' : ''}" data-reveal data-tl style="--d:${i * 140}ms">
+          ${s.timeline.map((t, i) => `<div class="tl-item ${t.accent ? 'accent' : ''} ${t.warn ? 'warn' : ''}" data-reveal data-tl data-theme="${esc(t.theme || '')}" style="--d:${i * 140}ms">
             <div class="dot"></div>
             <div class="tl-year">${esc(t.year)}</div>
-            <div class="tl-head">${esc(t.head)}</div>
+            <div class="tl-head">${esc(t.head)}${t.theme && themes ? ` <span class="tl-tag">${esc(themes[t.theme] || '')}</span>` : ''}</div>
             <div class="tl-body">${esc(t.body)}</div>
+            ${t.context ? `<details class="tl-context"><summary>บริบท / สถานะ</summary><div>${esc(t.context)}</div></details>` : ''}
           </div>`).join('')}
         </div>`;
     }
@@ -154,7 +171,9 @@
                 <div class="slabel">${esc(st.label)}${srcMark(st.src)}</div></div>` : '';
             const chartHTML = c.chart ? chartSVG(c.chart) : '';
             const counterHTML = c.counter ? `<div class="counter-note">${ICONS.quiz}<span>${esc(c.counter)}</span></div>` : '';
-            return `<div class="bigcard" data-reveal style="--d:${200 + i * 130}ms">
+            const chandraHTML = c.icon === 'rocket' ? chandraSceneHTML() : '';
+            return `<div class="bigcard ${c.icon === 'rocket' ? 'has-chandra' : ''}" data-reveal style="--d:${200 + i * 130}ms">
+              ${chandraHTML}
               <div class="bico">${ICONS[c.icon] || ''}</div>
               <div class="tag">${esc(c.tag)}</div>
               <div class="bhead">${esc(c.head)}</div>
@@ -211,6 +230,101 @@
         ${pollHTML(DATA.poll)}`;
     }
 
+    /* #15 ตัวคั่นบท (chapter divider) — full-bleed + ส่งไม้ต่อผู้นำเสนอ */
+    if (s.type === 'divider') {
+      const by = (DATA.presenters && DATA.presenters[s.id]) || '';
+      return `<div class="divider-stage" data-reveal>
+          <div class="divider-num">${esc(s.num || '')}</div>
+          <div class="divider-sweep"></div>
+          <div class="divider-chakra" data-divider-chakra></div>
+          <div class="divider-main">
+            <div class="kicker" data-reveal>${esc(s.kicker || '')}</div>
+            <h2 class="divider-title" data-reveal style="--d:120ms">${splitWords(s.title)}</h2>
+            ${s.lead ? `<p class="lead divider-lead" data-reveal style="--d:360ms">${esc(s.lead)}</p>` : ''}
+            ${by ? `<div class="divider-by" data-reveal style="--d:480ms">${ICONS.mic}<span>ช่วงนี้นำเสนอโดย</span> <b>${esc(by)}</b></div>` : ''}
+          </div>
+        </div>`;
+    }
+
+    /* #2 dashboard ก่อน/หลัง */
+    if (s.type === 'dashboard') {
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        <div class="dash" data-reveal style="--d:240ms" data-dash>
+          ${s.metrics.map((m, i) => `<div class="dash-row" data-dash-row style="--di:${i * 120}ms">
+            <div class="dash-label">${esc(m.label)}${kindTag(m.kind)}${srcMark(m.src)}</div>
+            <div class="dash-vals">
+              <span class="dash-from">${esc(m.from)}</span>
+              <span class="dash-arrow ${m.dir === 'down' ? 'down' : 'up'}">${m.dir === 'down' ? '↓' : '↑'}</span>
+              <span class="dash-to">${esc(m.to)}</span>
+            </div>
+          </div>`).join('')}
+        </div>
+        <div class="data-stamp" data-reveal>${esc(DATA.dataAsOf || '')}</div>`;
+    }
+
+    /* #3 comparison bars */
+    if (s.type === 'comparison') {
+      const max = Math.max.apply(null, s.bars.map(b => b.value)) || 1;
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        <div class="cmp" data-reveal style="--d:240ms" data-cmp>
+          ${s.bars.map((b, i) => `<div class="cmp-row ${b.hot ? 'hot' : ''}">
+            <div class="cmp-name">${esc(b.label)}</div>
+            <div class="cmp-track"><div class="cmp-bar" style="--w:${(b.value / max * 100).toFixed(1)}%;--bd:${200 + i * 130}ms"></div></div>
+            <div class="cmp-val">${esc(String(b.value))}${esc(s.unit ? ' ' + s.unit.replace(' ต่อปี','') : '')}</div>
+          </div>`).join('')}
+        </div>
+        <div class="cmp-unit" data-reveal>หน่วย: ${esc(s.unit || '')}${srcMark(s.src)}</div>`;
+    }
+
+    /* #9 international reception (สองคอลัมน์) */
+    if (s.type === 'reception') {
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        <div class="recv">
+          <div class="recv-col praise" data-reveal style="--d:240ms">
+            <div class="recv-h">${esc(s.praiseLabel)}${srcMark(s.praiseSrc)}</div>
+            <ul>${s.praise.map(p => `<li>${esc(p)}</li>`).join('')}</ul>
+          </div>
+          <div class="recv-col concern" data-reveal style="--d:340ms">
+            <div class="recv-h">${esc(s.concernLabel)}${srcMark(s.concernSrc)}</div>
+            <ul>${s.concern.map(p => `<li>${esc(p)}</li>`).join('')}</ul>
+          </div>
+        </div>`;
+    }
+
+    /* #6 voices (มุมมองตัวแทน) */
+    if (s.type === 'voices') {
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        <div class="voices">
+          ${s.voices.map((v, i) => `<figure class="voice ${v.tone}" data-reveal style="--d:${240 + i * 130}ms">
+            <div class="voice-q">“</div>
+            <blockquote class="voice-body" data-kinetic>${esc(v.body)}</blockquote>
+            <figcaption class="voice-who">${esc(v.who)}</figcaption>
+          </figure>`).join('')}
+        </div>`;
+    }
+
+    /* #7 leadership model (สองคอลัมน์ + บทสรุป) */
+    if (s.type === 'model') {
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        <div class="model">
+          ${s.cols.map((c, i) => `<div class="model-col ${c.tone}" data-reveal style="--d:${240 + i * 140}ms">
+            <div class="model-h">${esc(c.label)}<span class="model-sub">${esc(c.sub || '')}</span></div>
+            <ul>${c.traits.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
+          </div>`).join('')}
+        </div>
+        ${s.insight ? `<div class="model-insight" data-reveal style="--d:520ms">${ICONS.target}<span>${esc(s.insight)}</span></div>` : ''}`;
+    }
+
     if (s.type === 'sources') {
       return `${head}
         <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
@@ -219,6 +333,7 @@
           <span class="conf-pill verified">ยืนยันได้</span>
           <span class="conf-pill approx">โดยประมาณ</span>
           <span class="conf-pill illus">ภาพประกอบ</span>
+          ${DATA.dataAsOf ? `<span class="data-stamp inline">${esc(DATA.dataAsOf)}</span>` : ''}
         </div>
         <div class="src-list">
           ${collectSources().map((it, i) => `<div class="src-row" data-reveal style="--d:${300 + i * 70}ms">
@@ -414,11 +529,39 @@
       'L138 116 L132 132 L120 150 L110 168 L101 182 L95 169 L90 150 L82 140 L70 140 L58 130 L50 116 ' +
       'L40 110 L33 96 L40 86 L34 74 L44 66 L40 54 L54 50 L66 54 L74 46 L84 40 Z';
     const gujarat = 'M40 86 L34 74 L44 66 L40 54 L54 50 L60 60 L56 74 L62 86 L52 96 L44 94 Z';
+    /* #14 เส้นทางการเดินทาง กุจราต(49,74) → เดลี(~100,55) */
+    const route = 'M49 74 Q66 50 100 55';
     return `<svg viewBox="0 0 190 200" class="india-svg" aria-label="แผนที่อินเดียอย่างง่าย">
       <path class="in-nation" d="${india}"/>
       <path class="in-guj" d="${gujarat}"/>
+      <path class="in-route" d="${route}"/>
+      <circle class="in-route-dot" r="2.6"><animateMotion class="smil-begin" dur="2.2s" begin="indefinite" fill="freeze" path="${route}"/></circle>
       <circle class="in-ping" cx="49" cy="74" r="4"/>
+      <circle class="in-delhi" cx="100" cy="55" r="3"/>
     </svg>`;
+  }
+
+  /* #12 ฉากลงจอดจันทรายาน-3 (มินิอนิเมชัน บนการ์ดอวกาศ) */
+  function chandraSceneHTML() {
+    const arc = 'M6 72 Q46 4 86 40';
+    return `<div class="chandra" aria-hidden="true">
+      <svg viewBox="0 0 120 80">
+        <circle class="ch-moon" cx="92" cy="48" r="20"/>
+        <circle class="ch-crater" cx="86" cy="42" r="3"/>
+        <circle class="ch-crater" cx="99" cy="54" r="4"/>
+        <circle class="ch-crater" cx="95" cy="40" r="2"/>
+        <path class="ch-arc" d="${arc}"/>
+        <g class="ch-craft">
+          <path d="M-3 -6 L3 -6 L4 4 L-4 4 Z"/>
+          <path class="ch-flame" d="M-2.5 4 L2.5 4 L0 11 Z"/>
+          <animateMotion class="smil-begin" id="chMove" dur="2.1s" begin="indefinite" fill="freeze" rotate="auto" path="${arc}"/>
+        </g>
+        <circle class="ch-dust" cx="86" cy="40" r="2" opacity="0">
+          <animate attributeName="r" begin="chMove.end" dur="0.6s" from="2" to="16" fill="freeze"/>
+          <animate attributeName="opacity" begin="chMove.end" dur="0.6s" values="0;.5;0" fill="freeze"/>
+        </circle>
+      </svg>
+    </div>`;
   }
 
   /* #11 โพล (อ่าน/เขียน localStorage) */
@@ -466,6 +609,9 @@
         if (c.stat) add(c.stat.label, c.stat.src);
         if (c.chart) add(c.chart.title, c.chart.src, c.chart.illustrative ? 'illus' : null);
       });
+      (s.metrics || []).forEach(m => add(m.label, m.src));     // dashboard
+      if (s.type === 'comparison') add(s.title, s.src, s.illustrative ? 'illus' : null);
+      if (s.type === 'reception') { add(s.praiseLabel, s.praiseSrc); add(s.concernLabel, s.concernSrc); }
     });
     return out;
   }
@@ -536,6 +682,7 @@
     const st = el.querySelector(':scope > .split-title') || (el.classList.contains('split-title') ? el : el.querySelector('.split-title'));
     if (st) st.classList.add('is-visible');
     el.querySelectorAll('[data-count]').forEach(countUp);
+    triggerMotionIn(el);
   }
   function revealSlide(sec) {
     sec.querySelectorAll('.split-title').forEach(t => t.classList.add('is-visible'));
@@ -543,12 +690,19 @@
     items.forEach(el => el.classList.add('is-visible'));
     sec.querySelectorAll('[data-count]').forEach(countUp);
     fillTimeline(sec);
+    triggerMotionIn(sec);
   }
   function resetSlide(sec) {
     sec.querySelectorAll('[data-reveal]').forEach(el => el.classList.remove('is-visible'));
     sec.querySelectorAll('.split-title').forEach(t => t.classList.remove('is-visible'));
-    sec.querySelectorAll('[data-count]').forEach(el => { el.dataset.done = ''; el.textContent = (el.dataset.prefix || '') + '0' + (el.dataset.suffix || ''); });
+    sec.querySelectorAll('[data-count]').forEach(el => { el.dataset.done = ''; el.classList.remove('odo'); el.textContent = (el.dataset.prefix || '') + '0' + (el.dataset.suffix || ''); });
     const rf = sec.querySelector('.rail-fill'); if (rf) rf.style.height = '0';
+  }
+
+  /* #12 + #14 จุดเริ่มอนิเมชัน SMIL เมื่อ element โผล่ (เส้นทางแผนที่ + จันทรายาน) */
+  function triggerMotionIn(scope) {
+    if (!motionOn || !scope || !scope.querySelectorAll) return;
+    scope.querySelectorAll('.smil-begin').forEach(a => { try { a.beginElement(); } catch (_) {} });
   }
 
   /* ---------- count up ---------- */
@@ -560,6 +714,8 @@
     const sep = !el.dataset.plain; // years/รหัส ไม่ใส่ลูกน้ำคั่นหลัก
     const fmtNum = n => sep ? n.toLocaleString('en-US') : String(n);
     if (!motionOn) { el.textContent = prefix + fmtNum(target) + suffix; return; }
+    /* #13 odometer — ตัวเลขม้วนหลักเข้าตำแหน่ง (เฉพาะจำนวนเต็ม) */
+    if (Number.isInteger(target) && target >= 0) { odometer(el, prefix, fmtNum(target), suffix); return; }
     const dur = 1100, t0 = performance.now();
     function tick(now) {
       const p = Math.min(1, (now - t0) / dur);
@@ -569,6 +725,26 @@
       if (p < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
+  }
+
+  /* #13 สร้างเลขม้วน (odometer): แต่ละหลักเป็นรีลแนวตั้ง 0–9 เลื่อนไปตำแหน่งเป้าหมาย */
+  function odometer(el, prefix, str, suffix) {
+    let digitIdx = 0, html = prefix ? `<span class="odo-fix">${esc(prefix)}</span>` : '';
+    for (const ch of str) {
+      if (/\d/.test(ch)) {
+        const reel = '0123456789'.split('').map(n => `<span class="odo-n">${n}</span>`).join('');
+        html += `<span class="odo-digit"><span class="odo-reel" data-d="${ch}" style="--dl:${digitIdx * 70}ms">${reel}</span></span>`;
+        digitIdx++;
+      } else {
+        html += `<span class="odo-fix">${esc(ch)}</span>`;
+      }
+    }
+    if (suffix) html += `<span class="odo-fix">${esc(suffix)}</span>`;
+    el.innerHTML = html;
+    el.classList.add('odo');
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      el.querySelectorAll('.odo-reel').forEach(r => { r.style.transform = `translateY(${-(+r.dataset.d)}em)`; });
+    }));
   }
 
   /* ---------- timeline rail fill ---------- */
@@ -797,12 +973,16 @@
      scroll progress
      ==================================================================== */
   const bar = document.getElementById('progress');
+  const brandChakra = document.querySelector('.chakra-mini');
   let scrollRAF = 0;
   function onScroll() {
     if (mode === 'slide') return;
     const h = document.documentElement.scrollHeight - window.innerHeight;
-    bar.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+    const frac = h > 0 ? window.scrollY / h : 0;
+    bar.style.width = (frac * 100) + '%';
+    if (brandChakra && motionOn) brandChakra.style.transform = `rotate(${(frac * 720).toFixed(1)}deg)`; // #20 หมุนจักรตามสกรอลล์
     updateTimelineRails();
+    updateScrolly();
   }
   window.addEventListener('scroll', () => {
     if (scrollRAF) return;
@@ -823,6 +1003,23 @@
         if (r.top <= refLine) { fill = it.offsetTop + 14; it.classList.add('is-visible'); }
       });
       rf.style.height = fill + 'px';
+    });
+  }
+
+  /* #11 scrollytelling — ไฮไลต์แถวแดชบอร์ดทีละแถวตามตำแหน่งสกรอลล์ (guided read) */
+  function updateScrolly() {
+    if (mode !== 'scroll') return;
+    const ref = window.innerHeight * 0.5;
+    deck.querySelectorAll('[data-dash]').forEach(dash => {
+      const rows = dash.querySelectorAll('[data-dash-row]');
+      let best = -1, bestDist = Infinity;
+      rows.forEach((row, i) => {
+        const r = row.getBoundingClientRect();
+        const c = r.top + r.height / 2;
+        const d = Math.abs(c - ref);
+        if (d < bestDist) { bestDist = d; best = i; }
+      });
+      rows.forEach((row, i) => row.classList.toggle('focus', i === best && bestDist < window.innerHeight * 0.4));
     });
   }
 
@@ -1143,6 +1340,29 @@
     });
   }
   deck.querySelectorAll('[data-poll]').forEach(initPoll);
+
+  /* #15 เติมจักรลงในตัวคั่นบท */
+  deck.querySelectorAll('[data-divider-chakra]').forEach(el => { el.innerHTML = chakra('currentColor'); });
+
+  /* #18 kinetic typography — ห่อคำในข้อความที่ทำเครื่องหมาย data-kinetic */
+  deck.querySelectorAll('[data-kinetic]').forEach(el => {
+    const words = el.textContent.split(' ');
+    el.innerHTML = words.map((w, i) => `<span class="kw" style="--ki:${i * 55}ms">${esc(w)}</span>`).join(' ');
+  });
+
+  /* #8 ตัวกรองไทม์ไลน์ตามธีม */
+  deck.querySelectorAll('[data-tl-filter]').forEach(bar => {
+    const tl = bar.parentElement.querySelector('[data-timeline]');
+    bar.addEventListener('click', (e) => {
+      const btn = e.target.closest('.tlf'); if (!btn || !tl) return;
+      const th = btn.dataset.theme;
+      bar.querySelectorAll('.tlf').forEach(b => b.classList.toggle('active', b === btn));
+      tl.querySelectorAll('[data-tl]').forEach(it => {
+        const show = th === 'all' || it.dataset.theme === th;
+        it.classList.toggle('tl-hidden', !show);
+      });
+    });
+  });
 
   /* ====================================================================
      #14 REFLECTION — บันทึก localStorage + สะท้อนที่สไลด์ปิดท้าย
