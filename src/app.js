@@ -311,6 +311,14 @@
         </div>`;
     }
 
+    /* เทียบสถิติผู้นำ สไตล์เกม (hexagon radar) */
+    if (s.type === 'hexagon') {
+      return `${head}
+        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+        ${hexRadarHTML(s)}`;
+    }
+
     /* #7 leadership model (สองคอลัมน์ + บทสรุป) */
     if (s.type === 'model') {
       return `${head}
@@ -562,6 +570,48 @@
         </circle>
       </svg>
     </div>`;
+  }
+
+  /* เรดาร์หกเหลี่ยม (hexagon stat) — เทียบสไตล์ผู้นำแบบเกม */
+  function hexRadarHTML(s) {
+    const cx = 175, cy = 168, R = 118, N = 6;
+    const ang = i => (-90 + i * 60) * Math.PI / 180;
+    const pt = (i, r) => [ +(cx + r * Math.cos(ang(i))).toFixed(1), +(cy + r * Math.sin(ang(i))).toFixed(1) ];
+    const polyPts = (radii) => radii.map((r, i) => pt(i, r).join(',')).join(' ');
+    const grid = [0.25, 0.5, 0.75, 1].map(L =>
+      `<polygon class="rad-grid" points="${polyPts(Array(N).fill(R * L))}"/>`).join('');
+    const axisLines = Array.from({ length: N }, (_, i) => { const [x, y] = pt(i, R); return `<line class="rad-axis" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"/>`; }).join('');
+    const labels = s.axes.map((a, i) => {
+      const [x, y] = pt(i, R + 20);
+      const anchor = (i === 0 || i === 3) ? 'middle' : (x > cx ? 'start' : 'end');
+      const dy = i === 0 ? -4 : i === 3 ? 12 : 4;
+      return `<text class="rad-label" x="${x}" y="${(y + dy).toFixed(1)}" text-anchor="${anchor}">${esc(a)}</text>`;
+    }).join('');
+    const polys = s.leaders.map((ld, li) =>
+      `<polygon class="rad-poly ${li === 0 ? 'on' : 'off'}" data-poly="${ld.key}" points="${polyPts(ld.stats.map(v => R * Math.max(0, Math.min(100, v)) / 100))}" style="--c:${ld.color}"/>`).join('');
+    const dots = s.leaders.map((ld, li) => ld.stats.map((v, i) => { const [x, y] = pt(i, R * v / 100); return `<circle class="rad-dot ${li === 0 ? 'on' : 'off'}" data-dot="${ld.key}" cx="${x}" cy="${y}" r="3.2" style="--c:${ld.color}"/>`; }).join('')).join('');
+    const ovr = ld => Math.round(ld.stats.reduce((a, b) => a + b, 0) / ld.stats.length);
+    const cards = s.leaders.map((ld, li) => `<button type="button" class="lcard ${li === 0 ? 'active pinned' : ''}" data-leader="${ld.key}" style="--c:${ld.color}" aria-pressed="${li === 0 ? 'true' : 'false'}">
+        <span class="lc-flag">${ld.flag || ''}</span>
+        <span class="lc-meta"><b>${esc(ld.name)}</b><small>${esc(ld.country)}</small></span>
+        <span class="lc-ovr"><i>OVR</i>${ovr(ld)}</span>
+      </button>`).join('');
+    return `<div class="hexwrap" data-reveal style="--d:240ms" data-hex>
+        <div class="radar">
+          <svg viewBox="0 0 350 350" data-radar aria-label="เรดาร์เทียบสถิติผู้นำ">
+            <g class="rad-grids">${grid}</g>
+            ${axisLines}
+            <g class="rad-polys">${polys}</g>
+            <g class="rad-dots">${dots}</g>
+            ${labels}
+          </svg>
+        </div>
+        <div class="lcards">
+          <div class="lcards-h">แตะเพื่อซ้อนทับ ▾</div>
+          ${cards}
+          ${s.illustrative ? `<div class="lcards-hint">★ คะแนนเชิง “สไตล์” เพื่อการอภิปราย — ปรับได้ ไม่ใช่ข้อเท็จจริง</div>` : ''}
+        </div>
+      </div>`;
   }
 
   /* #11 โพล (อ่าน/เขียน localStorage) */
@@ -1343,6 +1393,21 @@
 
   /* #15 เติมจักรลงในตัวคั่นบท */
   deck.querySelectorAll('[data-divider-chakra]').forEach(el => { el.innerHTML = chakra('currentColor'); });
+
+  /* เรดาร์ผู้นำ — แตะการ์ดเพื่อซ้อน/ถอดสถิติ */
+  deck.querySelectorAll('[data-hex]').forEach(hex => {
+    const svg = hex.querySelector('[data-radar]');
+    hex.querySelectorAll('[data-leader]').forEach(card => {
+      card.addEventListener('click', () => {
+        if (card.classList.contains('pinned')) return;
+        const k = card.dataset.leader;
+        const on = card.classList.toggle('active');
+        card.setAttribute('aria-pressed', on ? 'true' : 'false');
+        svg.querySelectorAll(`[data-poly="${k}"], [data-dot="${k}"]`).forEach(el => el.classList.toggle('on', on));
+        sfxNav();
+      });
+    });
+  });
 
   /* #18 kinetic typography — ห่อคำในข้อความที่ทำเครื่องหมาย data-kinetic */
   deck.querySelectorAll('[data-kinetic]').forEach(el => {

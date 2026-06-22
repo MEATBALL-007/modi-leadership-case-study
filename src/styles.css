@@ -1165,6 +1165,57 @@ body.motion-off .chandra .ch-craft { opacity: 0 !important; } /* ซ่อนย
   .chandra, .in-route-dot { display: none; }
 }
 
+/* ============================================================================
+   ★ การ์ดสถิติผู้นำ (hexagon radar)
+   ============================================================================ */
+.hexwrap { display: grid; grid-template-columns: 1fr minmax(220px, 290px); gap: 1.6rem; align-items: center; margin-top: .5rem; }
+.radar { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: .8rem; box-shadow: var(--shadow); }
+.radar svg { width: 100%; height: auto; display: block; overflow: visible; }
+.rad-grid { fill: none; stroke: var(--line); stroke-width: 1; }
+.rad-grids polygon:last-child { stroke: var(--ink-faint); }
+.rad-axis { stroke: var(--line); stroke-width: 1; }
+.rad-label { fill: var(--ink-soft); font-family: var(--sans); font-size: 12px; font-weight: 700; }
+.rad-poly { fill: var(--c); fill-opacity: .15; stroke: var(--c); stroke-width: 2.5; stroke-linejoin: round; transform-box: fill-box; transform-origin: center; transition: opacity .5s var(--ease-out), transform .6s var(--ease-out); }
+.rad-poly.off { opacity: 0; transform: scale(.2); pointer-events: none; }
+.rad-poly.on { opacity: 1; transform: scale(1); }
+.hexwrap:not(.is-visible) .rad-poly { opacity: 0; transform: scale(.2); }
+.rad-dot { fill: var(--c); transition: opacity .3s; }
+.rad-dot.off { opacity: 0; }
+.hexwrap:not(.is-visible) .rad-dot { opacity: 0; }
+
+.lcards { display: flex; flex-direction: column; gap: .55rem; }
+.lcards-h { font-size: .74rem; font-weight: 800; letter-spacing: .05em; color: var(--ink-faint); text-transform: uppercase; }
+.lcard {
+  display: flex; align-items: center; gap: .7rem; text-align: left; font-family: var(--sans); cursor: pointer;
+  background: var(--card); border: 1.5px solid var(--line); border-left: 5px solid var(--c); border-radius: 14px;
+  padding: .65rem .85rem; box-shadow: var(--shadow); transition: transform .15s, border-color .2s, box-shadow .2s, opacity .2s;
+}
+.lcard:hover { transform: translateX(3px); }
+.lcard:focus-visible { outline: 2px solid var(--c); outline-offset: 2px; }
+.lcard:not(.active) { opacity: .62; }
+.lcard.active { opacity: 1; border-color: var(--c); box-shadow: var(--shadow), inset 0 0 0 2px var(--c); }
+.lcard.pinned { cursor: default; }
+.lcard.pinned::after { content: "หลัก"; font-size: .56rem; font-weight: 800; color: var(--c); border: 1px solid var(--c); border-radius: 5px; padding: .05rem .3rem; margin-left: auto; }
+.lc-flag { font-size: 1.55rem; line-height: 1; flex: 0 0 auto; }
+.lc-meta { display: flex; flex-direction: column; }
+.lcard.pinned .lc-meta { flex: 0 1 auto; }
+.lcard:not(.pinned) .lc-meta { flex: 1; }
+.lc-meta b { font-size: 1rem; font-weight: 800; }
+.lc-meta small { font-size: .74rem; color: var(--ink-faint); }
+.lcard:not(.pinned) .lc-ovr { margin-left: auto; }
+.lc-ovr { display: flex; flex-direction: column; align-items: center; font-family: var(--serif); font-weight: 900; font-size: 1.5rem; color: var(--c); line-height: .85; }
+.lc-ovr i { font-style: normal; font-family: var(--sans); font-size: .52rem; font-weight: 800; letter-spacing: .12em; color: var(--ink-faint); }
+.lcards-hint { font-size: .72rem; color: var(--ink-faint); margin-top: .3rem; line-height: 1.45; }
+body.motion-off .rad-poly, body.motion-off .rad-dot { transition: none !important; }
+@media (prefers-reduced-motion: reduce) { .rad-poly, .rad-dot { transition: none !important; } }
+@media (max-width: 820px) {
+  .hexwrap { grid-template-columns: 1fr; }
+  .lcards { flex-direction: row; flex-wrap: wrap; }
+  .lcards-h { flex: 1 0 100%; }
+  .lcard { flex: 1 1 150px; }
+  .lcards-hint { flex: 1 0 100%; }
+}
+
 /* ---------- #10 การพิมพ์ / Export PDF — แฮนด์เอาต์ 1 สไลด์ต่อหน้า ---------- */
 @media print {
   @page { margin: 1.4cm; }
@@ -1178,7 +1229,7 @@ body.motion-off .chandra .ch-craft { opacity: 0 !important; } /* ซ่อนย
   .mc-area, .mc-dot, .ppl, .in-nation, .in-guj, .in-delhi, .kw { opacity: 1 !important; }
   .kw { transform: none !important; }
   .in-ping { display: none !important; }
-  .scaleviz, .poll, .quiz-score, .agenda-item, .dragscale, .reflection, .divider-stage, .cmp, .dash { break-inside: avoid; }
+  .scaleviz, .poll, .quiz-score, .agenda-item, .dragscale, .reflection, .divider-stage, .cmp, .dash, .hexwrap, .radar { break-inside: avoid; }
   html, body { background: #fff !important; height: auto !important; overflow: visible !important; }
   body::before { display: none !important; }
   .deck { display: block !important; height: auto !important; }
