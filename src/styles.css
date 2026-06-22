@@ -26,7 +26,7 @@
   --serif: 'Noto Serif Thai', Georgia, serif;
   --sans:  'Noto Sans Thai', system-ui, -apple-system, sans-serif;
 
-  --maxw: 1120px;
+  --maxw: 1060px;
   --ease: cubic-bezier(.22,.61,.36,1);
   --ease-out: cubic-bezier(.16,1,.3,1);
 
@@ -219,7 +219,7 @@ h1, h2 { font-family: var(--serif); font-weight: 900; line-height: 1.04; color: 
 .fact-mini .v { font-size: 1.15rem; font-weight: 700; margin-top: .25rem; }
 
 .profile-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; margin-top: .5rem;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(195px, 1fr)); gap: 1rem; margin-top: .5rem;
 }
 .pcard {
   background: var(--card); border: 1px solid var(--line); border-radius: 16px;
@@ -236,6 +236,14 @@ h1, h2 { font-family: var(--serif); font-weight: 900; line-height: 1.04; color: 
 .pcard .sub { font-size: .92rem; color: var(--ink-soft); }
 
 /* ---------- TIMELINE (มินิไทม์ไลน์อินเทอแรกทีฟ) ---------- */
+.tl-layout { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
+.tl-side { position: sticky; top: 5.5rem; }
+.tl-main { min-width: 0; }
+.tl-main .timeline { margin-top: 0; }
+@media (max-width: 880px) {
+  .tl-layout { grid-template-columns: 1fr; gap: 1.2rem; }
+  .tl-side { position: static; }
+}
 .timeline { position: relative; margin-top: 1rem; padding-left: 2.4rem; }
 .timeline::before {
   content: ""; position: absolute; left: 11px; top: 6px; bottom: 6px; width: 2px;
@@ -328,6 +336,8 @@ h1, h2 { font-family: var(--serif); font-weight: 900; line-height: 1.04; color: 
 
 .quiz-wrap { margin-top: 1rem; }
 .quiz-title { font-family: var(--serif); font-weight: 700; font-size: 1.4rem; margin-bottom: 1rem; display: flex; align-items: center; gap: .6rem; }
+.quiz-title svg { width: 1.6rem; height: 1.6rem; flex: 0 0 auto; color: var(--accent); }
+.notes-panel .np-close svg { width: 16px; height: 16px; }
 .qcard { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 1.3rem 1.4rem; margin-bottom: 1rem; box-shadow: var(--shadow); }
 .qcard .q { font-weight: 700; font-size: 1.08rem; margin-bottom: .9rem; }
 .qcard .choices { display: grid; gap: .55rem; }
@@ -1112,12 +1122,13 @@ html[data-theme="dark"] .hero-aura span { mix-blend-mode: screen; opacity: .35; 
 .kw { display: inline-block; opacity: 0; transform: translateY(.5em) scale(.92); transition: opacity .5s var(--ease-out), transform .5s var(--ease-out); transition-delay: var(--ki, 0ms); }
 [data-reveal].is-visible [data-kinetic] .kw, .voice.is-visible .kw { opacity: 1; transform: none; }
 
-/* ---------- #17 line-draw icons ---------- */
-.bico svg path, .sico svg path, .pico svg path { stroke-dasharray: 150; stroke-dashoffset: 150; }
-.bigcard.is-visible .bico svg path { animation: drawIcon 1s var(--ease) .2s forwards; }
-.split-card.is-visible .sico svg path { animation: drawIcon 1s var(--ease) .2s forwards; }
-.pcard.is-visible .pico svg path { animation: drawIcon 1s var(--ease) .2s forwards; }
-@keyframes drawIcon { to { stroke-dashoffset: 0; } }
+/* ---------- #17 line-draw icons — ไอคอนแสดงปกติเสมอ, "วาด" เป็นลูกเล่นตอนโผล่เท่านั้น ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  body:not(.motion-off) .bigcard.is-visible .bico svg path,
+  body:not(.motion-off) .split-card.is-visible .sico svg path,
+  body:not(.motion-off) .pcard.is-visible .pico svg path { stroke-dasharray: 150; animation: drawIcon 1s var(--ease) .2s; }
+}
+@keyframes drawIcon { from { stroke-dashoffset: 150; } to { stroke-dashoffset: 0; } }
 
 /* ---------- #14 journey route on India map ---------- */
 .in-route { fill: none; stroke: var(--saffron); stroke-width: 1.6; stroke-dasharray: 4 3; stroke-dashoffset: 90; opacity: 0; }
@@ -1168,13 +1179,13 @@ body.motion-off .chandra .ch-craft { opacity: 0 !important; } /* ซ่อนย
 /* ============================================================================
    ★ การ์ดสถิติผู้นำ (hexagon radar)
    ============================================================================ */
-.hexwrap { display: grid; grid-template-columns: 1fr minmax(220px, 290px); gap: 1.6rem; align-items: center; margin-top: .5rem; }
-.radar { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: .8rem; box-shadow: var(--shadow); }
-.radar svg { width: 100%; height: auto; display: block; overflow: visible; }
+.hexwrap { display: grid; grid-template-columns: 1.05fr .95fr; gap: 1.4rem; align-items: center; margin-top: .5rem; }
+.radar { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 1.1rem; box-shadow: var(--shadow); display: grid; place-items: center; }
+.radar svg { width: 100%; max-width: 440px; height: auto; display: block; margin: 0 auto; overflow: visible; }
 .rad-grid { fill: none; stroke: var(--line); stroke-width: 1; }
 .rad-grids polygon:last-child { stroke: var(--ink-faint); }
 .rad-axis { stroke: var(--line); stroke-width: 1; }
-.rad-label { fill: var(--ink-soft); font-family: var(--sans); font-size: 12px; font-weight: 700; }
+.rad-label { fill: var(--ink-soft); font-family: var(--sans); font-size: 11px; font-weight: 700; }
 .rad-poly { fill: var(--c); fill-opacity: .15; stroke: var(--c); stroke-width: 2.5; stroke-linejoin: round; transform-box: fill-box; transform-origin: center; transition: opacity .5s var(--ease-out), transform .6s var(--ease-out); }
 .rad-poly.off { opacity: 0; transform: scale(.2); pointer-events: none; }
 .rad-poly.on { opacity: 1; transform: scale(1); }

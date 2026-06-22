@@ -41,6 +41,10 @@
     tts: P('M5 5h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H10l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z') + P('M8.5 9.5v1 M11.5 8.5v3 M14.5 7.5v5 M17 9v2', 'stroke-width="1.6"'),
     ttsOff: P('M5 5h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H10l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z') + P('M4 4l16 16', 'stroke-width="2"'),
   };
+  /* ทำให้ทุกไอคอนเป็น <svg> ครบสมบูรณ์ (หลายตัวเดิมเป็น path/rect เปล่า → ไม่เรนเดอร์) */
+  Object.keys(ICONS).forEach(k => {
+    if (ICONS[k].slice(0, 4) !== '<svg') ICONS[k] = `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[k]}</svg>`;
+  });
 
   /* ---------- จักรอโศก (Ashoka Chakra) 24 ซี่ ---------- */
   function chakra(stroke) {
@@ -143,20 +147,26 @@
           <button type="button" class="tlf active" data-theme="all">ทั้งหมด</button>
           ${Object.keys(themes).map(k => `<button type="button" class="tlf" data-theme="${esc(k)}">${esc(themes[k])}</button>`).join('')}
         </div>` : '';
-      return `${head}
-        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
-        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
-        ${filterHTML}
-        <div class="timeline" data-timeline>
-          <div class="rail-fill"></div>
-          ${s.timeline.map((t, i) => `<div class="tl-item ${t.accent ? 'accent' : ''} ${t.warn ? 'warn' : ''}" data-reveal data-tl data-theme="${esc(t.theme || '')}" style="--d:${i * 140}ms">
-            <div class="dot"></div>
-            <div class="tl-year">${esc(t.year)}</div>
-            <div class="tl-head">${esc(t.head)}${t.theme && themes ? ` <span class="tl-tag">${esc(themes[t.theme] || '')}</span>` : ''}</div>
-            <div class="tl-body">${esc(t.body)}</div>
-            ${t.context ? `<details class="tl-context"><summary>บริบท / สถานะ</summary><div>${esc(t.context)}</div></details>` : ''}
-          </div>`).join('')}
-        </div>`;
+      return `<div class="tl-layout">
+        <div class="tl-side">
+          ${head}
+          <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+          ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+          ${filterHTML}
+        </div>
+        <div class="tl-main">
+          <div class="timeline" data-timeline>
+            <div class="rail-fill"></div>
+            ${s.timeline.map((t, i) => `<div class="tl-item ${t.accent ? 'accent' : ''} ${t.warn ? 'warn' : ''}" data-reveal data-tl data-theme="${esc(t.theme || '')}" style="--d:${i * 140}ms">
+              <div class="dot"></div>
+              <div class="tl-year">${esc(t.year)}</div>
+              <div class="tl-head">${esc(t.head)}${t.theme && themes ? ` <span class="tl-tag">${esc(themes[t.theme] || '')}</span>` : ''}</div>
+              <div class="tl-body">${esc(t.body)}</div>
+              ${t.context ? `<details class="tl-context"><summary>บริบท / สถานะ</summary><div>${esc(t.context)}</div></details>` : ''}
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>`;
     }
 
     if (s.type === 'cards') {
@@ -574,7 +584,7 @@
 
   /* เรดาร์หกเหลี่ยม (hexagon stat) — เทียบสไตล์ผู้นำแบบเกม */
   function hexRadarHTML(s) {
-    const cx = 175, cy = 168, R = 118, N = 6;
+    const VW = 360, VH = 300, cx = 180, cy = 150, R = 100, N = 6;
     const ang = i => (-90 + i * 60) * Math.PI / 180;
     const pt = (i, r) => [ +(cx + r * Math.cos(ang(i))).toFixed(1), +(cy + r * Math.sin(ang(i))).toFixed(1) ];
     const polyPts = (radii) => radii.map((r, i) => pt(i, r).join(',')).join(' ');
@@ -582,9 +592,9 @@
       `<polygon class="rad-grid" points="${polyPts(Array(N).fill(R * L))}"/>`).join('');
     const axisLines = Array.from({ length: N }, (_, i) => { const [x, y] = pt(i, R); return `<line class="rad-axis" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"/>`; }).join('');
     const labels = s.axes.map((a, i) => {
-      const [x, y] = pt(i, R + 20);
+      const [x, y] = pt(i, R + 16);
       const anchor = (i === 0 || i === 3) ? 'middle' : (x > cx ? 'start' : 'end');
-      const dy = i === 0 ? -4 : i === 3 ? 12 : 4;
+      const dy = i === 0 ? -5 : i === 3 ? 14 : 4;
       return `<text class="rad-label" x="${x}" y="${(y + dy).toFixed(1)}" text-anchor="${anchor}">${esc(a)}</text>`;
     }).join('');
     const polys = s.leaders.map((ld, li) =>
@@ -598,7 +608,7 @@
       </button>`).join('');
     return `<div class="hexwrap" data-reveal style="--d:240ms" data-hex>
         <div class="radar">
-          <svg viewBox="0 0 350 350" data-radar aria-label="เรดาร์เทียบสถิติผู้นำ">
+          <svg viewBox="0 0 ${VW} ${VH}" data-radar aria-label="เรดาร์เทียบสถิติผู้นำ">
             <g class="rad-grids">${grid}</g>
             ${axisLines}
             <g class="rad-polys">${polys}</g>
