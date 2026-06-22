@@ -589,6 +589,22 @@ body.motion-off .slide { transition: opacity .15s linear !important; }
    ★ ส่วนเสริม 19 ฟีเจอร์ใหม่
    ============================================================================ */
 
+/* ---------- ป้ายผู้นำเสนอประจำสไลด์ (one presenter per slide) ---------- */
+.byline {
+  display: inline-flex; align-items: center; gap: .4rem;
+  font-size: .78rem; font-weight: 600; letter-spacing: .01em;
+  color: var(--accent); background: var(--accent-soft);
+  border: 1px solid var(--accent); border-radius: 999px;
+  padding: .3rem .8rem; margin-bottom: 1rem;
+}
+.byline svg { width: 15px; height: 15px; }
+.byline b { font-weight: 800; letter-spacing: .03em; }
+.byline .by-lbl { opacity: .85; font-weight: 600; }
+.hero .byline { margin-bottom: 1.1rem; }
+@media (max-width: 520px) { .byline .by-lbl { display: none; } }
+.pv-by { font-size: 1rem; font-weight: 700; color: var(--green-br); margin-bottom: .7rem; }
+.pv-by b { color: #fff; font-size: 1.15rem; }
+
 /* ---------- #17 เลนส์ภาวะผู้นำ (badge ข้าง kicker) ---------- */
 .lens-badge {
   display: inline-flex; align-items: center; gap: .3rem;

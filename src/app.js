@@ -34,6 +34,7 @@
     soundOff: P('M4 9v6h4l5 4V5L8 9H4z M16 9l5 6 M21 9l-5 6'),
     download: P('M12 4v11 M8 11l4 4 4-4 M5 20h14'),
     lens: '<circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M20 20l-4-4'),
+    mic: P('M12 3a3 3 0 0 1 3 3v5a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z M6 11a6 6 0 0 0 12 0 M12 17v4 M8.5 21h7'),
     present: '<rect x="3" y="4" width="18" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/>' + P('M9 20h6 M12 16v4 M9 12l4-2.5L9 7z'),
     tts: P('M5 5h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H10l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z') + P('M8.5 9.5v1 M11.5 8.5v3 M14.5 7.5v5 M17 9v2', 'stroke-width="1.6"'),
     ttsOff: P('M5 5h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H10l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z') + P('M4 4l16 16', 'stroke-width="2"'),
@@ -81,7 +82,9 @@
     const cat = DATA.categories[s.cat] || '';
     const lens = (DATA.lenses && DATA.lenses[s.id]) || '';
     const lensHTML = lens ? ` <span class="lens-badge" title="เลนส์ภาวะผู้นำ">${ICONS.lens}${esc(lens)}</span>` : '';
-    const head = `
+    const by = (DATA.presenters && DATA.presenters[s.id]) || '';
+    const byHTML = by ? `<span class="byline" data-reveal title="ผู้นำเสนอสไลด์นี้">${ICONS.mic}<span class="by-lbl">นำเสนอโดย</span> <b>${esc(by)}</b></span>` : '';
+    const head = `${byHTML}
       <div class="kicker" data-reveal>${esc(s.kicker)} <span class="cat-pill">${esc(cat)}</span>${lensHTML}</div>`;
 
     if (s.type === 'hero') {
@@ -1426,6 +1429,8 @@
     const txt = s => (s.lead || (s.takeaways ? s.takeaways[0] : '') || '');
     function render() {
       const cur = S[pi], nxt = S[pi + 1];
+      const by = (DATA.presenters && DATA.presenters[cur.id]) || '';
+      const nextBy = nxt ? (DATA.presenters && DATA.presenters[nxt.id]) || '' : '';
       const lens = (DATA.lenses && DATA.lenses[cur.id]) || '';
       root.innerHTML = `
         <div class="pv-head">
@@ -1434,13 +1439,14 @@
         </div>
         <div class="pv-grid">
           <div class="pv-current">
+            ${by ? `<div class="pv-by">🎤 นำเสนอโดย <b>${esc(by)}</b></div>` : ''}
             <div class="pv-kicker">${esc(cur.kicker || '')}${lens ? ' · ' + esc(lens) : ''}</div>
             <div class="pv-title">${esc(cur.title || '')}</div>
             <div class="pv-lead">${esc(txt(cur))}</div>
           </div>
           <div class="pv-side">
             <div class="pv-next-card">
-              <div class="pv-next-tag">ถัดไป →</div>
+              <div class="pv-next-tag">ถัดไป →${nextBy ? ' · 🎤 ' + esc(nextBy) : ''}</div>
               <div class="pv-next-title">${nxt ? esc(nxt.title || nxt.kicker || '') : '— สไลด์สุดท้าย —'}</div>
             </div>
             <div class="pv-notes-box">

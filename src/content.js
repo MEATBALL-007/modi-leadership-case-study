@@ -17,6 +17,25 @@ const DATA = {
     insight: 'บทเรียน',
   },
 
+  /* ---- ผู้นำเสนอประจำแต่ละสไลด์ (one presenter per slide) ---- */
+  presenters: {
+    hero:          'M',
+    agenda:        'M',
+    intro:         'M',
+    personal:      'M',
+    numbers:       'NON',
+    rise:          'NON',
+    policies:      'NON',
+    controversies: 'KEN',
+    different:     'KEN',
+    lessons:       'KEN',
+    poll:          'PONG',
+    balance:       'PONG',
+    summary:       'PONG',
+    sources:       'PONG',
+    closing:       'PONG',
+  },
+
   /* ---- #17 "เลนส์ภาวะผู้นำ" ต่อสไลด์ (แท็กบอกว่าสไลด์นี้สอนเรื่องอะไร) ---- */
   lenses: {
     agenda:        'แผนผังความคิด',
