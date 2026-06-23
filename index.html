@@ -40,7 +40,7 @@
   --serif: 'Noto Serif Thai', Georgia, serif;
   --sans:  'Noto Sans Thai', system-ui, -apple-system, sans-serif;
 
-  --maxw: 1120px;
+  --maxw: 1060px;
   --ease: cubic-bezier(.22,.61,.36,1);
   --ease-out: cubic-bezier(.16,1,.3,1);
 
@@ -233,7 +233,7 @@ h1, h2 { font-family: var(--serif); font-weight: 900; line-height: 1.04; color: 
 .fact-mini .v { font-size: 1.15rem; font-weight: 700; margin-top: .25rem; }
 
 .profile-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; margin-top: .5rem;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(195px, 1fr)); gap: 1rem; margin-top: .5rem;
 }
 .pcard {
   background: var(--card); border: 1px solid var(--line); border-radius: 16px;
@@ -250,6 +250,14 @@ h1, h2 { font-family: var(--serif); font-weight: 900; line-height: 1.04; color: 
 .pcard .sub { font-size: .92rem; color: var(--ink-soft); }
 
 /* ---------- TIMELINE (มินิไทม์ไลน์อินเทอแรกทีฟ) ---------- */
+.tl-layout { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
+.tl-side { position: sticky; top: 5.5rem; }
+.tl-main { min-width: 0; }
+.tl-main .timeline { margin-top: 0; }
+@media (max-width: 880px) {
+  .tl-layout { grid-template-columns: 1fr; gap: 1.2rem; }
+  .tl-side { position: static; }
+}
 .timeline { position: relative; margin-top: 1rem; padding-left: 2.4rem; }
 .timeline::before {
   content: ""; position: absolute; left: 11px; top: 6px; bottom: 6px; width: 2px;
@@ -342,6 +350,8 @@ h1, h2 { font-family: var(--serif); font-weight: 900; line-height: 1.04; color: 
 
 .quiz-wrap { margin-top: 1rem; }
 .quiz-title { font-family: var(--serif); font-weight: 700; font-size: 1.4rem; margin-bottom: 1rem; display: flex; align-items: center; gap: .6rem; }
+.quiz-title svg { width: 1.6rem; height: 1.6rem; flex: 0 0 auto; color: var(--accent); }
+.notes-panel .np-close svg { width: 16px; height: 16px; }
 .qcard { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 1.3rem 1.4rem; margin-bottom: 1rem; box-shadow: var(--shadow); }
 .qcard .q { font-weight: 700; font-size: 1.08rem; margin-bottom: .9rem; }
 .qcard .choices { display: grid; gap: .55rem; }
@@ -1126,12 +1136,13 @@ html[data-theme="dark"] .hero-aura span { mix-blend-mode: screen; opacity: .35; 
 .kw { display: inline-block; opacity: 0; transform: translateY(.5em) scale(.92); transition: opacity .5s var(--ease-out), transform .5s var(--ease-out); transition-delay: var(--ki, 0ms); }
 [data-reveal].is-visible [data-kinetic] .kw, .voice.is-visible .kw { opacity: 1; transform: none; }
 
-/* ---------- #17 line-draw icons ---------- */
-.bico svg path, .sico svg path, .pico svg path { stroke-dasharray: 150; stroke-dashoffset: 150; }
-.bigcard.is-visible .bico svg path { animation: drawIcon 1s var(--ease) .2s forwards; }
-.split-card.is-visible .sico svg path { animation: drawIcon 1s var(--ease) .2s forwards; }
-.pcard.is-visible .pico svg path { animation: drawIcon 1s var(--ease) .2s forwards; }
-@keyframes drawIcon { to { stroke-dashoffset: 0; } }
+/* ---------- #17 line-draw icons — ไอคอนแสดงปกติเสมอ, "วาด" เป็นลูกเล่นตอนโผล่เท่านั้น ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  body:not(.motion-off) .bigcard.is-visible .bico svg path,
+  body:not(.motion-off) .split-card.is-visible .sico svg path,
+  body:not(.motion-off) .pcard.is-visible .pico svg path { stroke-dasharray: 150; animation: drawIcon 1s var(--ease) .2s; }
+}
+@keyframes drawIcon { from { stroke-dashoffset: 150; } to { stroke-dashoffset: 0; } }
 
 /* ---------- #14 journey route on India map ---------- */
 .in-route { fill: none; stroke: var(--saffron); stroke-width: 1.6; stroke-dasharray: 4 3; stroke-dashoffset: 90; opacity: 0; }
@@ -1182,13 +1193,13 @@ body.motion-off .chandra .ch-craft { opacity: 0 !important; } /* ซ่อนย
 /* ============================================================================
    ★ การ์ดสถิติผู้นำ (hexagon radar)
    ============================================================================ */
-.hexwrap { display: grid; grid-template-columns: 1fr minmax(220px, 290px); gap: 1.6rem; align-items: center; margin-top: .5rem; }
-.radar { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: .8rem; box-shadow: var(--shadow); }
-.radar svg { width: 100%; height: auto; display: block; overflow: visible; }
+.hexwrap { display: grid; grid-template-columns: 1.05fr .95fr; gap: 1.4rem; align-items: center; margin-top: .5rem; }
+.radar { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 1.1rem; box-shadow: var(--shadow); display: grid; place-items: center; }
+.radar svg { width: 100%; max-width: 440px; height: auto; display: block; margin: 0 auto; overflow: visible; }
 .rad-grid { fill: none; stroke: var(--line); stroke-width: 1; }
 .rad-grids polygon:last-child { stroke: var(--ink-faint); }
 .rad-axis { stroke: var(--line); stroke-width: 1; }
-.rad-label { fill: var(--ink-soft); font-family: var(--sans); font-size: 12px; font-weight: 700; }
+.rad-label { fill: var(--ink-soft); font-family: var(--sans); font-size: 11px; font-weight: 700; }
 .rad-poly { fill: var(--c); fill-opacity: .15; stroke: var(--c); stroke-width: 2.5; stroke-linejoin: round; transform-box: fill-box; transform-origin: center; transition: opacity .5s var(--ease-out), transform .6s var(--ease-out); }
 .rad-poly.off { opacity: 0; transform: scale(.2); pointer-events: none; }
 .rad-poly.on { opacity: 1; transform: scale(1); }
@@ -1796,7 +1807,7 @@ const DATA = {
       type: 'hexagon',
       title: 'การ์ดสถิติผู้นำ',
       lead: 'แตะการ์ดคู่แข่งเพื่อซ้อนสถิติทับโมดี — คะแนนเชิง “สไตล์” เพื่อการอภิปราย ไม่ใช่การวัดเชิงข้อเท็จจริง',
-      axes: ['วิสัยทัศน์', 'การสื่อสาร', 'อิทธิพลเวทีโลก', 'การกุมอำนาจ', 'เศรษฐกิจ', 'ฐานความนิยม'],
+      axes: ['วิสัยทัศน์', 'การสื่อสาร', 'เวทีโลก', 'การกุมอำนาจ', 'เศรษฐกิจ', 'ฐานเสียง'],
       illustrative: true,
       leaders: [
         { key: 'modi',  name: 'โมดี',       country: 'อินเดีย', flag: '🇮🇳', color: '#e8821f', stats: [88, 90, 82, 78, 80, 85] },
@@ -2000,6 +2011,10 @@ const DATA = {
     tts: P('M5 5h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H10l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z') + P('M8.5 9.5v1 M11.5 8.5v3 M14.5 7.5v5 M17 9v2', 'stroke-width="1.6"'),
     ttsOff: P('M5 5h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H10l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z') + P('M4 4l16 16', 'stroke-width="2"'),
   };
+  /* ทำให้ทุกไอคอนเป็น <svg> ครบสมบูรณ์ (หลายตัวเดิมเป็น path/rect เปล่า → ไม่เรนเดอร์) */
+  Object.keys(ICONS).forEach(k => {
+    if (ICONS[k].slice(0, 4) !== '<svg') ICONS[k] = `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[k]}</svg>`;
+  });
 
   /* ---------- จักรอโศก (Ashoka Chakra) 24 ซี่ ---------- */
   function chakra(stroke) {
@@ -2102,20 +2117,26 @@ const DATA = {
           <button type="button" class="tlf active" data-theme="all">ทั้งหมด</button>
           ${Object.keys(themes).map(k => `<button type="button" class="tlf" data-theme="${esc(k)}">${esc(themes[k])}</button>`).join('')}
         </div>` : '';
-      return `${head}
-        <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
-        ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
-        ${filterHTML}
-        <div class="timeline" data-timeline>
-          <div class="rail-fill"></div>
-          ${s.timeline.map((t, i) => `<div class="tl-item ${t.accent ? 'accent' : ''} ${t.warn ? 'warn' : ''}" data-reveal data-tl data-theme="${esc(t.theme || '')}" style="--d:${i * 140}ms">
-            <div class="dot"></div>
-            <div class="tl-year">${esc(t.year)}</div>
-            <div class="tl-head">${esc(t.head)}${t.theme && themes ? ` <span class="tl-tag">${esc(themes[t.theme] || '')}</span>` : ''}</div>
-            <div class="tl-body">${esc(t.body)}</div>
-            ${t.context ? `<details class="tl-context"><summary>บริบท / สถานะ</summary><div>${esc(t.context)}</div></details>` : ''}
-          </div>`).join('')}
-        </div>`;
+      return `<div class="tl-layout">
+        <div class="tl-side">
+          ${head}
+          <h2 data-reveal style="--d:80ms">${esc(s.title)}</h2>
+          ${s.lead ? `<p class="lead" data-reveal style="--d:180ms">${esc(s.lead)}</p>` : ''}
+          ${filterHTML}
+        </div>
+        <div class="tl-main">
+          <div class="timeline" data-timeline>
+            <div class="rail-fill"></div>
+            ${s.timeline.map((t, i) => `<div class="tl-item ${t.accent ? 'accent' : ''} ${t.warn ? 'warn' : ''}" data-reveal data-tl data-theme="${esc(t.theme || '')}" style="--d:${i * 140}ms">
+              <div class="dot"></div>
+              <div class="tl-year">${esc(t.year)}</div>
+              <div class="tl-head">${esc(t.head)}${t.theme && themes ? ` <span class="tl-tag">${esc(themes[t.theme] || '')}</span>` : ''}</div>
+              <div class="tl-body">${esc(t.body)}</div>
+              ${t.context ? `<details class="tl-context"><summary>บริบท / สถานะ</summary><div>${esc(t.context)}</div></details>` : ''}
+            </div>`).join('')}
+          </div>
+        </div>
+      </div>`;
     }
 
     if (s.type === 'cards') {
@@ -2533,7 +2554,7 @@ const DATA = {
 
   /* เรดาร์หกเหลี่ยม (hexagon stat) — เทียบสไตล์ผู้นำแบบเกม */
   function hexRadarHTML(s) {
-    const cx = 175, cy = 168, R = 118, N = 6;
+    const VW = 360, VH = 300, cx = 180, cy = 150, R = 100, N = 6;
     const ang = i => (-90 + i * 60) * Math.PI / 180;
     const pt = (i, r) => [ +(cx + r * Math.cos(ang(i))).toFixed(1), +(cy + r * Math.sin(ang(i))).toFixed(1) ];
     const polyPts = (radii) => radii.map((r, i) => pt(i, r).join(',')).join(' ');
@@ -2541,9 +2562,9 @@ const DATA = {
       `<polygon class="rad-grid" points="${polyPts(Array(N).fill(R * L))}"/>`).join('');
     const axisLines = Array.from({ length: N }, (_, i) => { const [x, y] = pt(i, R); return `<line class="rad-axis" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"/>`; }).join('');
     const labels = s.axes.map((a, i) => {
-      const [x, y] = pt(i, R + 20);
+      const [x, y] = pt(i, R + 16);
       const anchor = (i === 0 || i === 3) ? 'middle' : (x > cx ? 'start' : 'end');
-      const dy = i === 0 ? -4 : i === 3 ? 12 : 4;
+      const dy = i === 0 ? -5 : i === 3 ? 14 : 4;
       return `<text class="rad-label" x="${x}" y="${(y + dy).toFixed(1)}" text-anchor="${anchor}">${esc(a)}</text>`;
     }).join('');
     const polys = s.leaders.map((ld, li) =>
@@ -2557,7 +2578,7 @@ const DATA = {
       </button>`).join('');
     return `<div class="hexwrap" data-reveal style="--d:240ms" data-hex>
         <div class="radar">
-          <svg viewBox="0 0 350 350" data-radar aria-label="เรดาร์เทียบสถิติผู้นำ">
+          <svg viewBox="0 0 ${VW} ${VH}" data-radar aria-label="เรดาร์เทียบสถิติผู้นำ">
             <g class="rad-grids">${grid}</g>
             ${axisLines}
             <g class="rad-polys">${polys}</g>
