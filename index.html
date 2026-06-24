@@ -22,8 +22,8 @@
   --paper:      #f4efe4;   /* พื้นกระดาษครีม */
   --paper-2:    #ece4d4;   /* ครีมเข้มขึ้น */
   --ink:        #1d2436;   /* หมึกน้ำเงินเข้ม */
-  --ink-soft:   #4a5266;
-  --ink-faint:  #8a8475;
+  --ink-soft:   #39414f;   /* เข้มขึ้นเพื่อคอนทราสต์ในห้องเรียน/โปรเจกเตอร์ */
+  --ink-faint:  #6a6557;
 
   --saffron:    #d9772a;   /* เหลืองหญ้าฝรั่นแบบเข้มพอให้อ่านบนครีม */
   --saffron-br: #f08a2c;
@@ -311,7 +311,7 @@ h1, h2 { font-family: var(--serif); font-weight: 900; line-height: 1.04; color: 
 .bigcard .bico svg { width: 28px; height: 28px; }
 .bigcard .tag { font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
 .bigcard .bhead { font-family: var(--serif); font-size: 1.3rem; font-weight: 700; margin: .25rem 0 .5rem; line-height: 1.2; }
-.bigcard .bbody { color: var(--ink-soft); font-size: .96rem; flex: 1; }
+.bigcard .bbody { color: var(--ink-soft); font-size: 1.04rem; line-height: 1.55; flex: 1; }
 .bigcard .stat {
   margin-top: 1.1rem; padding-top: 1rem; border-top: 1px dashed var(--line);
 }
@@ -384,7 +384,7 @@ h1, h2 { font-family: var(--serif); font-weight: 900; line-height: 1.04; color: 
 .footnote { margin-top: 2.5rem; font-size: .8rem; color: var(--ink-faint); border-top: 1px solid var(--line); padding-top: 1rem; max-width: 70ch; }
 
 /* ---------- #1 citations ใต้สถิติ ---------- */
-.cite { font-size: .7rem; color: var(--ink-faint); margin-top: .55rem; line-height: 1.4; }
+.cite { font-size: .82rem; color: var(--ink-faint); margin-top: .55rem; line-height: 1.45; }
 
 /* ---------- #2 stats-grid (by the numbers) ---------- */
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; margin-top: 1rem; }
@@ -465,7 +465,7 @@ h1, h2 { font-family: var(--serif); font-weight: 900; line-height: 1.04; color: 
    #9 ธีมมืด (Dark theme)
    ============================================================================ */
 html[data-theme="dark"] {
-  --paper: #13151b; --paper-2: #191c24; --ink: #ece7da; --ink-soft: #aeb4c0; --ink-faint: #7e838f;
+  --paper: #13151b; --paper-2: #191c24; --ink: #ece7da; --ink-soft: #c2c7d1; --ink-faint: #9aa0ab;
   --line: #2a2f3a; --card: #1b1f29;
   --saffron: #f0973f; --saffron-br: #ffac57; --green: #3bbd73; --clay: #e06a4f; --navy: #7aa7ff;
   --shadow: 0 1px 2px rgba(0,0,0,.35), 0 16px 40px -18px rgba(0,0,0,.65);
@@ -498,7 +498,7 @@ body.mode-slide { overflow: hidden; height: 100vh; }
 body.mode-slide .deck { height: 100vh; }
 body.mode-slide .slide {
   position: fixed; inset: 0; max-width: none; width: 100vw; height: 100vh;
-  margin: 0; padding: clamp(3.5rem, 8vh, 6rem) clamp(1.5rem, 8vw, 7rem);
+  margin: 0; padding: clamp(2.2rem, 5.5vh, 4rem) clamp(1.5rem, 7vw, 6rem);
   border: none !important;
   opacity: 0; visibility: hidden; pointer-events: none;
   transform: translateX(40px) scale(.99);
@@ -510,6 +510,50 @@ body.mode-slide .slide.is-active {
   opacity: 1; visibility: visible; pointer-events: auto; transform: none; z-index: 5;
 }
 body.mode-slide .slide.leaving-left { transform: translateX(-40px) scale(.99); opacity: 0; }
+
+/* ============================================================================
+   อ่านง่ายในห้องเรียน — ขยายตัวอักษรผู้ฟังเมื่อฉายเต็มจอ (slide mode)
+   ============================================================================ */
+body.mode-slide .lead { font-size: clamp(1.25rem, 2.4vw, 1.7rem); max-width: 50ch; line-height: 1.55; }
+body.mode-slide .hero .lead { font-size: clamp(1.3rem, 2.6vw, 1.75rem); }
+body.mode-slide .bigcard .bbody,
+body.mode-slide .split-card .sbody,
+body.mode-slide .recv-col li,
+body.mode-slide .model-col li,
+body.mode-slide .balance-col li,
+body.mode-slide .agenda-body,
+body.mode-slide .voice-body { font-size: 1.2rem; line-height: 1.55; }
+body.mode-slide .tl-body { font-size: 1.12rem; line-height: 1.5; }
+body.mode-slide .tl-item { padding-bottom: 1.1rem; }
+body.mode-slide .takeaway { font-size: 1.18rem; padding: .8rem 1.1rem; }
+body.mode-slide .takeaways { gap: .6rem; margin-bottom: 1.2rem; }
+body.mode-slide .qcard { padding: 1rem 1.2rem; margin-bottom: .8rem; }
+body.mode-slide .qcard .q { font-size: 1.16rem; margin-bottom: .7rem; }
+body.mode-slide .choice { font-size: 1.1rem; min-height: 50px; }
+body.mode-slide .qcard .why { font-size: 1.05rem; }
+body.mode-slide h2 { margin-bottom: .7rem; }
+body.mode-slide .lead { margin-bottom: 1.3rem; }
+body.mode-slide .fact-mini .v { font-size: 1.35rem; }
+body.mode-slide .pcard .v { font-size: 1.5rem; }
+body.mode-slide .pcard .sub { font-size: 1.1rem; }
+body.mode-slide .bigcard .bhead { font-size: 1.5rem; }
+body.mode-slide .split-card .shead { font-size: 1.45rem; }
+body.mode-slide .dash-label, body.mode-slide .recv-h, body.mode-slide .model-h { font-size: 1.2rem; }
+body.mode-slide .dash-to { font-size: 1.75rem; }
+body.mode-slide .cmp-name { font-size: 1.1rem; }
+body.mode-slide .tl-head { font-size: 1.3rem; }
+body.mode-slide .tl-year { font-size: 1.7rem; }
+body.mode-slide .kicker { font-size: .92rem; }
+body.mode-slide .cite, body.mode-slide .src-row-src { font-size: .92rem; }
+body.mode-slide .discuss-q, body.mode-slide .model-insight { font-size: 1.3rem; }
+body.mode-slide .lcards-h, body.mode-slide .lc-meta b { font-size: 1.05rem; }
+body.mode-slide .rad-label { font-size: 12.5px; }
+@media (max-width: 760px) {
+  body.mode-slide .bigcard .bbody, body.mode-slide .tl-body, body.mode-slide .split-card .sbody,
+  body.mode-slide .recv-col li, body.mode-slide .model-col li, body.mode-slide .voice-body,
+  body.mode-slide .agenda-body { font-size: 1.08rem; }
+  body.mode-slide .takeaway, body.mode-slide .qcard .q { font-size: 1.1rem; }
+}
 
 /* ---------- ตัวควบคุมสไลด์ ล่างจอ ---------- */
 .slide-nav {
